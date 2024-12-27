@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+require("dotenv").config();
 //-connect database
 const dataBase = require("./config/database");
 dataBase.connect();

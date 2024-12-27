@@ -55,6 +55,7 @@ function MenuSider() {
         defaultSelectedKeys={['sub3']}
         mode="inline"
         items={items}
+        style={{ height: "100%" }}
       />
     </>
   )

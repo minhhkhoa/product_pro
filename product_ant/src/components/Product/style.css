@@ -1,3 +1,37 @@
-.header{
-  /* background: none; */
+h1{
+  text-align: center;
+  
+}
+
+.group-utils{
+  display: flex;
+  justify-content: space-between;
+}
+
+.card {
+ width: 45%;
+ margin: 10px;
+}
+
+.card-groupsearch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-groupsearch Button {
+  margin-left: 3px;
+}
+
+.card-groupsort{
+  /* width: 30%; */
+}
+
+.select{
+  width: 40%;
+}
+
+.btnClear{
+  width: 70px;
+  margin-left: 40px;
 }
