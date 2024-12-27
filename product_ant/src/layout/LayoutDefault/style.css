@@ -1,0 +1,51 @@
+/* start header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #00050a;
+  padding: 10px;
+}
+
+.header h1 {
+  color: white;
+}
+
+.header-right a {
+  display: inline-block;
+  text-align: center;
+  size: 24px;
+  height: 40px;
+  width: auto;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  /* Thêm hiệu ứng mượt khi thay đổi kích thước */
+  transition: transform 0.3s ease;
+}
+
+.header-right__user {
+  margin-right: 10px;
+  background-color: #0069D9;
+  color: rgb(255, 255, 255);
+}
+
+.header-right__logout {
+  background-color: #C82333;
+  color: rgb(255, 255, 255);
+}
+
+.header-right a:hover {
+  /* Thu nhỏ 10% khi di chuột */
+  transform: scale(0.9);
+  color: rgb(255, 255, 255);
+}
+
+/* end header */
+
+/* start sider */
+.sider {
+  background: #323232 !important;
+}
+
+/* end sider */
