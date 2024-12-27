@@ -1,0 +1,15 @@
+.primary{
+  background: aquamarine;
+}
+
+.danger{
+  background: crimson;
+}
+
+.warning {
+  background: yellow;
+}
+
+.btn:hover{
+  transform: scale(0.9);
+}

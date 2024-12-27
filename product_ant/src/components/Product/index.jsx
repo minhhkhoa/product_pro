@@ -1,6 +1,7 @@
 import { Button, Input, Card, Table } from 'antd';
 import './style.css';
 import { useEffect, useState } from 'react';
+import ShowProduct from '../ShowProduct';
 
 const { Search } = Input;
 
@@ -12,8 +13,11 @@ function Product() {
     fetch("http://localhost:3000/admin/products")
       .then(res => res.json())
       .then(data => {
-        console.log(data);
-        setData(data);
+        const dataWithKeys = data.map(item => ({
+          // Giả định rằng _id là duy nhất cho mỗi phần tử hay mỗi hàng trong table
+          ...item, key: item._id 
+        }));
+        setData(dataWithKeys);
       })
   }
   useEffect(() => {
@@ -57,18 +61,12 @@ function Product() {
     },
     {
       title: 'Hành động',
-      dataIndex: 'Hành động',
+      dataIndex: '_id',
       render: (record) => (
         <div>
-          <Button type="link" onClick={() => console.log("Edit", record.key)}>
-            Chi tiết
-          </Button>
-          <Button type="link" onClick={() => console.log("Edit", record.key)}>
-            Sửa
-          </Button>
-          <Button type="link" danger onClick={() => console.log("Delete", record.key)}>
-            Xóa
-          </Button>
+          <ShowProduct typeTitle={'Chi tiết'} id={ record }/>
+          <ShowProduct typeTitle={'Sửa'} id={ record } />
+          <ShowProduct typeTitle={'Xóa'} id={ record } />
         </div>
       ),
     },

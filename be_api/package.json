@@ -10,7 +10,8 @@
     "express": "^4.21.2",
     "mongodb": "^6.9.0",
     "mongoose": "^8.9.2",
-    "mongoose-slug-updater": "^3.3.0"
+    "mongoose-slug-updater": "^3.3.0",
+    "prop-types": "^15.8.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
