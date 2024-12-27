@@ -1,108 +1,76 @@
-import { Button, Input, Card, Select, Table } from 'antd';
+import { Button, Input, Card, Table } from 'antd';
 import './style.css';
+import { useEffect, useState } from 'react';
 
 const { Search } = Input;
 
 function Product() {
+
+  const [data, setData] = useState([]);
+
+  const fetchData = () => {
+    fetch("http://localhost:3000/admin/products")
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        setData(data);
+      })
+  }
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const handleSearch = (value) => {
     console.log("Search value:", value);
   };
 
-  const options = [
-    {
-      value: 'option1',
-      label: 'Chọn hành động',
-    },
-    {
-      value: 'option2',
-      label: 'Vị trí tăng dần',
-    },
-    {
-      value: 'option3',
-      label: 'Vị trí giảm dần',
-    },
-    {
-      value: 'option4',
-      label: 'Giá tăng dần',
-    },
-    {
-      value: 'option5',
-      label: 'Giá giảm dần',
-    },
-    {
-      value: 'option6',
-      label: 'Tiêu đề A - Z',
-    },
-    {
-      value: 'option7',
-      label: 'Tiêu đề Z - A',
-    },
-  ];
-
-
   const columns = [
+    //-data tra ra theo dung theo cac cot nay
+    //-dataIndex: se lay key ma fetch về vd là: price hay status...
     {
-      title: 'STT',
-      dataIndex: 'STT',
-    },
-    {
-      title: 'Tên',
-      dataIndex: 'Tên',
+      title: 'Hình ảnh',
+      dataIndex: 'thumbnail',
+      render: (thumbnail) =>
+        <img src={thumbnail}
+          alt="product"
+          style={{ width: "100px", height: "90px", objectFit: "cover" }}
+        />,
     },
     {
       title: 'Tiêu đề',
-      dataIndex: 'Tiêu đề',
+      dataIndex: 'title',
+      sorter: (a, b) => a.title.localeCompare(b.title),
     },
     {
       title: 'Giá',
-      dataIndex: 'Giá',
+      dataIndex: 'price',
+      sorter: (a, b) => a.price - b.price,
     },
     {
       title: 'Vị trí',
-      dataIndex: 'Vị trí',
+      dataIndex: 'position',
+      sorter: (a, b) => a.position - b.position,
     },
     {
       title: 'Trạng thái',
-      dataIndex: 'Trạng thái',
-    },
-    {
-      title: 'Người tạo',
-      dataIndex: 'Người tạo',
-    },
-    {
-      title: 'Người cập nhật',
-      dataIndex: 'Người cập nhật',
+      dataIndex: 'status',
     },
     {
       title: 'Hành động',
       dataIndex: 'Hành động',
-    },
-  ];
-
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-    },
-    {
-      key: '4',
-      name: 'Jim Red',
-      age: 32,
-      address: 'London No. 2 Lake Park',
+      render: (record) => (
+        <div>
+          <Button type="link" onClick={() => console.log("Edit", record.key)}>
+            Chi tiết
+          </Button>
+          <Button type="link" onClick={() => console.log("Edit", record.key)}>
+            Sửa
+          </Button>
+          <Button type="link" danger onClick={() => console.log("Delete", record.key)}>
+            Xóa
+          </Button>
+        </div>
+      ),
     },
   ];
 
@@ -131,25 +99,17 @@ function Product() {
             </div>
           </div>
         </Card>
-
-        <Card className='card' title="Sắp xếp" size="small">
-          <div className='card-groupsort'>
-            <div >
-              <Select
-                className='select'
-                defaultValue="Chọn hành động"
-                options={options}
-              />
-              <Button className='btnClear' color='danger' variant="solid" type='default'>Clear</Button>
-            </div>
-          </div>
-        </Card>
       </div>
 
 
       <Table
         columns={columns}
         dataSource={data}
+        pagination={{
+          pageSize: 6, // Số bản ghi trên mỗi trang
+          // showSizeChanger: true, // Cho phép người dùng thay đổi số bản ghi trên mỗi trang
+          // pageSizeOptions: ['2', '3', '4', '10'], // Các lựa chọn số bản ghi
+        }}
         showSorterTooltip={{
           target: 'sorter-icon',
         }}

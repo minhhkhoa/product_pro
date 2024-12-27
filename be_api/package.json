@@ -1,13 +1,16 @@
 {
   "name": "be_api",
-  "packageManager": "yarn@4.5.1",
+  "packageManager": "yarn@4.5.3",
   "scripts": {
     "dev": "nodemon index.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "mongoose": "^8.9.2"
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.9.2",
+    "mongoose-slug-updater": "^3.3.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
