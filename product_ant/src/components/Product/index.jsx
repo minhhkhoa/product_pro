@@ -1,8 +1,9 @@
 import { Button, Table } from 'antd';
 import './style.css';
+import { Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import ShowProduct from '../ShowProduct';
-import FilterProduct from '../Ui/FilterProduct';
+import FilterProduct from '../Ui/Product/FilterProduct';
 
 function Product() {
   const [data, setData] = useState([]);
@@ -74,6 +75,7 @@ function Product() {
     {
       title: 'Giá',
       dataIndex: 'price',
+      render: (price) => `$${price}`,
       sorter: (a, b) => a.price - b.price,
     },
     {
@@ -95,13 +97,16 @@ function Product() {
       title: 'Trạng thái',
       dataIndex: 'status',
       render: (_, record) => (
-        <Button
-          type="primary"
-          className="btn status"
-          onClick={() => handleClickStatus(record)}
-        >
-          {record.status}
-        </Button>
+        <Tooltip title="Click to change status">
+          <Button
+            type="primary"
+            className="btn status"
+            onClick={() => handleClickStatus(record)}
+          >
+            {record.status}
+          </Button>
+        </Tooltip>
+
       ),
     },
     {

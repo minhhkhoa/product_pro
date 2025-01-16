@@ -1,5 +1,5 @@
 import { Button, Input, Card } from 'antd';
-
+import "./style.css";
 const { Search } = Input;
 
 // eslint-disable-next-line react/prop-types

@@ -1,0 +1,16 @@
+.card{
+  width: auto;
+}
+
+.card-groupsearch{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frm-search_left{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 30px;
+}
