@@ -219,7 +219,7 @@ function Product() {
         columns={columns}
         dataSource={data}
         pagination={{
-          pageSize: 6,
+          pageSize: 5,
         }}
       />
       <Context.Provider value={{ name: 'Ant Design' }}>
