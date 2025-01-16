@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button, Modal, Typography, Space, Image } from 'antd';
 import PropTypes from 'prop-types';
-import './style.css'; // Đảm bảo bạn có tệp CSS
+import './style.css';
 
 const { Title, Text } = Typography;
 

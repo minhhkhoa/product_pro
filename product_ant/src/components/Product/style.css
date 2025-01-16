@@ -35,3 +35,11 @@ h1{
   width: 70px;
   margin-left: 40px;
 }
+
+.danger {
+  background: crimson;
+}
+
+.btn:hover {
+  transform: scale(0.9);
+}
