@@ -48,9 +48,35 @@ function Product() {
   }, [selectedType, searchValue]);
 
   // Handle change position
-  const handleChange = (e) => {
-    console.log(e.target.value);
+  const handleChangePosition = (e, record) => {
+    const newPosition = e.target.value; // Lấy giá trị mới từ input
+    const productId = record._id; // Lấy ID sản phẩm từ bản ghi
+
+    // Gửi yêu cầu PATCH để thay đổi vị trí
+    fetch(`http://localhost:3000/admin/products/change-position/${newPosition}/${productId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then(() => {
+        // Hiển thị thông báo thành công
+        openNotification("Thành công", "Đã thay đổi vị trí sản phẩm thành công!");
+        fetchData(selectedType, searchValue); // Cập nhật lại danh sách
+      })
+      .catch((error) => {
+        // Hiển thị thông báo lỗi
+        openNotification("Lỗi", "Không thể thay đổi vị trí sản phẩm!");
+        console.error("Error:", error);
+      });
   };
+
 
   // Hiển thị modal xác nhận xóa
   const showDeleteModal = (id) => {
@@ -133,14 +159,13 @@ function Product() {
     {
       title: 'Vị trí',
       dataIndex: 'position',
-      render: (position) => (
+      render: (_, record) => (
         <input
           type="number"
           min="1"
-          value={position}
-          name="position"
+          defaultValue={record.position} // Hiển thị giá trị vị trí hiện tại
           style={{ width: '50px', height: '30px', textAlign: 'center' }}
-          onChange={handleChange}
+          onBlur={(e) => handleChangePosition(e, record)} // Truyền `record` vào hàm
         />
       ),
       sorter: (a, b) => a.position - b.position,
@@ -204,7 +229,7 @@ function Product() {
       {/* Modal xác nhận xóa */}
       <Modal
         title="Thông báo"
-        visible={isDeleteModalVisible}
+        open={isDeleteModalVisible}
         onOk={handleDelete} // Xóa sản phẩm khi nhấn ok trong modal
         onCancel={handleCancelDelete} // Đóng modal
         okText="Xóa"

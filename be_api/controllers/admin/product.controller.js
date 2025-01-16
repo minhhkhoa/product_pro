@@ -51,6 +51,19 @@ module.exports.changeStatus = async (req, res) => {
   }
 };
 
+module.exports.changePosition = async (req, res) => {
+  try {
+    const { position, id } = req.params;
+
+    // Cập nhật trạng thái sản phẩm
+    await Product.updateOne({ _id: id }, { position });
+
+    return res.json({ message: "Position updated successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id
 
@@ -59,21 +72,6 @@ module.exports.deleteItem = async (req, res) => {
     deleted: true,
   })
 
-  // Lấy các query params từ request (để giữ điều kiện lọc)
-  const { status: filterStatus, search } = req.query;
+  return res.json({ message: "Delete product successfully" });
 
-  // Tạo query để lấy lại sản phẩm với điều kiện lọc hiện tại
-  const query = {
-    deleted: false,
-    ...(filterStatus && filterStatus !== "all" && { status: filterStatus }),
-    ...(search && { title: { $regex: search, $options: 'i' } }), // Tìm theo search nếu có
-  };
-
-  // Lấy danh sách sản phẩm mới nhất từ DB với điều kiện lọc
-  const updatedProducts = await Product.find(query).select([
-    "thumbnail", "title", "price", "position", "status",
-  ]);
-
-  // Trả về danh sách sản phẩm đã được cập nhật
-  return res.json(updatedProducts);
 }
