@@ -112,11 +112,11 @@ function Product() {
     {
       title: 'Hành động',
       dataIndex: '_id',
-      render: (record) => (
+      render: (_,record) => (
         <div>
-          <ShowProduct typeTitle={'Chi tiết'} id={record} />
-          <ShowProduct typeTitle={'Sửa'} id={record} />
-          <ShowProduct typeTitle={'Xóa'} id={record} />
+          <ShowProduct typeTitle={'Chi tiết'} data={record} />
+          <ShowProduct typeTitle={'Sửa'} data={record} />
+          <ShowProduct typeTitle={'Xóa'} data={record} />
         </div>
       ),
     },
