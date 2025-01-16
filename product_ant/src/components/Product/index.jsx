@@ -1,13 +1,14 @@
-import { Button, Input, Card, Table } from 'antd';
+import { Button, Table } from 'antd';
 import './style.css';
 import { useEffect, useState } from 'react';
 import ShowProduct from '../ShowProduct';
+import FilterProduct from '../Ui/FilterProduct';
 
-const { Search } = Input;
 
 function Product() {
 
   const [data, setData] = useState([]);
+
 
   const fetchData = () => {
     fetch("http://localhost:3000/admin/products")
@@ -15,7 +16,7 @@ function Product() {
       .then(data => {
         const dataWithKeys = data.map(item => ({
           // Giả định rằng _id là duy nhất cho mỗi phần tử hay mỗi hàng trong table
-          ...item, key: item._id 
+          ...item, key: item._id
         }));
         setData(dataWithKeys);
       })
@@ -24,9 +25,33 @@ function Product() {
     fetchData();
   }, []);
 
-  const handleSearch = (value) => {
-    console.log("Search value:", value);
+  const handleChange = (e) => {
+    console.log(e.target.value);
+  }
+
+  const handleClickStatus = (record) => {
+    const newStatus = record.status === "active" ? "inactive" : "active";
+
+    fetch(`http://localhost:3000/admin/products/change-status/${newStatus}/${record._id}`, {
+      method: "PATCH",
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return res.json();
+      })
+      .then((updatedData) => {
+        // Cập nhật state với dữ liệu mới nhất từ server
+        const dataWithKeys = updatedData.map(item => ({
+          // Giả định rằng _id là duy nhất cho mỗi phần tử hay mỗi hàng trong table
+          ...item, key: item._id
+        }));
+        setData(dataWithKeys);
+      })
+      .catch((error) => console.error("Error:", error));
   };
+
 
   const columns = [
     //-data tra ra theo dung theo cac cot nay
@@ -53,20 +78,41 @@ function Product() {
     {
       title: 'Vị trí',
       dataIndex: 'position',
+      render: (position) => {
+        return (
+          <input
+            type="number"
+            min='1' value={position}
+            name='position'
+            style={{ width: '50px', height: '30px', textAlign: 'center' }}
+            onChange={handleChange}
+          />)
+      },
       sorter: (a, b) => a.position - b.position,
     },
     {
       title: 'Trạng thái',
       dataIndex: 'status',
+      render: (_, record) => {
+        //- record: chua du lieu cua dong hien tai
+        return (
+          <Button type="primary"
+            className='btn status'
+            onClick={() => handleClickStatus(record)}
+          >
+            {record.status}
+          </Button>
+        )
+      }
     },
     {
       title: 'Hành động',
       dataIndex: '_id',
       render: (record) => (
         <div>
-          <ShowProduct typeTitle={'Chi tiết'} id={ record }/>
-          <ShowProduct typeTitle={'Sửa'} id={ record } />
-          <ShowProduct typeTitle={'Xóa'} id={ record } />
+          <ShowProduct typeTitle={'Chi tiết'} id={record} />
+          <ShowProduct typeTitle={'Sửa'} id={record} />
+          <ShowProduct typeTitle={'Xóa'} id={record} />
         </div>
       ),
     },
@@ -75,30 +121,7 @@ function Product() {
   return (
     <>
       <h1>Danh sách sản phẩm</h1>
-      <div className='group-utils'>
-        <Card className='card' title="Bộ lọc và tìm kiếm" size="small">
-          <div className='card-groupsearch'>
-            <div className="frm-search_left">
-              <Button type="primary">Tất cả</Button>
-              <Button type="default">Hoạt động</Button>
-              <Button type="default">Dừng hoạt động</Button>
-            </div>
-            <div className="frm-search_right">
-              <Search
-                placeholder="Nhập tên sản phẩm"
-                allowClear
-                enterButton="Tìm kiếm"
-                size="large"
-                onSearch={handleSearch}
-                style={{
-                  width: 300,
-                }}
-              />
-            </div>
-          </div>
-        </Card>
-      </div>
-
+      <FilterProduct />
 
       <Table
         columns={columns}
