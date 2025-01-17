@@ -1,26 +1,29 @@
 const Product = require("../../models/product.model");
+const ProductCategory = require("../../models/product-category.model");
 
 module.exports.index = async (req, res) => {
   try {
-    const { status, search } = req.query;  // Lấy status và search từ query string (nếu có)
+    const { status, search, category } = req.query;  // Lấy category từ query string
 
     // Tạo query để tìm sản phẩm
     const query = {
       deleted: false,
-      ...(status && status !== "all" && { status }), // Nếu status !== "all", thêm vào query
+      ...(status && status !== "all" && { status }),  // Nếu status !== "all", thêm vào query
       ...(search && { title: { $regex: search, $options: 'i' } }), // Nếu có search, tìm theo title
+      ...(category && { product_category_id: category }), // Nếu có category, lọc theo categoryId
     };
 
     // Tìm các sản phẩm theo query
     const products = await Product.find(query).select([
-      "thumbnail", "title", "price", "position", "status",
+      "thumbnail", "title", "price", "position", "status", "product_category_id"
     ]);
 
     return res.json(products);
   } catch (error) {
-    return res.status(500).json({ message: "Internal Server Error" });
+    return res.status(500).json({ message: "Internal Server Error", error });
   }
 };
+
 
 module.exports.changeStatus = async (req, res) => {
   try {
@@ -41,7 +44,7 @@ module.exports.changeStatus = async (req, res) => {
 
     // Lấy danh sách sản phẩm mới nhất từ DB với điều kiện lọc
     const updatedProducts = await Product.find(query).select([
-      "thumbnail", "title", "price", "position", "status",
+      "thumbnail", "title", "price", "position", "status", "product_category_id"
     ]);
 
     // Trả về danh sách sản phẩm đã được cập nhật
@@ -62,6 +65,47 @@ module.exports.changePosition = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
+}
+
+module.exports.getCategory= async (req, res) => {
+  try {
+    const listCategories = await ProductCategory.find(
+      {
+        deleted: false
+      }
+    ).select([
+      "_id", "title", "parent_id",
+    ]);
+    return res.json(listCategories);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+}
+
+
+module.exports.createPost = async (req, res) => {
+  console.log(req.file); //no tu co khi dung multer
+  // console.log(req.body)
+  // req.body.price = parseInt(req.body.price)
+  // req.body.discountPercentage = parseInt(req.body.discountPercentage)
+  // req.body.stock = parseInt(req.body.stock)
+
+  // if (req.body.position == "") {
+  //   const countProducts = await Product.countDocuments({})
+  //   req.body.position = countProducts + 1
+  // } else {
+  //   req.body.position = parseInt(req.body.position)
+  // }
+
+  // //-them key nay cho req ==> add product se co
+  // req.body.createdBy = {
+  //   account_id: res.locals.user._id
+  // }
+
+  // //add product
+  // const product = new Product(req.body)
+  // await product.save()
+  // res.redirect("/admin/products")
 }
 
 module.exports.deleteItem = async (req, res) => {
