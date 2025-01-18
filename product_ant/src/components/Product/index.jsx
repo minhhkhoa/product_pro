@@ -5,6 +5,7 @@ import ShowProduct from "../Ui/Product/ShowProduct/index";
 import FilterProduct from "../Ui/Product/Filter/FilterProduct";
 import CreateProduct from "../Ui/Product/CreateProduct.jsx";
 import FilterCategory from "../Ui/Product/FilterCategory/index.jsx";
+import EditProduct from "../Ui/Product/EditProduct.jsx";
 
 const Context = React.createContext({
   name: "Default",
@@ -17,6 +18,7 @@ function Product() {
   const [selectedCategory, setSelectedCategory] = useState(null); // Thêm state để lưu danh mục được chọn
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -28,25 +30,29 @@ function Product() {
     });
   };
 
-  const fetchData = (status = "all", search = "", categoryId = null) => {
+  const fetchData = async (status = "all", search = "", categoryId = null) => {
+    setLoading(true);
     let url = `http://localhost:3000/admin/products?status=${status}`;
     if (search) {
       url += `&search=${search}`;
     }
     if (categoryId) {
-      url += `&category=${categoryId}`; // Thêm query param danh mục
+      url += `&category=${categoryId}`;
     }
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        const dataWithKeys = data.map((item) => ({
-          ...item,
-          key: item._id,
-        }));
-        setData(dataWithKeys);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const dataWithKeys = data.map((item) => ({
+        ...item,
+        key: item._id,
+      }));
+      setData(dataWithKeys);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -137,6 +143,15 @@ function Product() {
       .catch((error) => console.error("Error:", error));
   };
 
+  const dataRow = (id) => {
+    return data.find((item) => item._id === id); // Trả về sản phẩm có id khớp
+  };
+
+  const handleRefreshData = () => {
+    fetchData(selectedType, searchValue, selectedCategory); // Gọi lại API với các bộ lọc hiện tại
+  };
+
+
   const columns = [
     {
       title: "Hình ảnh",
@@ -194,8 +209,8 @@ function Product() {
       dataIndex: "_id",
       render: (_, record) => (
         <div>
-          <ShowProduct typeTitle={"Chi tiết"} data={record} />
-          <ShowProduct typeTitle={"Sửa"} data={record} />
+          <ShowProduct typeTitle={"Chi tiết"} data={dataRow(record._id)} />
+          <EditProduct typeTitle={"Sửa"} data={dataRow(record._id)} onProductCreated={handleRefreshData} />
           <Button
             className="btn danger"
             type="primary"
@@ -222,7 +237,7 @@ function Product() {
         />
         <FilterCategory setSelectedCategory={setSelectedCategory} />
 
-        <CreateProduct />
+        <CreateProduct onProductCreated={handleRefreshData} />
       </div>
 
       <Table
@@ -231,6 +246,7 @@ function Product() {
         pagination={{
           pageSize: 5,
         }}
+        loading={loading}
       />
       <Context.Provider value={{ name: "Ant Design" }}>
         {contextHolder}

@@ -29,6 +29,12 @@ router.post(
   controller.createPost
 )
 
+router.patch(
+  '/edit/:id',
+  upload.single('thumbnail'),
+  uploadCloud.upload,
+  validate.createPost,
+  controller.editSuccess)
 
 router.delete('/delete/:id', controller.deleteItem);
 

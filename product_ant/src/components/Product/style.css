@@ -38,6 +38,7 @@ h1{
 
 .danger {
   background: crimson;
+  margin-left: 10px;
 }
 
 .btn:hover {

@@ -59,7 +59,10 @@ const ShowProduct = ({ typeTitle, data }) => {
             <Text strong>Giá:</Text> <Text>${data.price}</Text>
           </div>
           <div>
-            <Text strong>Vị trí: </Text><Text>{data.position}</Text>
+            <Text strong>Số lượng còn: </Text><Text>{data.stock}</Text>
+          </div>
+          <div>
+            <Text strong>Mô tả: </Text><p dangerouslySetInnerHTML={{ __html: data.description }} />
           </div>
           <div>
             <Text strong>Trạng thái: </Text><Text>{data.status}</Text>

@@ -14,11 +14,11 @@ module.exports.index = async (req, res) => {
     };
 
     // Tìm các sản phẩm theo query
-    const products = await Product.find(query).select([
-      "thumbnail", "title", "price", "position", "status", "product_category_id"
-    ]);
+    const products = await Product.find(query).select("-createdBy -updatedBy -updatedAt -createdAt");
 
-    return res.json(products);
+    const reverseData = products.reverse();
+
+    return res.json(reverseData);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error", error });
   }
@@ -43,9 +43,7 @@ module.exports.changeStatus = async (req, res) => {
     };
 
     // Lấy danh sách sản phẩm mới nhất từ DB với điều kiện lọc
-    const updatedProducts = await Product.find(query).select([
-      "thumbnail", "title", "price", "position", "status", "product_category_id"
-    ]);
+    const updatedProducts = await Product.find(query).select("-createdBy -updatedBy -updatedAt -createdAt");
 
     // Trả về danh sách sản phẩm đã được cập nhật
     return res.json(updatedProducts);
@@ -84,11 +82,6 @@ module.exports.getCategory= async (req, res) => {
 
 
 module.exports.createPost = async (req, res) => {
-
-  req.body.title = req.body.title;
-  req.body.product_category_id = req.body.product_category_id;
-  req.body.featured = req.body.featured;
-  req.body.description = req.body.description;
   req.body.price = parseInt(req.body.price);
   req.body.discountPercentage = parseInt(req.body.discountPercentage);
   req.body.stock = parseInt(req.body.stock);
@@ -100,14 +93,42 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position)
   }
 
-  req.body.status = req.body.status;
-
-
   //add product
   const product = new Product(req.body)
-  console.log(product);
-  // await product.save()
+  await product.save();
+  return res.json({ message: "Create product successfully" });
 }
+
+module.exports.editSuccess = async (req, res) => {
+  const id = req.params.id;
+
+  // Kiểm tra và ép kiểu các giá trị sang kiểu số nếu có
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
+  req.body.position = parseInt(req.body.position);
+
+  try {
+
+    // Cập nhật thông tin sản phẩm
+    const updatedProduct = await Product.updateOne(
+      { _id: id }, // Điều kiện tìm sản phẩm theo id
+      {
+        ...req.body,   // Các thông tin cần cập nhật
+      }
+    );
+
+    if (updatedProduct.nModified === 0) {
+      return res.status(400).json({ message: "No changes were made to the product." });
+    }
+
+    return res.json({ message: "Product updated successfully." });
+  } catch (error) {
+    console.error(error);  // Ghi log lỗi để tiện theo dõi
+    return res.status(500).json({ message: "Failed to update product." });
+  }
+};
+
 
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id
