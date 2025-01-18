@@ -12,6 +12,7 @@ function FilterCategory({ setSelectedCategory }) {
     const tree = [];
 
     categories.forEach((item) => {
+      //-xếp theo id
       map[item._id] = {
         value: item._id,
         label: item.title,
@@ -20,6 +21,7 @@ function FilterCategory({ setSelectedCategory }) {
     });
 
     categories.forEach((item) => {
+      //-thêm vào cây
       if (item.parent_id) {
         map[item.parent_id]?.children.push(map[item._id]);
       } else {

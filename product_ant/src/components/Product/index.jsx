@@ -221,8 +221,9 @@ function Product() {
           setSearchValue={setSearchValue}
         />
         <FilterCategory setSelectedCategory={setSelectedCategory} />
+
+        <CreateProduct />
       </div>
-      <CreateProduct />
 
       <Table
         columns={columns}

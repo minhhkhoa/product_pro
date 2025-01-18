@@ -84,28 +84,29 @@ module.exports.getCategory= async (req, res) => {
 
 
 module.exports.createPost = async (req, res) => {
-  console.log(req.file); //no tu co khi dung multer
-  // console.log(req.body)
-  // req.body.price = parseInt(req.body.price)
-  // req.body.discountPercentage = parseInt(req.body.discountPercentage)
-  // req.body.stock = parseInt(req.body.stock)
 
-  // if (req.body.position == "") {
-  //   const countProducts = await Product.countDocuments({})
-  //   req.body.position = countProducts + 1
-  // } else {
-  //   req.body.position = parseInt(req.body.position)
-  // }
+  req.body.title = req.body.title;
+  req.body.product_category_id = req.body.product_category_id;
+  req.body.featured = req.body.featured;
+  req.body.description = req.body.description;
+  req.body.price = parseInt(req.body.price);
+  req.body.discountPercentage = parseInt(req.body.discountPercentage);
+  req.body.stock = parseInt(req.body.stock);
 
-  // //-them key nay cho req ==> add product se co
-  // req.body.createdBy = {
-  //   account_id: res.locals.user._id
-  // }
+  if (req.body.position == "") {
+    const countProducts = await Product.countDocuments({})
+    req.body.position = countProducts + 1
+  } else {
+    req.body.position = parseInt(req.body.position)
+  }
 
-  // //add product
-  // const product = new Product(req.body)
+  req.body.status = req.body.status;
+
+
+  //add product
+  const product = new Product(req.body)
+  console.log(product);
   // await product.save()
-  // res.redirect("/admin/products")
 }
 
 module.exports.deleteItem = async (req, res) => {
