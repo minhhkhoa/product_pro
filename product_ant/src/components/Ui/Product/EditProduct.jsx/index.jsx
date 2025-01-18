@@ -30,7 +30,7 @@ const uploadButton = (
 );
 
 // eslint-disable-next-line react/prop-types
-function EditProduct({ typeTitle, data, onProductCreated  }) {
+function EditProduct({ typeTitle, data, handleRefreshData  }) {
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (message, description) => {
     api.info({
@@ -71,6 +71,7 @@ function EditProduct({ typeTitle, data, onProductCreated  }) {
         },
       ]);
     }
+    
   }, [data]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -113,11 +114,12 @@ function EditProduct({ typeTitle, data, onProductCreated  }) {
         body: formData,
       });
       if (res.ok) {
-        if (onProductCreated) onProductCreated(); // Gọi callback để load lại dữ liệu
+        if (handleRefreshData) handleRefreshData(); // Gọi callback để load lại dữ liệu
         form.resetFields(); // Reset form
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
-        openNotification("Thành công", "Sản phẩm đã được thêm thành công!");
+        openNotification("Thành công", "Sản phẩm đã được cập nhật thành công!");
+        window.location.reload();
       } else {
         message.error('Đã có lỗi xảy ra khi cập nhật sản phẩm!');
       }

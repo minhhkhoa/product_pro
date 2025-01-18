@@ -59,6 +59,7 @@ function Product() {
     fetchData(selectedType, searchValue, selectedCategory); // Gọi API với bộ lọc danh mục
   }, [selectedType, searchValue, selectedCategory]);
 
+
   // Handle change position
   const handleChangePosition = (e, record) => {
     const newPosition = e.target.value;
@@ -148,7 +149,7 @@ function Product() {
   };
 
   const handleRefreshData = () => {
-    fetchData(selectedType, searchValue, selectedCategory); // Gọi lại API với các bộ lọc hiện tại
+    fetchData(selectedType, searchValue, selectedCategory);// Gọi lại API với các bộ lọc hiện tại
   };
 
 
@@ -210,7 +211,10 @@ function Product() {
       render: (_, record) => (
         <div>
           <ShowProduct typeTitle={"Chi tiết"} data={dataRow(record._id)} />
-          <EditProduct typeTitle={"Sửa"} data={dataRow(record._id)} onProductCreated={handleRefreshData} />
+          <EditProduct
+            typeTitle={"Sửa"}
+            data={dataRow(record._id)}
+            handleRefreshData={handleRefreshData} />
           <Button
             className="btn danger"
             type="primary"
