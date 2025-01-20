@@ -30,7 +30,7 @@ const uploadButton = (
 );
 
 // eslint-disable-next-line react/prop-types
-function EditProduct({ typeTitle, data, handleRefreshData  }) {
+function EditProduct({ typeTitle, data, handleRefreshData }) {
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (message, description) => {
     api.info({
@@ -39,12 +39,14 @@ function EditProduct({ typeTitle, data, handleRefreshData  }) {
       placement: "topRight",
     });
   };
-
   const [dataCategory, setDataCategory] = useState([]);
   const [editorContent, setEditorContent] = useState(data?.description || ''); // Mô tả từ props
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [previewOpen, setPreviewOpen] = useState(false);
+
+  const [form] = Form.useForm();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch dữ liệu danh mục sản phẩm
   const fetchData = async () => {
@@ -58,9 +60,10 @@ function EditProduct({ typeTitle, data, handleRefreshData  }) {
   };
 
   useEffect(() => {
+    // Gọi API để lấy danh mục sản phẩm
     fetchData();
 
-    // Load ảnh ban đầu vào fileList nếu có
+    // Cập nhật fileList nếu có ảnh thumbnail
     if (data?.thumbnail) {
       setFileList([
         {
@@ -71,11 +74,24 @@ function EditProduct({ typeTitle, data, handleRefreshData  }) {
         },
       ]);
     }
-    
-  }, [data]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form] = Form.useForm();
+    // Cập nhật giá trị form khi data thay đổi
+    if (data && form) { //-nếu data thay đổi
+      if (isModalOpen) { //-nếu model đã được mở
+        form.setFieldsValue({ //- mới bắt đầu gán dữ liệu vào form
+          title: data?.title || '',
+          product_category_id: data?.product_category_id || '',
+          featured: data?.featured || '0',
+          price: data?.price || '',
+          discountPercentage: data?.discountPercentage || '',
+          stock: data?.stock || '',
+          position: data?.position || '',
+          status: data?.status || 'active',
+        });
+      }
+    }
+  }, [data, form, isModalOpen]);
+
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -119,7 +135,6 @@ function EditProduct({ typeTitle, data, handleRefreshData  }) {
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
         openNotification("Thành công", "Sản phẩm đã được cập nhật thành công!");
-        window.location.reload();
       } else {
         message.error('Đã có lỗi xảy ra khi cập nhật sản phẩm!');
       }
@@ -158,21 +173,13 @@ function EditProduct({ typeTitle, data, handleRefreshData  }) {
         onCancel={handleCancel}
       >
         <Form
-          name="edit-product"
+          name={data._id} //-vì có rất nhiều modal chứa form nên phải có tên riêng
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          initialValues={{
-            title: data?.title || '',
-            product_category_id: data?.product_category_id || '',
-            featured: data?.featured || '0',
-            price: data?.price || '',
-            discountPercentage: data?.discountPercentage || '',
-            stock: data?.stock || '',
-            position: data?.position || '',
-            status: data?.status || 'active',
-          }}
+          initialValues={{}} //-để rỗng và sẽ cập nhật trên useEffect
         >
+
           <Form.Item
             label="Tên sản phẩm"
             name="title"

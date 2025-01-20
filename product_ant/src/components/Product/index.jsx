@@ -59,7 +59,6 @@ function Product() {
     fetchData(selectedType, searchValue, selectedCategory); // Gọi API với bộ lọc danh mục
   }, [selectedType, searchValue, selectedCategory]);
 
-
   // Handle change position
   const handleChangePosition = (e, record) => {
     const newPosition = e.target.value;
@@ -144,12 +143,12 @@ function Product() {
       .catch((error) => console.error("Error:", error));
   };
 
-  const dataRow = (id) => {
-    return data.find((item) => item._id === id); // Trả về sản phẩm có id khớp
-  };
-
   const handleRefreshData = () => {
     fetchData(selectedType, searchValue, selectedCategory);// Gọi lại API với các bộ lọc hiện tại
+  };
+
+  const dataRow = (id) => {
+    return data.find((item) => item._id === id); // Trả về sản phẩm có id khớp
   };
 
 
