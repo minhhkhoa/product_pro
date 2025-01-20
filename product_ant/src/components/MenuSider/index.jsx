@@ -9,6 +9,7 @@ import {
   SettingOutlined
 }
   from '@ant-design/icons';
+import { Link } from "react-router-dom";
 
 function MenuSider() {
   const items = [
@@ -19,12 +20,12 @@ function MenuSider() {
     },
     {
       key: 'sub2',
-      label: 'Danh mục sản phẩm',
+      label: <Link to="/products-category">Danh mục sản phẩm</Link>,
       icon: <PieChartOutlined />,
     },
     {
       key: 'sub3',
-      label: 'Danh sách sản phẩm',
+      label: <Link to="/products">Danh sách sản phẩm</Link>,
       icon: <HddOutlined />,
     },
     {

@@ -71,9 +71,7 @@ module.exports.getCategory= async (req, res) => {
       {
         deleted: false
       }
-    ).select([
-      "_id", "title", "parent_id",
-    ]);
+    ).select("-createdBy -updatedBy -updatedAt -createdAt");
     return res.json(listCategories);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
