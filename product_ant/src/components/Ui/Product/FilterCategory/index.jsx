@@ -63,6 +63,7 @@ function FilterCategory({ setSelectedCategory }) {
         options={data} // Dữ liệu phân cấp
         onChange={onChange}
         maxTagCount="responsive"
+        changeOnSelect 
         placeholder="Chọn danh mục"
       />
     </Card>
