@@ -142,6 +142,7 @@ function CreateProduct({ onProductCreated }) {
   return (
     <>
       <Button type="primary" onClick={showModal} className="btnCreate">
+        <PlusOutlined />
         Thêm sản phẩm
       </Button>
       <Modal title="Thêm sản phẩm" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>

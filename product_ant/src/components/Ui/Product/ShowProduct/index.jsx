@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, Modal, Typography, Space, Image } from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
 import PropTypes from 'prop-types';
 import './style.css';
 
@@ -42,6 +43,7 @@ const ShowProduct = ({ typeTitle, data }) => {
         style={{ marginRight: '10px' }}
         onClick={showModal}
       >
+        <EyeOutlined />
         {typeTitle}
       </Button>
 

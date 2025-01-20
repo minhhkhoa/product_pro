@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { EditOutlined } from "@ant-design/icons";
 import {
   Button,
   Modal,
@@ -164,6 +165,7 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
   return (
     <>
       <Button type="primary" onClick={showModal}>
+        <EditOutlined />
         {typeTitle}
       </Button>
       <Modal

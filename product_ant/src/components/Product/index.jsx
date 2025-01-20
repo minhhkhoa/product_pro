@@ -6,6 +6,7 @@ import FilterProduct from "../Ui/Product/Filter/FilterProduct";
 import CreateProduct from "../Ui/Product/CreateProduct.jsx";
 import FilterCategory from "../Ui/Product/FilterCategory/index.jsx";
 import EditProduct from "../Ui/Product/EditProduct.jsx";
+import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 
 const Context = React.createContext({
   name: "Default",
@@ -157,11 +158,17 @@ function Product() {
       title: "Hình ảnh",
       dataIndex: "thumbnail",
       render: (thumbnail) => (
-        <img
-          src={thumbnail}
-          alt="product"
-          style={{ width: "100px", height: "90px", objectFit: "cover" }}
-        />
+        <div className="image" >
+          <img
+            src={thumbnail}
+            alt="product"
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain"
+            }}
+          />
+        </div>
       ),
     },
     {
@@ -220,6 +227,7 @@ function Product() {
             danger
             onClick={() => showDeleteModal(record._id)}
           >
+            <DeleteOutlined />
             Xóa
           </Button>
         </div>
