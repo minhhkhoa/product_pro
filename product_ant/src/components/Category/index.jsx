@@ -3,8 +3,9 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table } from 'antd';
 import "./style.css";
 import Highlighter from 'react-highlight-words';
-import { PlusOutlined } from '@ant-design/icons'; // Thêm import icon
-import { Link, Outlet } from 'react-router-dom';
+import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'; // Thêm import icon
+import { Link } from 'react-router-dom';
+
 
 
 function Category() {
@@ -16,11 +17,19 @@ function Category() {
     try {
       const res = await fetch("http://localhost:3000/admin/products/getCategory");
       const result = await res.json();
-      setData(result);
+
+      // Gắn key cho từng phần tử trong mảng dữ liệu
+      const dataWithKeys = result.map((item, index) => ({
+        ...item,
+        key: item._id || index, // Sử dụng _id làm key, nếu không có thì dùng index
+      }));
+
+      setData(dataWithKeys);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
+
 
   useEffect(() => {
     fetchData();
@@ -135,6 +144,7 @@ function Category() {
       ),
   });
 
+
   //-start column
   const columns = [
     {
@@ -165,13 +175,30 @@ function Category() {
     },
     {
       title: 'Hành động',
-      dataIndex: 'address',
-      key: 'address',
+      key: 'action',
+      render: (_, record) => {
+        return (
+          <div>
+            <Link to={`/products-category/updateCategory/${record._id}`}>
+              <Button className="btn" type="primary">
+                <EditOutlined />
+                Sửa
+              </Button>
+            </Link>
+
+            <Button className="btn btnDelete" type="primary" danger>
+              <DeleteOutlined />
+              Xóa
+            </Button>
+          </div>
+        )
+      }
     },
   ];
   //-end column
 
-  console.log("Category Component Rendered");
+
+
   return (
     <>
       <h1 className='namePage'>Danh mục sản phẩm</h1>
@@ -181,6 +208,7 @@ function Category() {
           Thêm mới
         </Button>
       </Link>
+
       <Table
         columns={columns}
         dataSource={data}
@@ -188,7 +216,6 @@ function Category() {
           pageSize: 4,
         }}
       />
-      <Outlet />
     </>
   )
 }

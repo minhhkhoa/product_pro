@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { EditOutlined } from "@ant-design/icons";
 import {
   Button,
   Modal,
@@ -12,7 +11,7 @@ import {
   Upload,
   notification
 } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined} from '@ant-design/icons';
 const { Option } = Select;
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
@@ -164,7 +163,10 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button
+        className="btn editProduct"
+        type="primary"
+        onClick={showModal}>
         <EditOutlined />
         {typeTitle}
       </Button>

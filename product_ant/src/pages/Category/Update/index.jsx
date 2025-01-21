@@ -16,6 +16,9 @@ import {
 import { PlusOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import './style.css'; // Import file CSS tùy chỉnh
+import { useNavigate } from 'react-router-dom';
+
+import { useParams } from 'react-router-dom';
 
 const { Option } = Select;
 
@@ -30,7 +33,10 @@ const Context = React.createContext({
   name: 'Default',
 });
 
-function CreateCategory() {
+function UpdateCategory() {
+  const { id } = useParams(); // Lấy id từ URL
+  const navigate = useNavigate(); // Khởi tạo hook navigate
+
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
 
@@ -52,9 +58,40 @@ function CreateCategory() {
     }
   };
 
+  const fetchDataById = async (id) => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/admin/products-category/getCategoryById/${id}`
+      );
+      const result = await res.json();
+      
+      // Cập nhật các trường của form bằng dữ liệu nhận được
+      form.setFieldsValue({
+        title: result.title,
+        parent_id: result.parent_id, // Nếu có, đảm bảo rằng `parent_id` là một ID hợp lệ
+        description: result.description,
+        position: result.position,
+        status: result.status,
+      });
+      // Cập nhật fileList cho ảnh thumbnail nếu có
+      if (result.thumbnail) {
+        setFileList([
+          {
+            uid: '-1', // uid phải là duy nhất, có thể sử dụng -1 cho ảnh đã có
+            name: 'thumbnail', // Tên của file (tuỳ chọn)
+            status: 'done', // Trạng thái ảnh đã được tải lên
+            url: result.thumbnail // Đặt URL của ảnh
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  }
   useEffect(() => {
     fetchData();
-  }, []);
+    fetchDataById(id);
+  }, [id]);
 
   const openNotification = (message, description) => {
     api.info({
@@ -75,22 +112,25 @@ function CreateCategory() {
     formData.append('position', values.position || '');
     formData.append('status', values.status);
 
-    if (fileList.length > 0) {
+    // Chỉ gửi ảnh nếu có ảnh mới
+    if (fileList.length > 0 && fileList[0].originFileObj) {
       formData.append('thumbnail', fileList[0].originFileObj);
     }
 
     try {
-      const res = await fetch("http://localhost:3000/admin/products-category/create", {
-        method: 'POST',
+      const res = await fetch(`http://localhost:3000/admin/products-category/edit/${id}`, {
+        method: 'PATCH',
         body: formData,
       });
+
       if (res.ok) {
         form.resetFields(); // Reset form
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
-        openNotification("Thành công", "Danh mục đã được thêm thành công!");
+        openNotification("Thành công", "Danh mục đã được cập nhật thành công!");
+        navigate('/products-category'); 
       } else {
-        message.error('Đã có lỗi xảy ra khi tạo danh mục sản phẩm!');
+        message.error('Đã có lỗi xảy ra khi sửa danh mục sản phẩm!');
       }
     } catch (error) {
       message.error('Đã có lỗi xảy ra!', error);
@@ -117,7 +157,7 @@ function CreateCategory() {
 
   return (
     <>
-      <h1 className="page-title">Thêm Danh Mục Sản Phẩm</h1>
+      <h1 className="page-title">Sửa Danh Mục Sản Phẩm</h1>
 
       <Card bordered={false} className="form-container">
         <Form
@@ -140,7 +180,7 @@ function CreateCategory() {
           <Form.Item
             name="parent_id"
             label="Danh mục cha"
-            // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
+          // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
           >
             <Select allowClear placeholder="Chọn danh mục cha">
               <Option key="none" value="">
@@ -210,7 +250,7 @@ function CreateCategory() {
 
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
-              Thêm Danh Mục
+              Sửa Danh Mục
             </Button>
           </Form.Item>
         </Form>
@@ -223,4 +263,4 @@ function CreateCategory() {
   );
 }
 
-export default CreateCategory;
+export default UpdateCategory;

@@ -5,9 +5,6 @@ const multer = require('multer')
 const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware")
 const upload = multer()
 
-const uploadToCloudinary = require("../../helpers/uploadToCloudinary")
-
-
 
 const controller = require("../../controllers/admin/product.controller");
 const validate = require("../../validates/admin/product.validate")
@@ -34,7 +31,8 @@ router.patch(
   upload.single('thumbnail'),
   uploadCloud.upload,
   validate.createPost,
-  controller.editSuccess)
+  controller.editSuccess
+)
 
 router.delete('/delete/:id', controller.deleteItem);
 

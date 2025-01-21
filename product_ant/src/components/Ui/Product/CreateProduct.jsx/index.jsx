@@ -44,6 +44,7 @@ function CreateProduct({ onProductCreated }) {
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [form] = Form.useForm();
 
   // Fetch dữ liệu danh mục sản phẩm
   const fetchData = async () => {
@@ -61,7 +62,6 @@ function CreateProduct({ onProductCreated }) {
   }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [form] = Form.useForm();
 
   const showModal = () => {
     setIsModalOpen(true);

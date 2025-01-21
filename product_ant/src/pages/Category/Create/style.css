@@ -1,0 +1,30 @@
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-container {
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.ant-divider-horizontal {
+  margin: 20px 0;
+}
+
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+.ant-btn-primary {
+  background-color: #1890ff;
+  border-color: #1890ff;
+  font-size: 16px;
+  height: 40px;
+}

@@ -1,4 +1,4 @@
-import { Menu } from "antd";
+import { Menu, Tooltip } from "antd";
 import {
   PieChartOutlined,
   HddOutlined,
@@ -6,26 +6,51 @@ import {
   FormOutlined,
   MergeOutlined,
   AuditOutlined,
-  SettingOutlined
+  SettingOutlined,
+  StrikethroughOutlined,
+  CoffeeOutlined,
 }
   from '@ant-design/icons';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function MenuSider() {
+
+  const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
   const items = [
     {
-      key: 'sub1',
+      key: 'dashBoard',
       label: 'Tổng quan',
       icon: <HomeOutlined />,
     },
     {
-      key: 'sub2',
-      label: <Link to="/products-category">Danh mục sản phẩm</Link>,
+      key: 'category',
+      label: (
+        <Tooltip title="Danh mục sản phẩm">
+          <span>Danh mục sản phẩm</span>
+        </Tooltip>
+      ),
       icon: <PieChartOutlined />,
+      children: [
+        {
+          label: <Link to="/products-category">Danh mục</Link>,
+          key: "/products-category",
+          icon: <StrikethroughOutlined />,
+        },
+        {
+          label: <Link to="/products-category/createCategory">Thêm danh mục</Link>,
+          key: "/products-category/createCategory",
+          icon: <CoffeeOutlined />,
+
+        }
+      ]
     },
     {
-      key: 'sub3',
-      label: <Link to="/products">Danh sách sản phẩm</Link>,
+      key: '/products',
+      label: (
+        <Tooltip title="">
+          <Link to="/products">Danh sách sản phẩm</Link>
+        </Tooltip>
+      ),
       icon: <HddOutlined />,
     },
     {
@@ -53,7 +78,7 @@ function MenuSider() {
     <>
       <Menu
         theme={'dark'}
-        defaultSelectedKeys={['sub3']}
+        selectedKeys={[location.pathname]} // Thay đổi giá trị selectedKeys dựa trên đường dẫn hiện tại
         mode="inline"
         items={items}
         style={{ height: "100%" }}

@@ -21,3 +21,11 @@
   right: 10px;
   top: 110px
 }
+
+.btnDelete{
+  margin-left: 10px;
+}
+
+.btnDelete:hover {
+  background: crimson !important;
+}
