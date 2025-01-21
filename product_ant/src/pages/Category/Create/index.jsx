@@ -117,7 +117,7 @@ function CreateCategory() {
 
   return (
     <>
-      <h1 className="page-title">Thêm Danh Mục Sản Phẩm</h1>
+      <h1 className='namePage'>Thêm Danh Mục Sản Phẩm</h1>
 
       <Card bordered={false} className="form-container">
         <Form

@@ -157,7 +157,7 @@ function UpdateCategory() {
 
   return (
     <>
-      <h1 className="page-title">Sửa Danh Mục Sản Phẩm</h1>
+      <h1 className='namePage'>Sửa Danh Mục Sản Phẩm</h1>
 
       <Card bordered={false} className="form-container">
         <Form
