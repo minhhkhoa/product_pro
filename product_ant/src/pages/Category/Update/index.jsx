@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
+// React,
 import {
   Modal,
   Form,
@@ -8,7 +9,7 @@ import {
   InputNumber,
   Upload,
   Button,
-  notification,
+  // notification,
   Divider,
   Card,
   message
@@ -29,16 +30,16 @@ const uploadButton = (
   </div>
 );
 
-const Context = React.createContext({
-  name: 'Default',
-});
+// const Context = React.createContext({
+//   name: 'Default',
+// });
 
 function UpdateCategory() {
   const { id } = useParams(); // Lấy id từ URL
   const navigate = useNavigate(); // Khởi tạo hook navigate
 
   const [form] = Form.useForm();
-  const [api, contextHolder] = notification.useNotification();
+  // const [api, contextHolder] = notification.useNotification();
 
   const [dataCategory, setDataCategory] = useState([]);
   const [editorContent, setEditorContent] = useState('');
@@ -93,13 +94,13 @@ function UpdateCategory() {
     fetchDataById(id);
   }, [id]);
 
-  const openNotification = (message, description) => {
-    api.info({
-      message,
-      description,
-      placement: "topRight",
-    });
-  };
+  // const openNotification = (message, description) => {
+  //   api.info({
+  //     message,
+  //     description,
+  //     placement: "topRight",
+  //   });
+  // };
 
   const onFinish = async (values) => {
     values.description = editorContent;
@@ -127,8 +128,12 @@ function UpdateCategory() {
         form.resetFields(); // Reset form
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
-        openNotification("Thành công", "Danh mục đã được cập nhật thành công!");
-        navigate('/products-category'); 
+        navigate('/products-category', { //- gửi thông báo tới trang navigate tới
+          state: {
+            title: "Thành công",
+            description: "Danh mục đã được cập nhật thành công!" 
+          }
+        }); // Truyền trạng thái
       } else {
         message.error('Đã có lỗi xảy ra khi sửa danh mục sản phẩm!');
       }
@@ -256,9 +261,9 @@ function UpdateCategory() {
         </Form>
       </Card>
 
-      <Context.Provider value={{ name: 'Ant Design' }}>
+      {/* <Context.Provider value={{ name: 'Ant Design' }}>
         {contextHolder}
-      </Context.Provider>
+      </Context.Provider> */}
     </>
   );
 }

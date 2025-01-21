@@ -1,16 +1,48 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table } from 'antd';
+import { 
+  Button, 
+  Input, 
+  Space, 
+  Table,
+  Modal,
+  notification,
+} 
+from 'antd';
 import "./style.css";
 import Highlighter from 'react-highlight-words';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'; // Thêm import icon
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; 
+
+const Context = React.createContext({
+  name: "Default",
+});
 
 
 
 function Category() {
 
+  const location = useLocation(); //-Đọc state với useLocation được gửi từ navigate bên kia
+
   const [data, setData] = useState([]);
+  const [idDelete, setIdDelete] = useState(null);
+
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
+
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotification = (message, description) => {
+    api.info({
+      message,
+      description,
+      placement: "topRight",
+    });
+  };
 
   // Lấy dữ liệu danh mục từ API
   const fetchData = async () => {
@@ -33,11 +65,13 @@ function Category() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+    if (location.state?.title && location.state?.description) {
+      // Gọi hàm openNotification với thông tin từ trạng thái
+      openNotification(location.state.title, location.state.description);
+    }
+  }, [location.state]);
 
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
-  const searchInput = useRef(null);
+
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
     setSearchText(selectedKeys[0]);
@@ -145,6 +179,53 @@ function Category() {
   });
 
 
+  const showModal = (id) => {
+    setIdDelete(id);
+    setOpen(true);
+  };
+
+  const handleOk = async () => {
+    setConfirmLoading(true);
+
+    try {
+      await handleDelete(idDelete); // Đợi hàm xóa chạy xong
+    } catch (error) {
+      console.error("Error during delete:", error);
+    }
+
+    setConfirmLoading(false);
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  }
+
+
+  const handleDelete = async (id) => {
+  try {
+    const res = await fetch(`http://localhost:3000/admin/products-category/delete/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    // Chờ nhận kết quả JSON từ server
+    fetchData();
+
+    // Hiển thị thông báo thành công
+    openNotification("Thành công", "Danh mục đã được xóa thành công!");
+    setOpen(false);
+  } catch (error) {
+    // Xử lý lỗi nếu có
+    openNotification("Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!");
+    console.error("Error:", error);
+  }
+};
+
+
+
   //-start column
   const columns = [
     {
@@ -186,7 +267,12 @@ function Category() {
               </Button>
             </Link>
 
-            <Button className="btn btnDelete" type="primary" danger>
+            <Button
+              className="btn btnDelete"
+              type="primary"
+              danger
+              onClick={() => showModal(record._id)}
+            >
               <DeleteOutlined />
               Xóa
             </Button>
@@ -216,6 +302,20 @@ function Category() {
           pageSize: 4,
         }}
       />
+
+      <Context.Provider value={{ name: "Ant Design" }}>
+        {contextHolder}
+      </Context.Provider>
+
+      <Modal
+        title="Thông báo"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <p>Bạn có muốn xóa danh mục này không?</p>
+      </Modal>
     </>
   )
 }

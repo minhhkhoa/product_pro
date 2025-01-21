@@ -20,7 +20,6 @@ module.exports.createPost = async (req, res) => {
     }
 
     const record = new ProductCategory(req.body);
-    console.log(record);
     await record.save();
     
     return res.json("Thêm thành công");
@@ -47,3 +46,13 @@ module.exports.editPatch = async (req, res) => {
 
   return res.json("Cập nhật thành công");
 };
+
+module.exports.deleteItem = async (req, res) => {
+  const id = req.params.id
+  //-xóa mềm
+  await ProductCategory.updateOne({ _id: id }, {
+    deleted: true,
+  })
+
+  return res.json({ message: "Delete product successfully" });
+}
