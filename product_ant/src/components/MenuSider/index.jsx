@@ -47,7 +47,7 @@ function MenuSider() {
       ]
     },
     {
-      key: '/products',
+      key: 'rootProduct',
       label: (
         <Tooltip title="Danh sách sản phẩm">
           <span>Danh sách sản phẩm</span>

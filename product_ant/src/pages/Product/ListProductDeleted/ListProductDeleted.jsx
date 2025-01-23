@@ -63,7 +63,7 @@ function ListProductDeleted() {
 
   const handleRollBack = (id) => {
     fetch(`http://localhost:3000/admin/products/rollbackProduct/${id}`, {
-      method: "DELETE",
+      method: "PATCH",
     })
       .then((res) => {
         if (!res.ok) {

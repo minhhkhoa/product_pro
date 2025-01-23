@@ -16,7 +16,7 @@ router.patch('/change-status/:status/:id', controller.changeStatus);
 
 router.patch('/change-position/:position/:id', controller.changePosition);
 
-// router.patch('/rollbackProduct/:id', controller.rollbackProduct);
+router.patch('/rollbackProduct/:id', controller.rollbackProduct);
 
 
 router.get("/getProductsDeleted", controller.getProductsDeleted);

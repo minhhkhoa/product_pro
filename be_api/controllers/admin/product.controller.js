@@ -65,7 +65,7 @@ module.exports.changePosition = async (req, res) => {
   }
 }
 
-module.exports.getCategory= async (req, res) => {
+module.exports.getCategory = async (req, res) => {
   try {
     const listCategories = await ProductCategory.find(
       {
@@ -149,6 +149,32 @@ module.exports.getProductsDeleted = async (req, res) => {
     return res.status(500).json({ message: "Failed to get product." });
   }
 };
+
+module.exports.rollbackProduct = async (req, res) => {
+  try {
+    const id = req.params.id; // Lấy id từ params
+    if (!id) {
+      return res.status(400).json({ message: "Product ID is required." });
+    }
+
+    // Cập nhật sản phẩm
+    const updatedProduct = await Product.updateOne(
+      { _id: id }, // Điều kiện tìm sản phẩm theo id
+      { deleted: false } // Cập nhật trường deleted
+    );
+
+    // Kiểm tra xem sản phẩm có được cập nhật không
+    if (updatedProduct.modifiedCount === 0) {
+      return res.status(404).json({ message: "Product not found or already active." });
+    }
+
+    return res.json({ message: "Rollback success." });
+  } catch (error) {
+    console.error(error); // Ghi log lỗi
+    return res.status(500).json({ message: "Failed to rollback product." });
+  }
+};
+
 
 module.exports.deleteItemForever = async (req, res) => {
   const id = req.params.id; // Lấy id từ params
