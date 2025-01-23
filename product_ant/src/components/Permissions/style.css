@@ -29,10 +29,6 @@
   text-align: center;
 }
 
-/* .permissions-table .ant-table-tbody>tr:hover {
-  background: #e6f7ff;
-} */
-
 .permissions-table .ant-table-tbody>tr>td {
   text-align: center;
 }

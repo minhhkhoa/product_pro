@@ -141,7 +141,7 @@ const PermissionsTable = () => {
 
   return (
     <div className="permissions-container">
-      <h1 className="permissions-title">Phân quyền</h1>
+      <h1 className="namePage">Phân quyền</h1>
       <Table
         dataSource={dataSource}
         columns={columns}
