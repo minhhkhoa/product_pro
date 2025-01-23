@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Modal,
@@ -7,18 +7,13 @@ import {
   Select,
   Radio,
   InputNumber,
-  message,
   Upload,
-  notification,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'; // Thêm import icon
 const { Option } = Select;
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
-
-const Context = React.createContext({
-  name: "Default",
-});
+import Notification from '../../../../utils/Notification';
 
 const uploadButton = (
   <div>
@@ -30,14 +25,6 @@ const uploadButton = (
 
 // eslint-disable-next-line react/prop-types
 function CreateProduct({ onProductCreated }) {
-  const [api, contextHolder] = notification.useNotification();
-  const openNotification = (message, description) => {
-    api.info({
-      message,
-      description,
-      placement: "topRight",
-    });
-  };
 
   const [dataCategory, setDataCategory] = useState([]);
   const [editorContent, setEditorContent] = useState('');
@@ -109,12 +96,13 @@ function CreateProduct({ onProductCreated }) {
         form.resetFields(); // Reset form
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
-        openNotification("Thành công", "Sản phẩm đã được thêm thành công!");
+        Notification("success", "Thành công", "Sản phẩm đã được thêm thành công!");
       } else {
-        message.error('Đã có lỗi xảy ra khi tạo sản phẩm!');
+        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
       }
     } catch (error) {
-      message.error('Đã có lỗi xảy ra!', error);
+      console.log('Đã có lỗi xảy ra!', error);
+      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
     }
   };
 
@@ -145,7 +133,12 @@ function CreateProduct({ onProductCreated }) {
         <PlusOutlined />
         Thêm sản phẩm
       </Button>
-      <Modal title="Thêm sản phẩm" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <Modal
+        title="Thêm sản phẩm"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
         <Form
           name="create-product"
           form={form}
@@ -251,10 +244,6 @@ function CreateProduct({ onProductCreated }) {
           </Form.Item>
         </Form>
       </Modal>
-
-      <Context.Provider value={{ name: "Ant Design" }}>
-        {contextHolder}
-      </Context.Provider>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Button,
   Modal,
@@ -7,19 +7,14 @@ import {
   Select,
   Radio,
   InputNumber,
-  message,
   Upload,
-  notification
 } from 'antd';
 import { PlusOutlined, EditOutlined} from '@ant-design/icons';
 const { Option } = Select;
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
 import PropTypes from 'prop-types';
-
-const Context = React.createContext({
-  name: "Default",
-});
+import Notification from '../../../../utils/Notification';
 
 
 const uploadButton = (
@@ -31,14 +26,7 @@ const uploadButton = (
 
 // eslint-disable-next-line react/prop-types
 function EditProduct({ typeTitle, data, handleRefreshData }) {
-  const [api, contextHolder] = notification.useNotification();
-  const openNotification = (message, description) => {
-    api.info({
-      message,
-      description,
-      placement: "topRight",
-    });
-  };
+
   const [dataCategory, setDataCategory] = useState([]);
   const [editorContent, setEditorContent] = useState(data?.description || ''); // Mô tả từ props
   const [fileList, setFileList] = useState([]);
@@ -134,12 +122,13 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
         form.resetFields(); // Reset form
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
-        openNotification("Thành công", "Sản phẩm đã được cập nhật thành công!");
+        Notification("success", "Thành công", "Sản phẩm đã được cập nhật thành công!");
       } else {
-        message.error('Đã có lỗi xảy ra khi cập nhật sản phẩm!');
+        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
       }
     } catch (error) {
-      message.error('Đã có lỗi xảy ra!', error);
+      console.log('Đã có lỗi xảy ra khi cập nhật sản phẩm!', error);
+      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
     }
   };
 
@@ -293,10 +282,6 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
           </Form.Item>
         </Form>
       </Modal>
-
-      <Context.Provider value={{ name: "Ant Design" }}>
-        {contextHolder}
-      </Context.Provider>
     </>
   );
 }

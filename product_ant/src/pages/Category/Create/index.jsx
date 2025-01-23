@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Modal,
   Form,
@@ -8,14 +8,13 @@ import {
   InputNumber,
   Upload,
   Button,
-  notification,
   Divider,
   Card,
-  message
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import './style.css'; // Import file CSS tùy chỉnh
+import Notification from '../../../utils/Notification';
 
 const { Option } = Select;
 
@@ -26,13 +25,8 @@ const uploadButton = (
   </div>
 );
 
-const Context = React.createContext({
-  name: 'Default',
-});
-
 function CreateCategory() {
   const [form] = Form.useForm();
-  const [api, contextHolder] = notification.useNotification();
 
   const [dataCategory, setDataCategory] = useState([]);
   const [editorContent, setEditorContent] = useState('');
@@ -55,14 +49,6 @@ function CreateCategory() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const openNotification = (message, description) => {
-    api.info({
-      message,
-      description,
-      placement: "topRight",
-    });
-  };
 
   const onFinish = async (values) => {
     values.description = editorContent;
@@ -88,12 +74,13 @@ function CreateCategory() {
         form.resetFields(); // Reset form
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
-        openNotification("Thành công", "Danh mục đã được thêm thành công!");
+        Notification("success", "Thông báo", "Danh mục đã được thêm thành công!");
       } else {
-        message.error('Đã có lỗi xảy ra khi tạo danh mục sản phẩm!');
+        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo danh mục sản phẩm!");
       }
     } catch (error) {
-      message.error('Đã có lỗi xảy ra!', error);
+      console.log('Đã có lỗi xảy ra!', error);
+      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo danh mục sản phẩm!");
     }
   };
 
@@ -215,10 +202,6 @@ function CreateCategory() {
           </Form.Item>
         </Form>
       </Card>
-
-      <Context.Provider value={{ name: 'Ant Design' }}>
-        {contextHolder}
-      </Context.Provider>
     </>
   );
 }

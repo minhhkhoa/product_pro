@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Button, Table, notification, Tooltip, Modal } from "antd";
+import { useEffect, useState } from "react";
+import { Button, Table, Tooltip, Modal } from "antd";
 import "./style.css";
 import ShowProduct from "../Ui/Product/ShowProduct/index";
 import FilterProduct from "../Ui/Product/Filter/FilterProduct";
@@ -7,10 +7,8 @@ import CreateProduct from "../Ui/Product/CreateProduct.jsx";
 import FilterCategory from "../Ui/Product/FilterCategory/index.jsx";
 import EditProduct from "../Ui/Product/EditProduct.jsx";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
+import Notification from "../../utils/Notification/index.jsx";
 
-const Context = React.createContext({
-  name: "Default",
-});
 
 function Product() {
   const [data, setData] = useState([]);
@@ -20,16 +18,6 @@ function Product() {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotification = (message, description) => {
-    api.info({
-      message,
-      description,
-      placement: "topRight",
-    });
-  };
 
   const fetchData = async (status = "all", search = "", categoryId = null) => {
     setLoading(true);
@@ -81,15 +69,14 @@ function Product() {
         return res.json();
       })
       .then(() => {
-        openNotification(
-          "Thành công",
-          "Đã thay đổi vị trí sản phẩm thành công!"
-        );
+        Notification('success', 'Thành công', 'Đã thay đổi vị trí sản phẩm thành công!');
+
         fetchData(selectedType, searchValue, selectedCategory);
       })
       .catch((error) => {
-        openNotification("Lỗi", "Không thể thay đổi vị trí sản phẩm!");
-        console.error("Error:", error);
+        Notification('error', 'Lỗi', 'Không thể thay đổi vị trí sản phẩm!');
+        console.log(error);
+
       });
   };
 
@@ -109,12 +96,13 @@ function Product() {
         return res.json();
       })
       .then(() => {
-        openNotification("Thành công", "Sản phẩm đã được xóa thành công!");
+        Notification("success", "Thành công", "Sản phẩm đã được xóa thành công!");
         fetchData(selectedType, searchValue, selectedCategory);
         setIsDeleteModalVisible(false);
       })
       .catch((error) => {
-        openNotification("Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!");
+        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!")
+
         console.error("Error:", error);
       });
   };
@@ -139,9 +127,13 @@ function Product() {
         return res.json();
       })
       .then(() => {
+        Notification("success", "Thành công", "Thay đổi trạng thái sản phẩm thành công!");
         fetchData(selectedType, searchValue, selectedCategory);
       })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {
+        Notification("error", "Lỗi", "Đã có lỗi xảy ra!");
+        console.error("Error:", error);
+      });
   };
 
   const handleRefreshData = () => {
@@ -259,9 +251,6 @@ function Product() {
         }}
         loading={loading}
       />
-      <Context.Provider value={{ name: "Ant Design" }}>
-        {contextHolder}
-      </Context.Provider>
 
       <Modal
         title="Thông báo"
