@@ -33,7 +33,7 @@ export const routes = [
         element: <UpdateCategory />
       },
       {
-        path: "role",
+        path: "roles",
         element: <Role />
       },
     ]

@@ -69,8 +69,8 @@ function MenuSider() {
       ]
     },
     {
-      key: '/role',
-      label: <Link to="/role">Nhóm quyền</Link>,
+      key: '/roles',
+      label: <Link to="/roles">Nhóm quyền</Link>,
       icon: <FormOutlined />,
     },
     {
