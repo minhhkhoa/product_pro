@@ -16,6 +16,11 @@ router.patch('/change-status/:status/:id', controller.changeStatus);
 
 router.patch('/change-position/:position/:id', controller.changePosition);
 
+// router.patch('/rollbackProduct/:id', controller.rollbackProduct);
+
+
+router.get("/getProductsDeleted", controller.getProductsDeleted);
+
 router.get("/getCategory", controller.getCategory);
 
 router.post(
@@ -35,6 +40,9 @@ router.patch(
 )
 
 router.delete('/delete/:id', controller.deleteItem);
+
+router.delete("/deleteForever/:id", controller.deleteItemForever);
+
 
 
 module.exports = router;

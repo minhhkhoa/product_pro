@@ -139,3 +139,32 @@ module.exports.deleteItem = async (req, res) => {
   return res.json({ message: "Delete product successfully" });
 
 }
+
+module.exports.getProductsDeleted = async (req, res) => {
+  try {
+    const data = await Product.find({ deleted: true }).lean(); // Lấy dữ liệu thuần
+    return res.json(data); // Trả về JSON dữ liệu
+  } catch (error) {
+    console.error(error); // Ghi log lỗi
+    return res.status(500).json({ message: "Failed to get product." });
+  }
+};
+
+module.exports.deleteItemForever = async (req, res) => {
+  const id = req.params.id; // Lấy id từ params
+  try {
+    // Kiểm tra id có tồn tại không
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    // Xoá vĩnh viễn document
+    await Product.findByIdAndDelete(id);
+
+    return res.status(200).json({ message: "Product deleted permanently" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to delete product" });
+  }
+};

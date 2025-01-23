@@ -229,7 +229,7 @@ function Product() {
 
   return (
     <>
-      <h1>Danh sách sản phẩm</h1>
+      <h1 className='namePage'>Danh sách sản phẩm</h1>
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <FilterProduct
           setData={setData}

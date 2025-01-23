@@ -9,6 +9,8 @@ import {
   SettingOutlined,
   StrikethroughOutlined,
   CoffeeOutlined,
+  DeploymentUnitOutlined,
+  ProductOutlined
 }
   from '@ant-design/icons';
 import { Link, useLocation } from "react-router-dom";
@@ -47,11 +49,24 @@ function MenuSider() {
     {
       key: '/products',
       label: (
-        <Tooltip title="">
-          <Link to="/products">Danh sách sản phẩm</Link>
+        <Tooltip title="Danh sách sản phẩm">
+          <span>Danh sách sản phẩm</span>
         </Tooltip>
       ),
       icon: <HddOutlined />,
+      children: [
+        {
+          label: <Link to="/products">Sản phẩm</Link>,
+          key: "/products",
+          icon: <ProductOutlined />,
+        },
+        {
+          label: <Link to="/products-deleted">Sản phẩm đã xóa</Link>,
+          key: "/products-deleted",
+          icon: <DeploymentUnitOutlined />,
+
+        }
+      ]
     },
     {
       key: 'sub4',
