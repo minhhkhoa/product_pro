@@ -69,8 +69,8 @@ function MenuSider() {
       ]
     },
     {
-      key: 'sub4',
-      label: 'Nhóm quyền',
+      key: '/role',
+      label: <Link to="/role">Nhóm quyền</Link>,
       icon: <FormOutlined />,
     },
     {

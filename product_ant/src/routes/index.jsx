@@ -4,6 +4,7 @@ import Category from '../components/Category';
 import CreateCategory from '../pages/Category/Create';
 import UpdateCategory from '../pages/Category/Update';
 import ListProductDeleted from '../pages/Product/ListProductDeleted/ListProductDeleted';
+import Role from '../components/Role';
 
 //-obj route
 export const routes = [
@@ -30,6 +31,10 @@ export const routes = [
       {
         path: "products-category/updateCategory/:id",
         element: <UpdateCategory />
+      },
+      {
+        path: "role",
+        element: <Role />
       },
     ]
   }
