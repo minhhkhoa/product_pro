@@ -1,0 +1,56 @@
+.permissions-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.permissions-title {
+  text-align: center;
+  font-size: 1.5em;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.permissions-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.permissions-table .ant-table-thead>tr>th {
+  background: #1890ff;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* .permissions-table .ant-table-tbody>tr:hover {
+  background: #e6f7ff;
+} */
+
+.permissions-table .ant-table-tbody>tr>td {
+  text-align: center;
+}
+
+.actions-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.submit-button {
+  background: #1890ff;
+  border: none;
+  font-size: 1.1em;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.submit-button:hover {
+  background: #40a9ff;
+}

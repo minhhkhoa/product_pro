@@ -74,8 +74,8 @@ function MenuSider() {
       icon: <FormOutlined />,
     },
     {
-      key: 'sub5',
-      label: 'Phân quyền',
+      key: '/permissions',
+      label: <Link to="/permissions">Phân quyền</Link>,
       icon: <MergeOutlined />,
     },
     {
