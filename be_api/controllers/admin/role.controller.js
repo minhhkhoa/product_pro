@@ -46,3 +46,29 @@ module.exports.deleteRole = async (req, res) => {
   }
 };
 
+module.exports.editPatch = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Kiểm tra xem Role có tồn tại hay không
+    const role = await Role.findById(id);
+    if (!role) {
+      return res.status(404).json({ message: "Role not found" });
+    }
+
+    // Cập nhật thông tin Role với dữ liệu từ req.body
+    const result = await Role.updateOne({ _id: id }, req.body);
+
+    // Kiểm tra kết quả cập nhật
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({ message: "No changes were made" });
+    }
+
+    return res.json({ message: "Role updated successfully" });
+  } catch (error) {
+    console.error("Error updating Role:", error);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
+  }
+};
+
+

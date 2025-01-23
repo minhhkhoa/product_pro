@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Modal } from "antd";
 import "./style.css";
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons'; // Thêm import icon
+import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 import Notification from "../../utils/Notification";
 import CreateRole from "../Ui/Role/CreateRole";
+import EditRole from "../Ui/Role/EditRole";
 
 function Role() {
 
@@ -60,6 +61,10 @@ function Role() {
       });
   };
 
+  const dataRow = (id) => {
+    return data.find((item) => item._id === id); // Trả về sản phẩm có id khớp
+  };
+
 
   const columns = [
     
@@ -83,14 +88,10 @@ function Role() {
       dataIndex: "_id",
       render: (_, record) => (
         <div>
-          <Button
-            className="btn"
-            type="primary"
-          >
-            <EditOutlined />
-            Sửa
-          </Button>
-
+          <EditRole
+            data={dataRow(record._id)}
+            resetData={fetchData}
+          />
           <Button
             className="btn danger"
             type="primary"
