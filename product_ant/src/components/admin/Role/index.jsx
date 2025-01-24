@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Button, Table, Modal } from "antd";
 import "./style.css";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
-import Notification from "../../utils/Notification";
-import CreateRole from "../Ui/Role/CreateRole";
-import EditRole from "../Ui/Role/EditRole";
+import Notification from "../../../utils/Notification";
+import CreateRole from "../../Ui/admin/Role/CreateRole";
+import EditRole from "../../Ui/admin/Role/EditRole";
 
 function Role() {
 

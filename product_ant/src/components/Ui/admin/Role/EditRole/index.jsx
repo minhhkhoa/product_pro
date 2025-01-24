@@ -1,16 +1,28 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
-import { PlusOutlined } from '@ant-design/icons'; // Thêm import icon
+import { EditOutlined } from '@ant-design/icons'; // Thêm import icon
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
-import Notification from '../../../../utils/Notification';
+import Notification from '../../../../../utils/Notification';
+import PropTypes from 'prop-types';
+
 
 
 // eslint-disable-next-line react/prop-types
-function CreateRole({ resetData }) {
+function EditRole({ resetData, data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editorContent, setEditorContent] = useState('');
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (data && form) { //-nếu data thay đổi
+      if (isModalOpen) { //-nếu model đã được mở
+        form.setFieldsValue({ //- mới bắt đầu gán dữ liệu vào form
+          title: data?.title || '',
+        });
+      }
+    }
+  }, [data, form, isModalOpen])
 
 
   const showModal = () => {
@@ -27,8 +39,8 @@ function CreateRole({ resetData }) {
   const onFinish = async (values) => {
     values.description = editorContent; // Thêm mô tả từ editor
     try {
-      const res = await fetch("http://localhost:3000/admin/roles/create", {
-        method: 'POST',
+      const res = await fetch(`http://localhost:3000/admin/roles/edit/${data._id}`, {
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json', // Đặt header để chỉ định dữ liệu JSON
         },
@@ -38,13 +50,13 @@ function CreateRole({ resetData }) {
       if (res.ok) {
         if (resetData) resetData(); // Gọi callback để load lại dữ liệu
         form.resetFields(); // Reset form
-        Notification("success", "Thành công", "Nhóm quyền đã được thêm thành công!");
+        Notification("success", "Thành công", "Nhóm quyền đã được sửa thành công!");
       } else {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo nhóm quyền!");
+        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi sửa nhóm quyền!");
       }
     } catch (error) {
       console.log('Đã có lỗi xảy ra!', error);
-      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo nhóm quyền!");
+      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi sửa nhóm quyền!");
     }
   };
 
@@ -52,21 +64,20 @@ function CreateRole({ resetData }) {
   return (
     <>
       <Button
-        className='btnCreateRole'
         type="primary"
         onClick={showModal}
       >
-        <PlusOutlined />
-        Thêm mới
+        <EditOutlined />
+        Chỉnh sửa
       </Button>
       <Modal
-        title="Thêm nhóm quyền mới"
+        title="Chỉnh sửa nhóm quyền"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
         <Form
-          name="create-product"
+          name={data._id}
           form={form}
           layout="vertical"
           onFinish={onFinish}
@@ -92,6 +103,7 @@ function CreateRole({ resetData }) {
                 plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
                 toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
               }}
+              initialValue={data.description}
             />
           </Form.Item>
         </Form>
@@ -99,4 +111,8 @@ function CreateRole({ resetData }) {
     </>
   )
 }
-export default CreateRole;
+export default EditRole;
+
+EditRole.propTypes = {
+  data: PropTypes.object.isRequired,  // Dữ liệu sản phẩm
+};

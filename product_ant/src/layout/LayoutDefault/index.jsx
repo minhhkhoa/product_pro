@@ -2,7 +2,7 @@ import { Layout } from 'antd';
 const { Sider, Content } = Layout;
 import './style.css';
 import { Outlet } from "react-router-dom";
-import MenuSider from '../../components/MenuSider';
+import MenuSider from '../../components/admin/MenuSider';
 
 
 function LayoutDefault() {

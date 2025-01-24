@@ -34,13 +34,13 @@ function MenuSider() {
       icon: <PieChartOutlined />,
       children: [
         {
-          label: <Link to="/products-category">Danh mục</Link>,
-          key: "/products-category",
+          label: <Link to="/admin/products-category">Danh mục</Link>,
+          key: "/admin/products-category",
           icon: <StrikethroughOutlined />,
         },
         {
-          label: <Link to="/products-category/createCategory">Thêm danh mục</Link>,
-          key: "/products-category/createCategory",
+          label: <Link to="/admin/products-category/createCategory">Thêm danh mục</Link>,
+          key: "/admin/products-category/createCategory",
           icon: <CoffeeOutlined />,
 
         }
@@ -56,31 +56,31 @@ function MenuSider() {
       icon: <HddOutlined />,
       children: [
         {
-          label: <Link to="/products">Sản phẩm</Link>,
-          key: "/products",
+          label: <Link to="/admin/products">Sản phẩm</Link>,
+          key: "/admin/products",
           icon: <ProductOutlined />,
         },
         {
-          label: <Link to="/products-deleted">Sản phẩm đã xóa</Link>,
-          key: "/products-deleted",
+          label: <Link to="/admin/products-deleted">Sản phẩm đã xóa</Link>,
+          key: "/admin/products-deleted",
           icon: <DeploymentUnitOutlined />,
 
         }
       ]
     },
     {
-      key: '/roles',
-      label: <Link to="/roles">Nhóm quyền</Link>,
+      key: '/admin/roles',
+      label: <Link to="/admin/roles">Nhóm quyền</Link>,
       icon: <FormOutlined />,
     },
     {
-      key: '/permissions',
-      label: <Link to="/permissions">Phân quyền</Link>,
+      key: '/admin/permissions',
+      label: <Link to="/admin/permissions">Phân quyền</Link>,
       icon: <MergeOutlined />,
     },
     {
-      key: 'sub6',
-      label: 'Danh sách tài khoản',
+      key: '/admin/permissions',
+      label: <Link to="/admin/permissions" > Danh sách tài khoản</Link> ,
       icon: <AuditOutlined />,
     },
     {

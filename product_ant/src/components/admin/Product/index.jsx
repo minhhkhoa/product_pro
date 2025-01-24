@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Tooltip, Modal } from "antd";
 import "./style.css";
-import ShowProduct from "../Ui/Product/ShowProduct/index";
-import FilterProduct from "../Ui/Product/Filter/FilterProduct";
-import CreateProduct from "../Ui/Product/CreateProduct.jsx";
-import FilterCategory from "../Ui/Product/FilterCategory/index.jsx";
-import EditProduct from "../Ui/Product/EditProduct.jsx";
+import ShowProduct from "../../Ui/admin/Product/ShowProduct";
+import FilterProduct from "../../Ui/admin/Product/Filter/FilterProduct.jsx";
+import CreateProduct from "../../Ui/admin/Product/CreateProduct.jsx";
+import FilterCategory from "../../Ui/admin/Product/FilterCategory";
+import EditProduct from "../../Ui/admin/Product/EditProduct.jsx";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
-import Notification from "../../utils/Notification/index.jsx";
+import Notification from "../../../utils/Notification";
 
 
 function Product() {

@@ -9,13 +9,11 @@ import {
   InputNumber,
   Upload,
 } from 'antd';
-import { PlusOutlined, EditOutlined} from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons'; // Thêm import icon
 const { Option } = Select;
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
-import PropTypes from 'prop-types';
-import Notification from '../../../../utils/Notification';
-
+import Notification from '../../../../../utils/Notification';
 
 const uploadButton = (
   <div>
@@ -24,17 +22,16 @@ const uploadButton = (
   </div>
 );
 
+
 // eslint-disable-next-line react/prop-types
-function EditProduct({ typeTitle, data, handleRefreshData }) {
+function CreateProduct({ onProductCreated }) {
 
   const [dataCategory, setDataCategory] = useState([]);
-  const [editorContent, setEditorContent] = useState(data?.description || ''); // Mô tả từ props
+  const [editorContent, setEditorContent] = useState('');
   const [fileList, setFileList] = useState([]);
   const [previewImage, setPreviewImage] = useState('');
   const [previewOpen, setPreviewOpen] = useState(false);
-
   const [form] = Form.useForm();
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch dữ liệu danh mục sản phẩm
   const fetchData = async () => {
@@ -48,38 +45,10 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
   };
 
   useEffect(() => {
-    // Gọi API để lấy danh mục sản phẩm
     fetchData();
+  }, []);
 
-    // Cập nhật fileList nếu có ảnh thumbnail
-    if (data?.thumbnail) {
-      setFileList([
-        {
-          uid: '-1',
-          name: 'thumbnail.png',
-          status: 'done',
-          url: data.thumbnail,
-        },
-      ]);
-    }
-
-    // Cập nhật giá trị form khi data thay đổi
-    if (data && form) { //-nếu data thay đổi
-      if (isModalOpen) { //-nếu model đã được mở
-        form.setFieldsValue({ //- mới bắt đầu gán dữ liệu vào form
-          title: data?.title || '',
-          product_category_id: data?.product_category_id || '',
-          featured: data?.featured || '0',
-          price: data?.price || '',
-          discountPercentage: data?.discountPercentage || '',
-          stock: data?.stock || '',
-          position: data?.position || '',
-          status: data?.status || 'active',
-        });
-      }
-    }
-  }, [data, form, isModalOpen]);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -108,32 +77,39 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
     formData.append('position', values.position || "");
     formData.append('status', values.status);
 
-    if (fileList.length > 0 && fileList[0]?.originFileObj) {
-      formData.append('thumbnail', fileList[0].originFileObj);
+    if (fileList.length > 0) {
+      formData.append('thumbnail', fileList[0].originFileObj); // Chỉ gửi ảnh đầu tiên
     }
 
+    // Duyệt qua FormData và in ra dữ liệu
+    // formData.forEach((value, key) => {
+    //   console.log(key, value);
+    // });
+
     try {
-      const res = await fetch(`http://localhost:3000/admin/products/edit/${data._id}`, {
-        method: 'PATCH', // Sử dụng PATCH cho cập nhật
+      const res = await fetch("http://localhost:3000/admin/products/create", {
+        method: 'POST',
         body: formData,
       });
       if (res.ok) {
-        if (handleRefreshData) handleRefreshData(); // Gọi callback để load lại dữ liệu
+        if (onProductCreated) onProductCreated(); // Gọi callback để load lại dữ liệu
         form.resetFields(); // Reset form
         setFileList([]); // Reset fileList
         setEditorContent(''); // Reset nội dung Editor
-        Notification("success", "Thành công", "Sản phẩm đã được cập nhật thành công!");
+        Notification("success", "Thành công", "Sản phẩm đã được thêm thành công!");
       } else {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
+        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
       }
     } catch (error) {
-      console.log('Đã có lỗi xảy ra khi cập nhật sản phẩm!', error);
-      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
+      console.log('Đã có lỗi xảy ra!', error);
+      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
     }
   };
 
+  // Xử lý thay đổi ảnh upload
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
 
+  // Hiển thị ảnh preview
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -142,6 +118,7 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
     setPreviewOpen(true);
   };
 
+  // Chuyển file sang Base64 để hiển thị preview
   const getBase64 = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -152,27 +129,25 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
 
   return (
     <>
-      <Button
-        className="btn editProduct"
-        type="primary"
-        onClick={showModal}>
-        <EditOutlined />
-        {typeTitle}
+      <Button type="primary" onClick={showModal} className="btnCreate">
+        <PlusOutlined />
+        Thêm sản phẩm
       </Button>
       <Modal
-        title={typeTitle}
+        title="Thêm sản phẩm"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
         <Form
-          name={data._id} //-vì có rất nhiều modal chứa form nên phải có tên riêng
+          name="create-product"
           form={form}
           layout="vertical"
           onFinish={onFinish}
-          initialValues={{}} //-để rỗng và sẽ cập nhật trên useEffect
-        >
-
+          initialValues={{
+            status: 'active', // Đặt giá trị mặc định cho status
+            featured: '0' // Đặt giá trị mặc định cho featured
+          }}>
           <Form.Item
             label="Tên sản phẩm"
             name="title"
@@ -196,7 +171,7 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
           </Form.Item>
 
           <Form.Item label="Đặt làm nổi bật" name="featured">
-            <Radio.Group>
+            <Radio.Group defaultValue="0">
               <Radio value="1"> Có </Radio>
               <Radio value="0"> Không </Radio>
             </Radio.Group>
@@ -205,15 +180,11 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
           <Form.Item label="Mô tả" name="description">
             <Editor
               apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
-              value={editorContent}
               onEditorChange={(newValue) => setEditorContent(newValue)}
               init={{
-                plugins:
-                  'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                toolbar:
-                  'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
               }}
-              initialValue={data.description}
             />
           </Form.Item>
 
@@ -237,45 +208,36 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
             <InputNumber min={1} style={{ width: '100%' }} />
           </Form.Item>
 
+          {/* Phần chọn ảnh và hiển thị preview */}
           <Form.Item label="Ảnh sản phẩm" name="thumbnail">
             <Upload
               listType="picture-card"
               fileList={fileList}
               onPreview={handlePreview}
               onChange={handleChange}
-              beforeUpload={() => false}
+              beforeUpload={() => false} // Chặn việc upload ngay khi chọn file
             >
               {fileList.length < 1 && uploadButton}
             </Upload>
             {previewOpen && (
-              <Modal
-                open={previewOpen}
-                footer={null}
-                onCancel={() => setPreviewOpen(false)}
-              >
-                <img
-                  alt="example"
-                  style={{ width: '100%' }}
-                  src={previewImage}
-                />
+              <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
+                <img alt="example" style={{ width: '100%' }} src={previewImage} />
               </Modal>
             )}
           </Form.Item>
 
+          {/* vị trí */}
           <Form.Item
             label="Vị trí"
             name="position"
             rules={[{ required: false, message: 'Vui lòng nhập vị trí!' }]}
           >
-            <InputNumber
-              min={1}
-              style={{ width: '100%' }}
-              placeholder={'Tự động tăng nếu bỏ trống'}
-            />
+            <InputNumber min={1} style={{ width: '100%' }} placeholder={'Tự động tăng nếu bỏ trống'} />
           </Form.Item>
 
+          {/* trạng thái */}
           <Form.Item label="Trạng thái" name="status">
-            <Radio.Group>
+            <Radio.Group defaultValue="active">
               <Radio value="active"> Hoạt động </Radio>
               <Radio value="inactive"> Dừng hoạt động </Radio>
             </Radio.Group>
@@ -286,9 +248,4 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
   );
 }
 
-export default EditProduct;
-
-EditProduct.propTypes = {
-  typeTitle: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,  // Dữ liệu sản phẩm
-};
+export default CreateProduct;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Table, Checkbox, Button } from "antd";
 import "./style.css"; // Import file CSS tùy chỉnh
-import Notification from "../../utils/Notification";
+import Notification from "../../../utils/Notification";
 
 const permissionsData = [
   {
