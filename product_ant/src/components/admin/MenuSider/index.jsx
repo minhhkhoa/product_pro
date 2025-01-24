@@ -79,8 +79,8 @@ function MenuSider() {
       icon: <MergeOutlined />,
     },
     {
-      key: '/admin/permissions',
-      label: <Link to="/admin/permissions" > Danh sách tài khoản</Link> ,
+      key: '/admin/accounts',
+      label: <Link to="/admin/accounts" > Danh sách tài khoản</Link> ,
       icon: <AuditOutlined />,
     },
     {

@@ -6,6 +6,7 @@ import UpdateCategory from '../pages/admin/Category/Update';
 import ListProductDeleted from '../pages/admin/Product/ListProductDeleted/ListProductDeleted';
 import Role from '../components/admin/Role';
 import PermissionsTable from '../components/admin/Permissions';
+import Account from '../components/admin/Account';
 
 //-obj route
 export const routes = [
@@ -43,7 +44,7 @@ export const routes = [
       },
       {
         path: "accounts",
-        element: <PermissionsTable/>
+        element: <Account/>
       },
     ]
   }

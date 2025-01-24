@@ -9,7 +9,9 @@ const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
 const controller = require("../../controllers/admin/account.controller");
 
+router.get("/getAllAccount", controller.getAllAccount);
 
+router.patch('/change-status/:status/:id', controller.changeStatus);
 
 
 module.exports = router;
