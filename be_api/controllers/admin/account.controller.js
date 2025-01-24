@@ -38,3 +38,15 @@ module.exports.changeStatus = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+module.exports.deleteItem = async (req, res) => {
+  const id = req.params.id
+
+  //-xóa mềm
+  await Account.updateOne({ _id: id }, {
+    deleted: true,
+  })
+
+  return res.json({ message: "Delete account successfully" });
+
+}
