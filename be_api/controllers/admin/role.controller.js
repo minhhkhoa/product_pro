@@ -72,3 +72,41 @@ module.exports.editPatch = async (req, res) => {
 };
 
 
+
+module.exports.permissionsPatch = async (req, res) => {
+  try {
+    // console.log("Body received from client:", req.body); // Debug dữ liệu từ client
+    const roles = req.body;
+
+    // Kiểm tra roles
+    if (!roles || !Array.isArray(roles)) {
+      return res.status(400).json({
+        message: "Invalid input: 'roles' must be an array",
+      });
+    }
+
+    // Duyệt qua từng role trong mảng
+    for (const role of roles) {
+      const permissionsObject = role.permissions;
+
+      // Lấy các key có giá trị true từ object permissions
+      const updatedPermissions = Object.keys(permissionsObject).filter(
+        (key) => permissionsObject[key] === true
+      );
+
+      // Cập nhật Role trong database
+      await Role.updateOne(
+        { _id: role._id }, // Tìm theo _id
+        { permissions: updatedPermissions } // Lưu permissions dưới dạng mảng string
+      );
+    }
+
+    res.status(200).json({ message: "Cập nhật phân quyền thành công!" });
+  } catch (error) {
+    console.error("Error updating role permissions:", error);
+    res.status(500).json({ message: "Đã xảy ra lỗi khi cập nhật phân quyền!" });
+  }
+};
+
+
+

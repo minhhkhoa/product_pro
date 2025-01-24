@@ -1,14 +1,15 @@
-import  { useState, useEffect } from "react";
-import { Table, Checkbox, Button, message } from "antd";
+import { useState, useEffect } from "react";
+import { Table, Checkbox, Button } from "antd";
 import "./style.css"; // Import file CSS tùy chỉnh
+import Notification from "../../utils/Notification";
 
 const permissionsData = [
   {
     group: "Danh mục sản phẩm",
     permissions: [
-      { key: "products-category_create", label: "Thêm mới" },
-      { key: "products-category_edit", label: "Chỉnh sửa" },
-      { key: "products-category_delete", label: "Xóa" },
+      { key: "products_category_create", label: "Thêm mới" },
+      { key: "products_category_edit", label: "Chỉnh sửa" },
+      { key: "products_category_delete", label: "Xóa" },
     ],
   },
   {
@@ -43,7 +44,7 @@ const permissionsData = [
 const PermissionsTable = () => {
   const [roles, setRoles] = useState([]);
 
-  // Fetch dữ liệu từ API
+  // Lấy dữ liệu roles từ API
   const fetchData = async () => {
     const url = `http://localhost:3000/admin/roles/getAllRole`;
 
@@ -52,8 +53,11 @@ const PermissionsTable = () => {
       const data = await res.json();
       const dataWithKeys = data.map((item) => ({
         ...item,
-        key: item._id, // Gắn key duy nhất
-        permissions: item.permissions || {}, // Gắn giá trị mặc định
+        key: item._id,
+        permissions: item.permissions.reduce((acc, curr) => {
+          acc[curr] = true; // Gán true cho các quyền đã được cấp
+          return acc;
+        }, {}),
       }));
       setRoles(dataWithKeys);
     } catch (error) {
@@ -65,7 +69,7 @@ const PermissionsTable = () => {
     fetchData();
   }, []);
 
-  // Xử lý thay đổi quyền
+  // Hàm thay đổi trạng thái quyền khi checkbox thay đổi
   const handlePermissionChange = (roleId, permissionKey, isChecked) => {
     const updatedRoles = roles.map((role) => {
       if (role.key === roleId) {
@@ -82,21 +86,36 @@ const PermissionsTable = () => {
     setRoles(updatedRoles);
   };
 
-  // Xử lý khi submit
-  const handleSubmit = () => {
-    console.log("Dữ liệu phân quyền gửi lên:", roles);
-    message.success("Cập nhật quyền thành công!");
+  // Hàm gửi dữ liệu phân quyền cập nhật
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/admin/roles/permissions", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(roles),
+      });
+
+      if (res.ok) {
+        Notification("success", "Thành công", "Phân quyền đã được sửa thành công!");
+        fetchData();
+      } else {
+        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi sửa phân quyền!");
+      }
+    } catch (error) {
+      Notification("error", "Lỗi", "Đã xảy ra lỗi không mong muốn!");
+      console.error("Error submitting permissions:", error);
+    }
   };
 
-  // Tạo cột cho bảng
   const columns = [
     {
       title: "Nhóm quyền",
       dataIndex: "group",
       key: "group",
-      // eslint-disable-next-line no-unused-vars
-      onCell: (record, rowIndex) => ({
-        rowSpan: record.rowSpan, // Merge cells bằng cách đặt rowSpan ở đây
+      onCell: (record) => ({
+        rowSpan: record.rowSpan,
       }),
     },
     {
@@ -123,21 +142,18 @@ const PermissionsTable = () => {
     })),
   ];
 
-
-  // Chuẩn bị dữ liệu cho bảng
   const dataSource = [];
   permissionsData.forEach((group, groupIndex) => {
     group.permissions.forEach((permission, permissionIndex) => {
       dataSource.push({
         key: `${groupIndex}-${permissionIndex}`,
-        group: permissionIndex === 0 ? group.group : null, // Chỉ hiển thị tên nhóm ở dòng đầu tiên
+        group: permissionIndex === 0 ? group.group : null,
         permissionLabel: permission.label,
         permissionKey: permission.key,
-        rowSpan: permissionIndex === 0 ? group.permissions.length : 0, // Merge cells cho nhóm quyền
+        rowSpan: permissionIndex === 0 ? group.permissions.length : 0,
       });
     });
   });
-
 
   return (
     <div className="permissions-container">
