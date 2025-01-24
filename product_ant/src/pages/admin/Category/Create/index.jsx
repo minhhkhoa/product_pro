@@ -14,7 +14,7 @@ import {
 import { PlusOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import './style.css'; // Import file CSS tùy chỉnh
-import Notification from '../../../utils/Notification';
+import Notification from '../../../../utils/Notification';
 
 const { Option } = Select;
 

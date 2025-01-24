@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Table, Modal } from "antd";
 import "./style.css";
 import { DeleteOutlined, UndoOutlined } from '@ant-design/icons'; // Thêm import icon
-import Notification from "../../../utils/Notification";
+import Notification from "../../../../utils/Notification";
 
 function ListProductDeleted() {
 

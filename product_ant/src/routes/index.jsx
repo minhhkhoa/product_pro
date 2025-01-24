@@ -1,9 +1,9 @@
 import LayoutDefault from '../layout/LayoutDefault';
 import Product from '../components/admin/Product';
 import Category from '../components/admin/Category';
-import CreateCategory from '../pages/Category/Create';
-import UpdateCategory from '../pages/Category/Update';
-import ListProductDeleted from '../pages/Product/ListProductDeleted/ListProductDeleted';
+import CreateCategory from '../pages/admin/Category/Create';
+import UpdateCategory from '../pages/admin/Category/Update';
+import ListProductDeleted from '../pages/admin/Product/ListProductDeleted/ListProductDeleted';
 import Role from '../components/admin/Role';
 import PermissionsTable from '../components/admin/Permissions';
 
