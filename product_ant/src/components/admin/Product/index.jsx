@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Button, Table, Tooltip, Modal } from "antd";
 import "./style.css";
 import ShowProduct from "../../Ui/admin/Product/ShowProduct";
@@ -7,8 +7,7 @@ import CreateProduct from "../../Ui/admin/Product/CreateProduct.jsx";
 import FilterCategory from "../../Ui/admin/Product/FilterCategory";
 import EditProduct from "../../Ui/admin/Product/EditProduct.jsx";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
-import Notification from "../../../utils/Notification";
-import { fetchData } from "../../../api/admin/index.jsx";
+import { fetchDataProduct, changePosition, deleteItem, changeStatus } from "../../../api/admin/index.jsx";
 
 
 function Product() {
@@ -20,55 +19,31 @@ function Product() {
   const [productToDelete, setProductToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  
+  const loadData = useCallback(async () => { //-useCallback Giảm số lần render lại không cần thiết
+    setLoading(true);
+    try {
+      const data = await fetchDataProduct(selectedType, searchValue, selectedCategory); // Gọi API với bộ lọc danh mục
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedType, searchValue, selectedCategory]);
+
 
   useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const data = await fetchData(selectedType, searchValue, selectedCategory); // Gọi API với bộ lọc danh mục
-        setData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadData();
-  }, [selectedType, searchValue, selectedCategory]);
+  }, [selectedType, searchValue, selectedCategory, loadData]);
+
 
 
   // Handle change position
   const handleChangePosition = (e, record) => {
     const newPosition = e.target.value;
     const productId = record._id;
-
-    fetch(
-      `http://localhost:3000/admin/products/change-position/${newPosition}/${productId}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then(() => {
-        Notification('success', 'Thành công', 'Đã thay đổi vị trí sản phẩm thành công!');
-
-        fetchData(selectedType, searchValue, selectedCategory);
-      })
-      .catch((error) => {
-        Notification('error', 'Lỗi', 'Không thể thay đổi vị trí sản phẩm!');
-        console.log(error);
-
-      });
+    changePosition(newPosition, productId);
+    fetchDataProduct(selectedType, searchValue, selectedCategory);
   };
 
   const showDeleteModal = (id) => {
@@ -77,58 +52,39 @@ function Product() {
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:3000/admin/products/delete/${productToDelete}`, {
-      method: "DELETE",
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
+    deleteItem(productToDelete)
       .then(() => {
-        Notification("success", "Thành công", "Sản phẩm đã được xóa thành công!");
-        fetchData(selectedType, searchValue, selectedCategory);
-        setIsDeleteModalVisible(false);
+        // Sau khi xóa thành công, gọi lại API để tải dữ liệu mới
+        loadData();
+        setIsDeleteModalVisible(false); // Đóng modal
       })
       .catch((error) => {
-        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!")
-
-        console.error("Error:", error);
+        console.error("Error deleting product:", error);
+        setIsDeleteModalVisible(false);
       });
   };
+
 
   const handleCancelDelete = () => {
     setIsDeleteModalVisible(false);
   };
 
   const handleClickStatus = (record) => {
+    const id = record._id;
     const newStatus = record.status === "active" ? "inactive" : "active";
 
-    fetch(
-      `http://localhost:3000/admin/products/change-status/${newStatus}/${record._id}`,
-      {
-        method: "PATCH",
-      }
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
+    changeStatus(newStatus, id)
       .then(() => {
-        Notification("success", "Thành công", "Thay đổi trạng thái sản phẩm thành công!");
-        fetchData(selectedType, searchValue, selectedCategory);
+        // Sau khi xóa thành công, gọi lại API để tải dữ liệu mới
+        loadData();
       })
       .catch((error) => {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra!");
-        console.error("Error:", error);
+        console.error("Error deleting product:", error);
       });
   };
 
   const handleRefreshData = () => {
-    fetchData(selectedType, searchValue, selectedCategory);// Gọi lại API với các bộ lọc hiện tại
+    fetchDataProduct(selectedType, searchValue, selectedCategory);// Gọi lại API với các bộ lọc hiện tại
   };
 
   const dataRow = (id) => {
@@ -227,13 +183,13 @@ function Product() {
           setSelectedType={setSelectedType}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
-          fetchData={fetchData}
+          fetchDataProduct={fetchDataProduct}
           selectedCategory={selectedCategory}
         />
         <FilterCategory
           selectedType={selectedType}
           searchValue={searchValue}
-          fetchData={fetchData}
+          fetchDataProduct={fetchDataProduct}
           setSelectedCategory={setSelectedCategory}
         />
 
