@@ -3,34 +3,16 @@ import "./style.css";
 const { Search } = Input;
 
 // eslint-disable-next-line react/prop-types
-const FilterProduct = ({ setData, selectedType, setSelectedType, searchValue, setSearchValue }) => {
+const FilterProduct = ({ selectedType, setSelectedType, searchValue, setSearchValue, fetchData, selectedCategory }) => {
   
   const handleSearch = (value) => {
     setSearchValue(value);
-    fetchData(value, selectedType);
-  };
-
-  const fetchData = (search = '', status = 'all') => {
-    let url = `http://localhost:3000/admin/products?status=${status}`;
-    if (search) {
-      url += `&search=${search}`;
-    }
-
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        const dataWithKeys = data.map((item) => ({
-          ...item,
-          key: item._id,
-        }));
-        setData(dataWithKeys);
-      })
-      .catch((error) => console.error("Error fetching data:", error));
+    fetchData(selectedType, value, selectedCategory);
   };
 
   const handleClick = (type) => {
     setSelectedType(type);
-    fetchData(searchValue, type);
+    fetchData(type, searchValue, selectedCategory);
   };
 
   return (

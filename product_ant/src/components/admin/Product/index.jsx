@@ -8,6 +8,7 @@ import FilterCategory from "../../Ui/admin/Product/FilterCategory";
 import EditProduct from "../../Ui/admin/Product/EditProduct.jsx";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 import Notification from "../../../utils/Notification";
+import { fetchData } from "../../../api/admin/index.jsx";
 
 
 function Product() {
@@ -19,34 +20,24 @@ function Product() {
   const [productToDelete, setProductToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async (status = "all", search = "", categoryId = null) => {
-    setLoading(true);
-    let url = `http://localhost:3000/admin/products?status=${status}`;
-    if (search) {
-      url += `&search=${search}`;
-    }
-    if (categoryId) {
-      url += `&category=${categoryId}`;
-    }
-
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      const dataWithKeys = data.map((item) => ({
-        ...item,
-        key: item._id,
-      }));
-      setData(dataWithKeys);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   useEffect(() => {
-    fetchData(selectedType, searchValue, selectedCategory); // Gọi API với bộ lọc danh mục
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchData(selectedType, searchValue, selectedCategory); // Gọi API với bộ lọc danh mục
+        setData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, [selectedType, searchValue, selectedCategory]);
+
 
   // Handle change position
   const handleChangePosition = (e, record) => {
@@ -232,13 +223,19 @@ function Product() {
       <h1 className='namePage'>Danh sách sản phẩm</h1>
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <FilterProduct
-          setData={setData}
           selectedType={selectedType}
           setSelectedType={setSelectedType}
           searchValue={searchValue}
           setSearchValue={setSearchValue}
+          fetchData={fetchData}
+          selectedCategory={selectedCategory}
         />
-        <FilterCategory setSelectedCategory={setSelectedCategory} />
+        <FilterCategory
+          selectedType={selectedType}
+          searchValue={searchValue}
+          fetchData={fetchData}
+          setSelectedCategory={setSelectedCategory}
+        />
 
         <CreateProduct onProductCreated={handleRefreshData} />
       </div>

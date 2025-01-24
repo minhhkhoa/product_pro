@@ -48,5 +48,4 @@ module.exports.deleteItem = async (req, res) => {
   })
 
   return res.json({ message: "Delete account successfully" });
-
 }

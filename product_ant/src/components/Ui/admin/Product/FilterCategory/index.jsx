@@ -3,7 +3,7 @@ import "./style.css";
 import { Card, Cascader } from "antd";
 
 // eslint-disable-next-line react/prop-types
-function FilterCategory({ setSelectedCategory }) {
+function FilterCategory({ selectedType, searchValue, fetchData, setSelectedCategory }) {
   const [data, setData] = useState([]);
 
   // Chuyển đổi danh sách danh mục thành dạng cây
@@ -33,25 +33,35 @@ function FilterCategory({ setSelectedCategory }) {
   };
 
   // Lấy dữ liệu danh mục từ API
-  const fetchData = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/admin/products/getCategory");
-      const result = await res.json();
-      const treeData = convertToTree(result);
-      setData(treeData);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/admin/products/getCategory");
+        const result = await res.json();
+        const treeData = convertToTree(result);
+        setData(treeData);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
     fetchData();
   }, []);
 
-  // Xử lý khi thay đổi danh mục
+  // Xử lý khi thay đổi hoặc xóa danh mục
   const onChange = (value) => {
-    const selectedCategoryId = value[value.length - 1]; // Lấy ID cuối cùng (danh mục con hoặc cha)
-    setSelectedCategory(selectedCategoryId); // Gửi ID lên component cha
+    if (value === undefined) {
+      console.log("first")
+      // Khi người dùng xóa danh mục
+      setSelectedCategory(null); // Xóa danh mục đã chọn
+      fetchData(selectedType, searchValue, null); // Gửi giá trị null lên backend
+    } else {
+      // Khi người dùng chọn danh mục
+      const selectedCategoryId = value[value.length - 1]; // Lấy ID danh mục cuối cùng
+      setSelectedCategory(selectedCategoryId); // Lưu danh mục đã chọn
+      fetchData(selectedType, searchValue, selectedCategoryId); // Gọi API với danh mục đã chọn
+    }
   };
 
   return (
