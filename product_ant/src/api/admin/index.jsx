@@ -18,19 +18,81 @@ const nameAction = (typeRoute) => {
 }
 
 //-create
-export const createItem = async (formData, setLoading, typeRoute) => {
+export const createItem = async (data, setLoading, typeRoute, isJSON = false) => {
   setLoading(true); // Bật trạng thái loading
-  const res = await fetch(`http://localhost:3000/admin/${typeRoute}/create`, {
-    method: 'POST',
-    body: formData,
-  });
 
-  if (res.ok) {
-    Notification("success", "Thành công", `${nameAction(typeRoute)} đã được tạo thành công!`);
-  } else {
-    Notification("error", "Lỗi", `Đã có lỗi xảy ra khi tạo ${nameAction(typeRoute)}!`);
+  try {
+    const options = {
+      method: 'POST',
+      body: isJSON ? JSON.stringify(data) : data, // Nếu là JSON, chuyển thành chuỗi JSON
+    };
+
+    if (isJSON) {
+      options.headers = {
+        'Content-Type': 'application/json', // Thêm header nếu là JSON
+      };
+    }
+
+    const res = await fetch(`http://localhost:3000/admin/${typeRoute}/create`, options);
+
+    if (res.ok) {
+      Notification(
+        "success",
+        "Thành công",
+        `${nameAction(typeRoute)} đã được tạo thành công!`
+      );
+    } else {
+      Notification(
+        "error",
+        "Lỗi",
+        `Đã có lỗi xảy ra khi tạo ${nameAction(typeRoute)}!`
+      );
+    }
+  } catch (error) {
+    console.error("Error creating item:", error);
+    Notification("error", "Lỗi", "Đã xảy ra lỗi không mong muốn!");
+  } finally {
+    setLoading(false); // Tắt trạng thái loading
   }
-  setLoading(false); // Tắt trạng thái loading
+};
+
+//-edit
+export const editItem = async (data, id, typeRoute, isJSON = false) => {
+  //- sửa hàm editItem để có thể gửi dữ liệu dạng JSON hoặc FormData (đọc ghi chú cuối file này)
+  try {
+    const options = {
+      method: 'PATCH',
+      body: isJSON ? JSON.stringify(data) : data, // Nếu là JSON, chuyển đổi thành chuỗi
+    };
+
+    if (isJSON) {
+      options.headers = {
+        'Content-Type': 'application/json', // Chỉ thêm header nếu là JSON
+      };
+    }
+
+    const res = await fetch(
+      `http://localhost:3000/admin/${typeRoute}/edit/${id}`,
+      options
+    );
+
+    if (res.ok) {
+      Notification(
+        'success',
+        'Thành công',
+        `${nameAction(typeRoute)} đã được cập nhật thành công!`
+      );
+    } else {
+      Notification(
+        'error',
+        'Lỗi',
+        `Có lỗi xảy ra khi cập nhật ${nameAction(typeRoute)}!`
+      );
+    }
+  } catch (error) {
+    console.error('Error updating item:', error);
+    Notification('error', 'Lỗi', 'Đã xảy ra lỗi không mong muốn!');
+  }
 };
 
 //-delete
@@ -54,18 +116,6 @@ export const deleteItem = async (id, typeRoute) => {
     });
 };
 
-//-edit
-export const editItem = async (formData, id, typeRoute) => {
-  const res = await fetch(`http://localhost:3000/admin/${typeRoute}/edit/${id}`, {
-    method: 'PATCH', // Sử dụng PATCH cho cập nhật
-    body: formData,
-  });
-  if (res.ok) {
-    Notification("success", "Thành công", `${nameAction(typeRoute)} đã được cập nhật thành công!`);
-  } else {
-    Notification("error", "Lỗi", `Có lỗi xảy ra khi cập nhật ${nameAction(typeRoute)}!`);
-  }
-} 
 //-end hàm dùng chung
 
 //-start api product
@@ -186,3 +236,40 @@ export const dataCategoryById = async (id) => {
 };
 
 //-end api category
+
+//-start api roles
+export const getAllRoles = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/admin/roles/getAllRole");
+
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+    return data;
+
+  } catch (error) {
+    Notification.error('Failed to fetch roles');
+    console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
+//-end api roles
+
+
+
+
+//-start ghi chú
+
+          // 1.Cách gửi formData:
+          // Khi sử dụng FormData, bạn không cần thiết lập header Content - Type 
+          // vì trình duyệt tự động thêm khi gửi.
+          // Dữ liệu được gửi dưới dạng multipart / form - data.
+
+          // 2.Cách gửi JSON:
+          // Khi sử dụng JSON(body: JSON.stringify(values)), bạn phải thiết lập 
+          // header Content - Type là application / json để server biết rằng dữ 
+          // liệu gửi lên là JSON.
+
+//-end ghi chú

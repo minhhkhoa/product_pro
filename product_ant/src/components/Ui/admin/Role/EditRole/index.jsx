@@ -5,11 +5,12 @@ import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
 import Notification from '../../../../../utils/Notification';
 import PropTypes from 'prop-types';
+import { editItem } from '../../../../../api/admin';
 
 
 
 // eslint-disable-next-line react/prop-types
-function EditRole({ resetData, data }) {
+function EditRole({ fetchDataRoles, data }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editorContent, setEditorContent] = useState('');
   const [form] = Form.useForm();
@@ -39,21 +40,10 @@ function EditRole({ resetData, data }) {
   const onFinish = async (values) => {
     values.description = editorContent; // Thêm mô tả từ editor
     try {
-      const res = await fetch(`http://localhost:3000/admin/roles/edit/${data._id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json', // Đặt header để chỉ định dữ liệu JSON
-        },
-        body: JSON.stringify(values), // Chuyển đổi đối tượng thành chuỗi JSON
-      });
+      await editItem(values, data._id, "roles", true); //- tham số thứ 4 để xác định gửi dữ liệu dạng JSON
 
-      if (res.ok) {
-        if (resetData) resetData(); // Gọi callback để load lại dữ liệu
-        form.resetFields(); // Reset form
-        Notification("success", "Thành công", "Nhóm quyền đã được sửa thành công!");
-      } else {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi sửa nhóm quyền!");
-      }
+      form.resetFields(); // Reset form
+      fetchDataRoles(); // Gọi callback để load lại dữ liệu
     } catch (error) {
       console.log('Đã có lỗi xảy ra!', error);
       Notification("error", "Lỗi", "Đã có lỗi xảy ra khi sửa nhóm quyền!");

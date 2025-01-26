@@ -5,6 +5,7 @@ import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 import Notification from "../../../utils/Notification";
 import CreateRole from "../../Ui/admin/Role/CreateRole";
 import EditRole from "../../Ui/admin/Role/EditRole";
+import { deleteItem, getAllRoles } from "../../../api/admin/index";
 
 function Role() {
 
@@ -13,14 +14,11 @@ function Role() {
   const [roleId, setRoleId] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchData = async () => {
+  const fetchDataRoles = async () => {
     setLoading(true);
-    let url = `http://localhost:3000/admin/roles/getAllRole`;
-
     try {
-      const res = await fetch(url);
-      const data = await res.json();
-      const dataWithKeys = data.map((item) => ({
+      const resultData = await getAllRoles();
+      const dataWithKeys = resultData.map((item) => ({
         ...item,
         key: item._id,
       }));
@@ -33,7 +31,7 @@ function Role() {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchDataRoles();
   }, []);
 
   const showModalDelete = (id) => {
@@ -42,18 +40,10 @@ function Role() {
   };
 
   const handleDelete = () => {
-    fetch(`http://localhost:3000/admin/roles/delete/${roleId}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json()) // Chuyển response sang JSON
-      .then((data) => {
-        if (data.message === "Role deleted successfully") {
-          Notification("success", "Thành công", "Nhóm quyền đã được xóa thành công!");
-          fetchData(); // Load lại dữ liệu sau khi xóa
-          setIsDeleteModalVisible(false);
-        } else {
-          throw new Error(data.message || "Có lỗi xảy ra!");
-        }
+    deleteItem(roleId, "roles")
+      .then(() => {
+        fetchDataRoles(); // Load lại dữ liệu sau khi xóa
+        setIsDeleteModalVisible(false);
       })
       .catch((error) => {
         Notification("error", "Lỗi", error.message || "Có lỗi xảy ra khi xóa nhóm quyền!");
@@ -67,7 +57,7 @@ function Role() {
 
 
   const columns = [
-    
+
     {
       title: "Tiêu đề",
       dataIndex: "title",
@@ -90,7 +80,7 @@ function Role() {
         <div>
           <EditRole
             data={dataRow(record._id)}
-            resetData={fetchData}
+            fetchDataRoles={fetchDataRoles}
           />
           <Button
             className="btn danger"
@@ -114,7 +104,7 @@ function Role() {
   return (
     <>
       <h1 className='namePage'>Các nhóm quyền</h1>
-      <CreateRole resetData={fetchData}/>
+      <CreateRole fetchDataRoles={fetchDataRoles} />
 
       <Table
         columns={columns}

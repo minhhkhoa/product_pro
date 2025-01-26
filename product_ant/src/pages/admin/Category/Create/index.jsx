@@ -198,7 +198,7 @@ function CreateCategory() {
       </Card>
 
       {/* Thêm class spin vào thẻ Spin */}
-      {loading && <Spin className="spin" tip="Đang tạo sản phẩm..." />}
+      {loading && <Spin className="spin" />}
     </>
   );
 }

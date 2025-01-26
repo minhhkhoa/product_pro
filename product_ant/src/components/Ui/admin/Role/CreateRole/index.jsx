@@ -1,16 +1,20 @@
 import { useState } from 'react';
-import { Button, Modal, Form, Input } from 'antd';
+import { Button, Modal, Form, Input, Spin } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'; // Thêm import icon
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
 import Notification from '../../../../../utils/Notification';
+import { createItem } from '../../../../../api/admin';
 
 
 // eslint-disable-next-line react/prop-types
-function CreateRole({ resetData }) {
+function CreateRole({ fetchDataRoles }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editorContent, setEditorContent] = useState('');
   const [form] = Form.useForm();
+
+  const [loading, setLoading] = useState(false);//-muc dich de hien spin khi dang tao nhóm quyền
+
 
 
   const showModal = () => {
@@ -27,21 +31,10 @@ function CreateRole({ resetData }) {
   const onFinish = async (values) => {
     values.description = editorContent; // Thêm mô tả từ editor
     try {
-      const res = await fetch("http://localhost:3000/admin/roles/create", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Đặt header để chỉ định dữ liệu JSON
-        },
-        body: JSON.stringify(values), // Chuyển đổi đối tượng thành chuỗi JSON
-      });
+      await createItem(values, setLoading,  "roles", true); //- tham số thứ 3 để xác định gửi dữ liệu dạng JSON
 
-      if (res.ok) {
-        if (resetData) resetData(); // Gọi callback để load lại dữ liệu
-        form.resetFields(); // Reset form
-        Notification("success", "Thành công", "Nhóm quyền đã được thêm thành công!");
-      } else {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo nhóm quyền!");
-      }
+      form.resetFields(); // Reset form
+      fetchDataRoles(); // Gọi callback để load lại dữ liệu
     } catch (error) {
       console.log('Đã có lỗi xảy ra!', error);
       Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo nhóm quyền!");
@@ -96,6 +89,10 @@ function CreateRole({ resetData }) {
           </Form.Item>
         </Form>
       </Modal>
+
+      {/* Thêm class spin vào thẻ Spin */}
+      {loading && <Spin className="spin" />}
+
     </>
   )
 }

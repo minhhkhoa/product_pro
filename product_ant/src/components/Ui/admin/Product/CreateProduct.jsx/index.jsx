@@ -254,8 +254,9 @@ function CreateProduct({ onProductCreated }) {
           </Form.Item>
         </Form>
       </Modal>
+
       {/* Thêm class spin vào thẻ Spin */}
-      {loading && <Spin className="spin" tip="Đang tạo sản phẩm..." />}
+      {loading && <Spin className="spin" />}
     </>
   );
 }
