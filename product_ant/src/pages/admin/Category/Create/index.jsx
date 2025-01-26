@@ -10,11 +10,13 @@ import {
   Button,
   Divider,
   Card,
+  Spin
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import './style.css'; // Import file CSS tùy chỉnh
 import Notification from '../../../../utils/Notification';
+import { getDataCategory, createItem } from '../../../../api/admin/index';
 
 const { Option } = Select;
 
@@ -34,13 +36,13 @@ function CreateCategory() {
   const [previewImage, setPreviewImage] = useState('');
   const [previewOpen, setPreviewOpen] = useState(false);
 
+  const [loading, setLoading] = useState(false);//-muc dich de hien spin khi dang tao danh muc
+
+
   const fetchData = async () => {
     try {
-      const res = await fetch(
-        'http://localhost:3000/admin/products/getCategory'
-      );
-      const result = await res.json();
-      setDataCategory(result);
+      const categoryData = await getDataCategory("flat"); // Chờ dữ liệu trả về
+      setDataCategory(categoryData);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -66,18 +68,10 @@ function CreateCategory() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/admin/products-category/create", {
-        method: 'POST',
-        body: formData,
-      });
-      if (res.ok) {
-        form.resetFields(); // Reset form
-        setFileList([]); // Reset fileList
-        setEditorContent(''); // Reset nội dung Editor
-        Notification("success", "Thông báo", "Danh mục đã được thêm thành công!");
-      } else {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo danh mục sản phẩm!");
-      }
+      await createItem(formData, setLoading, "products-category");
+      form.resetFields(); // Reset form
+      setFileList([]); // Reset fileList
+      setEditorContent(''); // Reset nội dung Editor
     } catch (error) {
       console.log('Đã có lỗi xảy ra!', error);
       Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo danh mục sản phẩm!");
@@ -127,7 +121,7 @@ function CreateCategory() {
           <Form.Item
             name="parent_id"
             label="Danh mục cha"
-            // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
+          // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
           >
             <Select allowClear placeholder="Chọn danh mục cha">
               <Option key="none" value="">
@@ -202,6 +196,9 @@ function CreateCategory() {
           </Form.Item>
         </Form>
       </Card>
+
+      {/* Thêm class spin vào thẻ Spin */}
+      {loading && <Spin className="spin" tip="Đang tạo sản phẩm..." />}
     </>
   );
 }

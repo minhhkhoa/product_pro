@@ -1,6 +1,73 @@
 import Notification from "../../utils/Notification";
 import { convertToTree } from "../../utils/ConvertTreeData";
 
+//-start hàm dùng chung
+const nameAction = (typeRoute) => {
+  switch (typeRoute) {
+    case "products":
+      return "Sản phẩm";
+    case "products-category":
+      return "Danh mục";
+    case "roles":
+      return "Nhóm quyền";
+    case "accounts":
+      return "Tài khoản";
+    default:
+      return "Dữ liệu";
+  }
+}
+
+//-create
+export const createItem = async (formData, setLoading, typeRoute) => {
+  setLoading(true); // Bật trạng thái loading
+  const res = await fetch(`http://localhost:3000/admin/${typeRoute}/create`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (res.ok) {
+    Notification("success", "Thành công", `${nameAction(typeRoute)} đã được tạo thành công!`);
+  } else {
+    Notification("error", "Lỗi", `Đã có lỗi xảy ra khi tạo ${nameAction(typeRoute)}!`);
+  }
+  setLoading(false); // Tắt trạng thái loading
+};
+
+//-delete
+export const deleteItem = async (id, typeRoute) => {
+  return fetch(`http://localhost:3000/admin/${typeRoute}/delete/${id}`, { //-trả về promise
+    method: "DELETE",
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return res.json();
+    })
+    .then(() => {
+      Notification("success", "Thành công", `${nameAction(typeRoute)} đã được xóa thành công!`);
+    })
+    .catch((error) => {
+      Notification("error", "Lỗi", `Có lỗi xảy ra khi xóa ${nameAction(typeRoute)}!`);
+      console.error("Error:", error);
+      throw error;  // Đảm bảo Promise bị reject khi có lỗi
+    });
+};
+
+//-edit
+export const editItem = async (formData, id, typeRoute) => {
+  const res = await fetch(`http://localhost:3000/admin/${typeRoute}/edit/${id}`, {
+    method: 'PATCH', // Sử dụng PATCH cho cập nhật
+    body: formData,
+  });
+  if (res.ok) {
+    Notification("success", "Thành công", `${nameAction(typeRoute)} đã được cập nhật thành công!`);
+  } else {
+    Notification("error", "Lỗi", `Có lỗi xảy ra khi cập nhật ${nameAction(typeRoute)}!`);
+  }
+} 
+//-end hàm dùng chung
+
 //-start api product
 export const fetchDataProduct = async (status = "all", search = "", categoryId = null) => {
   let url = `http://localhost:3000/admin/products?status=${status}`;
@@ -53,26 +120,6 @@ export const changePosition = async (newPosition, productId) => {
     });
 }
 
-export const deleteItem = async (productToDelete) => {
-  return fetch(`http://localhost:3000/admin/products/delete/${productToDelete}`, { //-trả về promise
-    method: "DELETE",
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return res.json();
-    })
-    .then(() => {
-      Notification("success", "Thành công", "Sản phẩm đã được xóa thành công!");
-    })
-    .catch((error) => {
-      Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!");
-      console.error("Error:", error);
-      throw error;  // Đảm bảo Promise bị reject khi có lỗi
-    });
-};
-
 export const changeStatus = async (newStatus, productId) => {
   return fetch(
     `http://localhost:3000/admin/products/change-status/${newStatus}/${productId}`,
@@ -95,7 +142,7 @@ export const changeStatus = async (newStatus, productId) => {
     });
 }
 
-export const getDataCategory = async (typeData=null) => {
+export const getDataCategory = async (typeData = null) => {
   try {
     const res = await fetch("http://localhost:3000/admin/products/getCategory");
 
@@ -114,31 +161,28 @@ export const getDataCategory = async (typeData=null) => {
   }
 };
 
-export const editItem = async (formData, id) => {
-  const res = await fetch(`http://localhost:3000/admin/products/edit/${id}`, {
-    method: 'PATCH', // Sử dụng PATCH cho cập nhật
-    body: formData,
-  });
-  if (res.ok) {
-    Notification("success", "Thành công", "Sản phẩm đã được cập nhật thành công!");
-  } else {
-    Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
-  }
-} 
+//-end api product
 
-export const createItem = async (formData, setLoading) => {
-  setLoading(true); // Bật trạng thái loading
-  const res = await fetch("http://localhost:3000/admin/products/create", {
-    method: 'POST',
-    body: formData,
-  });
 
-  if (res.ok) {
-    Notification("success", "Thành công", "Sản phẩm đã được thêm thành công!");
-  } else {
-    Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
+//-start api category
+export const dataCategoryById = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/admin/products-category/getCategoryById/${id}`
+    );
+
+    // Kiểm tra nếu phản hồi không thành công
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Chuyển đổi phản hồi thành JSON
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error fetching category by ID:', error);
+    throw error; // Ném lỗi để nơi sử dụng hàm này biết và xử lý
   }
-  setLoading(false); // Tắt trạng thái loading
 };
 
-//-end api product
+//-end api category

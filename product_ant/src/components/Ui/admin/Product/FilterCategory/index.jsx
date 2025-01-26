@@ -4,12 +4,12 @@ import { Card, Cascader } from "antd";
 import { getDataCategory } from "../../../../../api/admin/index";
 
 // eslint-disable-next-line react/prop-types
-function FilterCategory({ selectedType, searchValue, fetchData, setSelectedCategory }) {
+function FilterCategory({ selectedType, searchValue, fetchDataProduct, setSelectedCategory }) {
   const [data, setData] = useState([]);
 
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataCategory = async () => {
       try {
         const categoryData = await getDataCategory(); // Chờ dữ liệu trả về
         setData(categoryData); // Cập nhật state với dữ liệu
@@ -18,7 +18,7 @@ function FilterCategory({ selectedType, searchValue, fetchData, setSelectedCateg
       }
     };
 
-    fetchData();
+    fetchDataCategory();
   }, []);
 
 
@@ -28,12 +28,12 @@ function FilterCategory({ selectedType, searchValue, fetchData, setSelectedCateg
       console.log("first")
       // Khi người dùng xóa danh mục
       setSelectedCategory(null); // Xóa danh mục đã chọn
-      fetchData(selectedType, searchValue, null); // Gửi giá trị null lên backend
+      fetchDataProduct(selectedType, searchValue, null); // Gửi giá trị null lên backend
     } else {
       // Khi người dùng chọn danh mục
       const selectedCategoryId = value[value.length - 1]; // Lấy ID danh mục cuối cùng
       setSelectedCategory(selectedCategoryId); // Lưu danh mục đã chọn
-      fetchData(selectedType, searchValue, selectedCategoryId); // Gọi API với danh mục đã chọn
+      fetchDataProduct(selectedType, searchValue, selectedCategoryId); // Gọi API với danh mục đã chọn
     }
   };
 

@@ -3,16 +3,16 @@ import "./style.css";
 const { Search } = Input;
 
 // eslint-disable-next-line react/prop-types
-const FilterProduct = ({ selectedType, setSelectedType, searchValue, setSearchValue, fetchData, selectedCategory }) => {
+const FilterProduct = ({ selectedType, setSelectedType, searchValue, setSearchValue, fetchDataProduct, selectedCategory }) => {
   
   const handleSearch = (value) => {
     setSearchValue(value);
-    fetchData(selectedType, value, selectedCategory);
+    fetchDataProduct(selectedType, value, selectedCategory);
   };
 
   const handleClick = (type) => {
     setSelectedType(type);
-    fetchData(type, searchValue, selectedCategory);
+    fetchDataProduct(type, searchValue, selectedCategory);
   };
 
   return (

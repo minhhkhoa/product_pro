@@ -52,7 +52,7 @@ function Product() {
   };
 
   const handleDelete = () => {
-    deleteItem(productToDelete)
+    deleteItem(productToDelete, "products")
       .then(() => {
         // Sau khi xóa thành công, gọi lại API để tải dữ liệu mới
         loadData();

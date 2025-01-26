@@ -113,7 +113,7 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
     }
 
     try {
-      await editItem(formData, data._id);
+      await editItem(formData, data._id, "products");
       form.resetFields(); // Reset form
       setFileList([]); // Reset fileList
       setEditorContent(''); // Reset nội dung Editor

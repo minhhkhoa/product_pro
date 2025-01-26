@@ -35,7 +35,7 @@ function CreateProduct({ onProductCreated }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [form] = Form.useForm();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);//-muc dich de hien spin khi dang tao san pham
 
 
   // Fetch dữ liệu danh mục sản phẩm
@@ -105,7 +105,7 @@ function CreateProduct({ onProductCreated }) {
     // });
 
     try {
-      await createItem(formData, setLoading);
+      await createItem(formData, setLoading, "products");
       form.resetFields(); // Reset form
       setFileList([]); // Reset fileList
       setEditorContent(''); // Reset nội dung Editor

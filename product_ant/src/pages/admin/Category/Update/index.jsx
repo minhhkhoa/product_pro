@@ -1,4 +1,4 @@
-import  { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 // React,
 import {
   Modal,
@@ -9,7 +9,6 @@ import {
   InputNumber,
   Upload,
   Button,
-  // notification,
   Divider,
   Card,
   message
@@ -20,6 +19,7 @@ import './style.css'; // Import file CSS tùy chỉnh
 import { useNavigate } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
+import { getDataCategory, dataCategoryById, editItem } from '../../../../api/admin/index';
 
 const { Option } = Select;
 
@@ -30,9 +30,6 @@ const uploadButton = (
   </div>
 );
 
-// const Context = React.createContext({
-//   name: 'Default',
-// });
 
 function UpdateCategory() {
   const { id } = useParams(); // Lấy id từ URL
@@ -49,58 +46,52 @@ function UpdateCategory() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(
-        'http://localhost:3000/admin/products/getCategory'
-      );
-      const result = await res.json();
-      setDataCategory(result);
+      const categoryData = await getDataCategory("flat");
+      setDataCategory(categoryData);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
 
-  const fetchDataById = async (id) => {
-    try {
-      const res = await fetch(
-        `http://localhost:3000/admin/products-category/getCategoryById/${id}`
-      );
-      const result = await res.json();
-      
-      // Cập nhật các trường của form bằng dữ liệu nhận được
-      form.setFieldsValue({
-        title: result.title,
-        parent_id: result.parent_id, // Nếu có, đảm bảo rằng `parent_id` là một ID hợp lệ
-        description: result.description,
-        position: result.position,
-        status: result.status,
-      });
-      // Cập nhật fileList cho ảnh thumbnail nếu có
-      if (result.thumbnail) {
-        setFileList([
-          {
-            uid: '-1', // uid phải là duy nhất, có thể sử dụng -1 cho ảnh đã có
-            name: 'thumbnail', // Tên của file (tuỳ chọn)
-            status: 'done', // Trạng thái ảnh đã được tải lên
-            url: result.thumbnail // Đặt URL của ảnh
-          }
-        ]);
+  //-mục đích của hàm này là dán dữ liệu của danh mục được chọn
+  //-vào các trường của form
+  const fetchDataById = useCallback(
+    async (id) => {
+      try {
+        const result = await dataCategoryById(id)
+
+        // Cập nhật các trường của form bằng dữ liệu nhận được
+        form.setFieldsValue({
+          title: result.title,
+          parent_id: result.parent_id, // Đảm bảo rằng `parent_id` là một ID hợp lệ
+          description: result.description,
+          position: result.position,
+          status: result.status,
+        });
+
+        // Cập nhật fileList cho ảnh thumbnail nếu có
+        if (result.thumbnail) {
+          setFileList([
+            {
+              uid: '-1', // uid phải là duy nhất
+              name: 'thumbnail',
+              status: 'done',
+              url: result.thumbnail,
+            },
+          ]);
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
       }
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  }
+    },
+    [form, setFileList] // Các dependencies cần thiết
+  );
+
   useEffect(() => {
     fetchData();
     fetchDataById(id);
-  }, [id]);
+  }, [id, fetchDataById]);
 
-  // const openNotification = (message, description) => {
-  //   api.info({
-  //     message,
-  //     description,
-  //     placement: "topRight",
-  //   });
-  // };
 
   const onFinish = async (values) => {
     values.description = editorContent;
@@ -119,24 +110,18 @@ function UpdateCategory() {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/admin/products-category/edit/${id}`, {
-        method: 'PATCH',
-        body: formData,
-      });
+      await editItem(formData, id, "products-category");
 
-      if (res.ok) {
-        form.resetFields(); // Reset form
-        setFileList([]); // Reset fileList
-        setEditorContent(''); // Reset nội dung Editor
-        navigate('/products-category', { //- gửi thông báo tới trang navigate tới
-          state: {
-            title: "Thành công",
-            description: "Danh mục đã được cập nhật thành công!" 
-          }
-        }); // Truyền trạng thái
-      } else {
-        message.error('Đã có lỗi xảy ra khi sửa danh mục sản phẩm!');
-      }
+      form.resetFields(); // Reset form
+      setFileList([]); // Reset fileList
+      setEditorContent(''); // Reset nội dung Editor
+      navigate('/admin/products-category', { //- gửi thông báo tới trang navigate tới
+        state: {
+          title: "Thành công",
+          description: "Danh mục đã được cập nhật thành công!"
+        }
+      }); // Truyền trạng thái
+
     } catch (error) {
       message.error('Đã có lỗi xảy ra!', error);
     }
@@ -185,7 +170,6 @@ function UpdateCategory() {
           <Form.Item
             name="parent_id"
             label="Danh mục cha"
-          // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
           >
             <Select allowClear placeholder="Chọn danh mục cha">
               <Option key="none" value="">
@@ -260,10 +244,6 @@ function UpdateCategory() {
           </Form.Item>
         </Form>
       </Card>
-
-      {/* <Context.Provider value={{ name: 'Ant Design' }}>
-        {contextHolder}
-      </Context.Provider> */}
     </>
   );
 }

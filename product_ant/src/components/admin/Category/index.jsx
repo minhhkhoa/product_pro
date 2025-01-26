@@ -1,28 +1,21 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import { 
-  Button, 
-  Input, 
-  Space, 
+import {
+  Button,
+  Input,
+  Space,
   Table,
   Modal,
-  notification,
-} 
-from 'antd';
+}
+  from 'antd';
 import "./style.css";
 import Highlighter from 'react-highlight-words';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'; // Thêm import icon
-import { Link, useLocation } from 'react-router-dom'; 
-
-const Context = React.createContext({
-  name: "Default",
-});
-
+import { Link } from 'react-router-dom';
+import { getDataCategory, deleteItem } from '../../../api/admin/index';
 
 
 function Category() {
-
-  const location = useLocation(); //-Đọc state với useLocation được gửi từ navigate bên kia
 
   const [data, setData] = useState([]);
   const [idDelete, setIdDelete] = useState(null);
@@ -34,24 +27,14 @@ function Category() {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
 
-  const [api, contextHolder] = notification.useNotification();
-
-  const openNotification = (message, description) => {
-    api.info({
-      message,
-      description,
-      placement: "topRight",
-    });
-  };
 
   // Lấy dữ liệu danh mục từ API
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:3000/admin/products/getCategory");
-      const result = await res.json();
+      const categoryData = await getDataCategory("flat"); // Chờ dữ liệu trả về
 
       // Gắn key cho từng phần tử trong mảng dữ liệu
-      const dataWithKeys = result.map((item, index) => ({
+      const dataWithKeys = categoryData.map((item, index) => ({
         ...item,
         key: item._id || index, // Sử dụng _id làm key, nếu không có thì dùng index
       }));
@@ -65,11 +48,7 @@ function Category() {
 
   useEffect(() => {
     fetchData();
-    if (location.state?.title && location.state?.description) {
-      // Gọi hàm openNotification với thông tin từ trạng thái
-      openNotification(location.state.title, location.state.description);
-    }
-  }, [location.state]);
+  }, []);
 
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -82,7 +61,7 @@ function Category() {
     clearFilters();
     setSearchText('');
   };
-  
+
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div
@@ -204,28 +183,18 @@ function Category() {
 
 
   const handleDelete = async (id) => {
-  try {
-    const res = await fetch(`http://localhost:3000/admin/products-category/delete/${id}`, {
-      method: "DELETE",
-    });
-
-    if (!res.ok) {
-      throw new Error("Network response was not ok");
+    try {
+      deleteItem(id, "products-category")
+        .then(() => {
+          // Sau khi xóa thành công, gọi lại API để tải dữ liệu mới
+          fetchData();
+          setOpen(false);
+        })
+    } catch (error) {
+      // Xử lý lỗi nếu có
+      console.error("Error:", error);
     }
-
-    // Chờ nhận kết quả JSON từ server
-    fetchData();
-
-    // Hiển thị thông báo thành công
-    openNotification("Thành công", "Danh mục đã được xóa thành công!");
-    setOpen(false);
-  } catch (error) {
-    // Xử lý lỗi nếu có
-    openNotification("Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!");
-    console.error("Error:", error);
-  }
-};
-
+  };
 
 
   //-start column
@@ -262,7 +231,7 @@ function Category() {
       render: (_, record) => {
         return (
           <div>
-            <Link to={`/products-category/updateCategory/${record._id}`}>
+            <Link to={`/admin/products-category/updateCategory/${record._id}`}>
               <Button className="btn" type="primary">
                 <EditOutlined />
                 Sửa
@@ -290,7 +259,7 @@ function Category() {
   return (
     <>
       <h1 className='namePage'>Danh mục sản phẩm</h1>
-      <Link to="/products-category/createCategory">
+      <Link to="/admin/products-category/createCategory">
         <Button className="btnCreateCategory" type="primary">
           <PlusOutlined />
           Thêm mới
@@ -304,10 +273,6 @@ function Category() {
           pageSize: 4,
         }}
       />
-
-      <Context.Provider value={{ name: "Ant Design" }}>
-        {contextHolder}
-      </Context.Provider>
 
       <Modal
         title="Thông báo"
