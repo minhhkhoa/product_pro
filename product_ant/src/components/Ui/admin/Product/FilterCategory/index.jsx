@@ -1,53 +1,26 @@
 import { useState, useEffect } from "react";
 import "./style.css";
 import { Card, Cascader } from "antd";
+import { getDataCategory } from "../../../../../api/admin/index";
 
 // eslint-disable-next-line react/prop-types
 function FilterCategory({ selectedType, searchValue, fetchData, setSelectedCategory }) {
   const [data, setData] = useState([]);
 
-  // Chuyển đổi danh sách danh mục thành dạng cây
-  const convertToTree = (categories) => {
-    const map = {};
-    const tree = [];
-
-    categories.forEach((item) => {
-      //-xếp theo id
-      map[item._id] = {
-        value: item._id,
-        label: item.title,
-        children: [],
-      };
-    });
-
-    categories.forEach((item) => {
-      //-thêm vào cây
-      if (item.parent_id) {
-        map[item.parent_id]?.children.push(map[item._id]);
-      } else {
-        tree.push(map[item._id]);
-      }
-    });
-
-    return tree;
-  };
-
-  // Lấy dữ liệu danh mục từ API
-
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:3000/admin/products/getCategory");
-        const result = await res.json();
-        const treeData = convertToTree(result);
-        setData(treeData);
+        const categoryData = await getDataCategory(); // Chờ dữ liệu trả về
+        setData(categoryData); // Cập nhật state với dữ liệu
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
+
     fetchData();
   }, []);
+
 
   // Xử lý khi thay đổi hoặc xóa danh mục
   const onChange = (value) => {

@@ -8,12 +8,14 @@ import {
   Radio,
   InputNumber,
   Upload,
+  Spin
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons'; // Thêm import icon
 const { Option } = Select;
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
 import Notification from '../../../../../utils/Notification';
+import { getDataCategory, createItem } from '../../../../../api/admin/index';
 
 const uploadButton = (
   <div>
@@ -33,20 +35,36 @@ function CreateProduct({ onProductCreated }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [form] = Form.useForm();
 
+  const [loading, setLoading] = useState(false);
+
+
   // Fetch dữ liệu danh mục sản phẩm
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:3000/admin/products/getCategory");
-      const result = await res.json();
-      setDataCategory(result);
+      const categoryData = await getDataCategory("flat"); // Chờ dữ liệu trả về
+      setDataCategory(categoryData);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
+
   useEffect(() => {
     fetchData();
-  }, []);
+
+    const handleBeforeUnload = (event) => {
+      if (loading) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [loading]);
+
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -87,19 +105,11 @@ function CreateProduct({ onProductCreated }) {
     // });
 
     try {
-      const res = await fetch("http://localhost:3000/admin/products/create", {
-        method: 'POST',
-        body: formData,
-      });
-      if (res.ok) {
-        if (onProductCreated) onProductCreated(); // Gọi callback để load lại dữ liệu
-        form.resetFields(); // Reset form
-        setFileList([]); // Reset fileList
-        setEditorContent(''); // Reset nội dung Editor
-        Notification("success", "Thành công", "Sản phẩm đã được thêm thành công!");
-      } else {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
-      }
+      await createItem(formData, setLoading);
+      form.resetFields(); // Reset form
+      setFileList([]); // Reset fileList
+      setEditorContent(''); // Reset nội dung Editor
+      onProductCreated(); // Gọi hàm callback
     } catch (error) {
       console.log('Đã có lỗi xảy ra!', error);
       Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
@@ -171,7 +181,7 @@ function CreateProduct({ onProductCreated }) {
           </Form.Item>
 
           <Form.Item label="Đặt làm nổi bật" name="featured">
-            <Radio.Group defaultValue="0">
+            <Radio.Group>
               <Radio value="1"> Có </Radio>
               <Radio value="0"> Không </Radio>
             </Radio.Group>
@@ -237,13 +247,15 @@ function CreateProduct({ onProductCreated }) {
 
           {/* trạng thái */}
           <Form.Item label="Trạng thái" name="status">
-            <Radio.Group defaultValue="active">
+            <Radio.Group>
               <Radio value="active"> Hoạt động </Radio>
               <Radio value="inactive"> Dừng hoạt động </Radio>
             </Radio.Group>
           </Form.Item>
         </Form>
       </Modal>
+      {/* Thêm class spin vào thẻ Spin */}
+      {loading && <Spin className="spin" tip="Đang tạo sản phẩm..." />}
     </>
   );
 }

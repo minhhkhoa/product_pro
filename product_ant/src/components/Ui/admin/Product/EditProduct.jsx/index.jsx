@@ -9,12 +9,13 @@ import {
   InputNumber,
   Upload,
 } from 'antd';
-import { PlusOutlined, EditOutlined} from '@ant-design/icons';
+import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 const { Option } = Select;
 import { Editor } from '@tinymce/tinymce-react';
 import "./style.css";
 import PropTypes from 'prop-types';
 import Notification from '../../../../../utils/Notification';
+import { getDataCategory, editItem } from '../../../../../api/admin/index';
 
 
 const uploadButton = (
@@ -39,9 +40,8 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
   // Fetch dữ liệu danh mục sản phẩm
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:3000/admin/products/getCategory");
-      const result = await res.json();
-      setDataCategory(result);
+      const categoryData = await getDataCategory("flat"); // Chờ dữ liệu trả về
+      setDataCategory(categoryData);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -113,19 +113,11 @@ function EditProduct({ typeTitle, data, handleRefreshData }) {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/admin/products/edit/${data._id}`, {
-        method: 'PATCH', // Sử dụng PATCH cho cập nhật
-        body: formData,
-      });
-      if (res.ok) {
-        if (handleRefreshData) handleRefreshData(); // Gọi callback để load lại dữ liệu
-        form.resetFields(); // Reset form
-        setFileList([]); // Reset fileList
-        setEditorContent(''); // Reset nội dung Editor
-        Notification("success", "Thành công", "Sản phẩm đã được cập nhật thành công!");
-      } else {
-        Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
-      }
+      await editItem(formData, data._id);
+      form.resetFields(); // Reset form
+      setFileList([]); // Reset fileList
+      setEditorContent(''); // Reset nội dung Editor
+      handleRefreshData();
     } catch (error) {
       console.log('Đã có lỗi xảy ra khi cập nhật sản phẩm!', error);
       Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");

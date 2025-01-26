@@ -2,3 +2,24 @@
   margin-top: 58px;
   margin-left: 20px;
 }
+
+/* CSS trong file CreateProduct.css */
+.spin {
+  position: fixed;
+  /* Đảm bảo Spin ở vị trí cố định trên màn hình */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* Căn giữa chính xác */
+  z-index: 1000;
+  /* Đảm bảo Spin ở trên cùng */
+  background-color: rgba(255, 255, 255, 0.5);
+  /* Nền mờ */
+  width: 100vw;
+  /* Chiếm toàn bộ chiều ngang */
+  height: 100vh;
+  /* Chiếm toàn bộ chiều cao */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

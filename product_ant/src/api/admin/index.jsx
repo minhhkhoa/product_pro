@@ -1,4 +1,5 @@
 import Notification from "../../utils/Notification";
+import { convertToTree } from "../../utils/ConvertTreeData";
 
 //-start api product
 export const fetchDataProduct = async (status = "all", search = "", categoryId = null) => {
@@ -93,5 +94,51 @@ export const changeStatus = async (newStatus, productId) => {
       console.error("Error:", error);
     });
 }
+
+export const getDataCategory = async (typeData=null) => {
+  try {
+    const res = await fetch("http://localhost:3000/admin/products/getCategory");
+
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+    if (typeData === 'flat') {
+      return data;
+    }
+    return convertToTree(data);
+  } catch (error) {
+    Notification.error('Failed to fetch categories');
+    console.error('Fetch error:', error);
+    throw error;
+  }
+};
+
+export const editItem = async (formData, id) => {
+  const res = await fetch(`http://localhost:3000/admin/products/edit/${id}`, {
+    method: 'PATCH', // Sử dụng PATCH cho cập nhật
+    body: formData,
+  });
+  if (res.ok) {
+    Notification("success", "Thành công", "Sản phẩm đã được cập nhật thành công!");
+  } else {
+    Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
+  }
+} 
+
+export const createItem = async (formData, setLoading) => {
+  setLoading(true); // Bật trạng thái loading
+  const res = await fetch("http://localhost:3000/admin/products/create", {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (res.ok) {
+    Notification("success", "Thành công", "Sản phẩm đã được thêm thành công!");
+  } else {
+    Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo sản phẩm!");
+  }
+  setLoading(false); // Tắt trạng thái loading
+};
 
 //-end api product

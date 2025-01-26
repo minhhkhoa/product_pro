@@ -85,6 +85,7 @@ function Product() {
 
   const handleRefreshData = () => {
     fetchDataProduct(selectedType, searchValue, selectedCategory);// Gọi lại API với các bộ lọc hiện tại
+    loadData();
   };
 
   const dataRow = (id) => {
