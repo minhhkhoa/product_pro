@@ -77,10 +77,12 @@ function Category() {
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
   };
+
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText('');
   };
+  
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div

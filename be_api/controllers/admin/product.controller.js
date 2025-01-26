@@ -143,7 +143,8 @@ module.exports.deleteItem = async (req, res) => {
 module.exports.getProductsDeleted = async (req, res) => {
   try {
     const data = await Product.find({ deleted: true }).lean(); // Lấy dữ liệu thuần
-    return res.json(data); // Trả về JSON dữ liệu
+    const reverseData = data.reverse();
+    return res.json(reverseData); // Trả về JSON dữ liệu
   } catch (error) {
     console.error(error); // Ghi log lỗi
     return res.status(500).json({ message: "Failed to get product." });
