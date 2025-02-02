@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Tooltip, Modal } from "antd";
 import "./style.css";
-import ShowProduct from "../../Ui/admin/Product/ShowProduct";
-import EditProduct from "../../Ui/admin/Product/EditProduct.jsx";
+// import ShowProduct from "../../Ui/admin/Product/ShowProduct";
+import EditAccount from "../../Ui/admin/Account/EditAccount/index.jsx";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 import Notification from "../../../utils/Notification";
 
@@ -158,9 +158,9 @@ function Account() {
       dataIndex: "_id",
       render: (_, record) => (
         <div>
-          <ShowProduct typeTitle={"Chi tiết"} data={dataRow(record._id)} />
-          <EditProduct
-            typeTitle={"Sửa"}
+          {/* <ShowAccount typeTitle={"Chi tiết"} data={dataRow(record._id)} /> */}
+          <EditAccount
+            typeTitle={"Sửa tài khoản"}
             data={dataRow(record._id)}
             handleRefreshData={handleRefreshData} />
           <Button

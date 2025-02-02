@@ -13,6 +13,13 @@ router.get("/getAllAccount", controller.getAllAccount);
 
 router.patch('/change-status/:status/:id', controller.changeStatus);
 
+router.patch(
+  '/edit/:id',
+  upload.single('avatar'),
+  uploadCloud.upload,
+  controller.editSuccess
+)
+
 router.delete('/delete/:id', controller.deleteItem);
 
 

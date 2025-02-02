@@ -49,3 +49,40 @@ module.exports.deleteItem = async (req, res) => {
 
   return res.json({ message: "Delete account successfully" });
 }
+
+
+module.exports.editSuccess = async (req, res) => {
+  const id = req.params.id; // ID của tài khoản cần sửa
+  try {
+    // Kiểm tra xem email đã tồn tại trong hệ thống chưa (ngoại trừ tài khoản đang sửa)
+    const emailExists = await Account.findOne({
+      _id: { $ne: id }, // Loại trừ tài khoản đang chỉnh sửa
+      email: req.body.email,
+      deleted: false
+    });
+
+    if (emailExists) {
+      return res.status(400).json({ message: "Email đã tồn tại!" });
+    }
+
+    // Nếu có mật khẩu mới, mã hóa nó, nếu không thì xóa khỏi req.body
+    if (req.body.password) {
+      req.body.password = md5(req.body.password);
+    } else {
+      delete req.body.password;
+    }
+
+    // Cập nhật thông tin tài khoản
+    const updatedAccount = await Account.updateOne({ _id: id }, req.body);
+
+    if (updatedAccount.nModified === 0) {
+      return res.status(400).json({ message: "Không có thay đổi nào được thực hiện." });
+    }
+
+    return res.json({ message: "Cập nhật tài khoản thành công." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Lỗi khi cập nhật tài khoản." });
+  }
+};
+
