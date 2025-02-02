@@ -5,6 +5,7 @@ import "./style.css";
 import EditAccount from "../../Ui/admin/Account/EditAccount/index.jsx";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 import Notification from "../../../utils/Notification";
+import CreateAccount from "../../Ui/admin/Account/CreateAccount/CreateAccount.jsx";
 
 
 function Account() {
@@ -158,7 +159,6 @@ function Account() {
       dataIndex: "_id",
       render: (_, record) => (
         <div>
-          {/* <ShowAccount typeTitle={"Chi tiết"} data={dataRow(record._id)} /> */}
           <EditAccount
             typeTitle={"Sửa tài khoản"}
             data={dataRow(record._id)}
@@ -180,6 +180,10 @@ function Account() {
   return (
     <>
       <h1 className='namePage'>Danh sách tài khoản</h1>
+
+      <CreateAccount
+        handleRefreshData={handleRefreshData}
+      />
 
       <Table
         columns={columns}

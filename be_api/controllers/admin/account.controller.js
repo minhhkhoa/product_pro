@@ -3,17 +3,17 @@ const Role = require("../../models/role.model")
 var md5 = require('md5') //-mã hóa mật khẩu của account
 
 module.exports.getAllAccount = async (req, res) => {
-  try{
+  try {
     const accounts = await Account.find({
       deleted: false
     }).select("-password -token -createdAt -updatedAt").lean();
-    
-    for (const account of accounts){
+
+    for (const account of accounts) {
       const role = await Role.findOne({
         _id: account.role_id,
         deleted: false
       }).select("-createdAt -updatedAt -description")
-      if (role){
+      if (role) {
         account.role = role
       }
       //-thêm key role cho obj
@@ -33,7 +33,7 @@ module.exports.changeStatus = async (req, res) => {
     // Cập nhật trạng thái sản phẩm
     await Account.updateOne({ _id: id }, { status });
 
-    return res.json({message: "success"});
+    return res.json({ message: "success" });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
@@ -49,6 +49,19 @@ module.exports.deleteItem = async (req, res) => {
 
   return res.json({ message: "Delete account successfully" });
 }
+
+module.exports.createPost = async (req, res) => {
+  try {
+    // Tạo tài khoản mới
+    const newAccount = new Account(req.body);
+    await newAccount.save();
+
+    return res.status(201).json({ message: "Tạo tài khoản thành công!", account: newAccount });
+  } catch (error) {
+    console.error("Lỗi tạo tài khoản:", error);
+    return res.status(500).json({ message: "Lỗi server, vui lòng thử lại!" });
+  }
+};
 
 
 module.exports.editSuccess = async (req, res) => {
@@ -85,4 +98,25 @@ module.exports.editSuccess = async (req, res) => {
     return res.status(500).json({ message: "Lỗi khi cập nhật tài khoản." });
   }
 };
+
+module.exports.checkEmailExists = async (req, res) => {
+  try {
+    const { email } = req.query; // Lấy email từ query parameters
+    if (!email) {
+      return res.status(400).json({ message: "Email không hợp lệ" });
+    }
+
+    // Kiểm tra email trong database
+    const existingUser = await Account.findOne({ email });
+
+    if (existingUser) {
+      return res.json({ exists: true }); // Email đã tồn tại
+    }
+
+    res.json({ exists: false }); // Email chưa tồn tại
+  } catch (error) {
+    console.error("Lỗi khi kiểm tra email:", error);
+    res.status(500).json({ message: "Lỗi server" });
+  }
+}
 

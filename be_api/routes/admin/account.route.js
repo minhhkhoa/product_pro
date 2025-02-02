@@ -20,6 +20,15 @@ router.patch(
   controller.editSuccess
 )
 
+router.post(
+  '/create',
+  upload.single('avatar'),
+  uploadCloud.upload,
+  controller.createPost)
+
+// Route kiểm tra email đã tồn tại
+router.get("/check-email", controller.checkEmailExists);
+
 router.delete('/delete/:id', controller.deleteItem);
 
 

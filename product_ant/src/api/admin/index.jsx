@@ -20,6 +20,7 @@ const nameAction = (typeRoute) => {
 //-create
 export const createItem = async (data, setLoading, typeRoute, isJSON = false) => {
   setLoading(true); // Bật trạng thái loading
+  console.log(data);
 
   try {
     const options = {
@@ -256,6 +257,29 @@ export const getAllRoles = async () => {
 }
 
 //-end api roles
+
+//-start api account
+
+
+export const checkEmailExists = async (email) => {
+  try {
+    const res = await fetch(`http://localhost:3000/admin/accounts/check-email?email=${encodeURIComponent(email)}`);
+
+    if (!res.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await res.json();
+    return data.exists; // Giả sử API trả về { exists: true } nếu email đã tồn tại
+
+  } catch (error) {
+    console.error("Error checking email:", error);
+    Notification("error", "Lỗi", "Đã xảy ra lỗi khi kiểm tra email!");
+    throw error;
+  }
+};
+
+//-end api account
 
 
 
