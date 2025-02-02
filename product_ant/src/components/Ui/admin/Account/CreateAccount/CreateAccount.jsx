@@ -83,6 +83,7 @@ function CreateAccount({ handleRefreshData }) {
         delete values.password;
       }
 
+      //-gửi password đã mã hóa lên server
       formData.append("password", values.password);
 
       // Gửi data lên server

@@ -1,0 +1,48 @@
+/* Login.css */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.login-form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+  width: 450px;
+  height: 200px;
+}
+
+.login-form .ant-form-item-label>label {
+  font-weight: bold;
+  color: #333;
+  position: absolute;
+  left: 0px;
+}
+
+.login-form .ant-input {
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.login-form .ant-btn-primary {
+  background: #667eea;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s;
+  position: absolute;
+  right: -130px;
+  top: 0px;
+}
+
+.login-form .ant-btn-primary:hover {
+  background: #5a67d8;
+}
+
+.login-form .ant-form-item {
+  margin-bottom: 20px;
+}

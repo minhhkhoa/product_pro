@@ -7,6 +7,8 @@ import ListProductDeleted from '../pages/admin/Product/ListProductDeleted/ListPr
 import Role from '../components/admin/Role';
 import PermissionsTable from '../components/admin/Permissions';
 import Account from '../components/admin/Account';
+import Login from '../components/admin/Auth/Login';
+import DashBoard from '../components/admin/DashBoard';
 
 //-obj route
 export const routes = [
@@ -14,6 +16,10 @@ export const routes = [
     path: "/admin",
     element: <LayoutDefault />,
     children: [
+      {
+        path: "dashboard",
+        element: <DashBoard />
+      },
       {
         path: "products",
         element: <Product />
@@ -47,5 +53,9 @@ export const routes = [
         element: <Account/>
       },
     ]
-  }
+  },
+  {
+    path: "/admin/auth/login",
+    element: <Login />
+  },
 ]

@@ -281,6 +281,33 @@ export const checkEmailExists = async (email) => {
 
 //-end api account
 
+//-start api auth
+export const login = async (email, password) => {
+  try {
+    const res = await fetch('http://localhost:3000/admin/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const data = await res.json();
+    return data;
+
+  } catch (error) {
+    console.error('Error logging in:', error);
+    Notification.error('Failed to log in');
+    throw error;
+  }
+}
+
+//-end api auth
+
 
 
 

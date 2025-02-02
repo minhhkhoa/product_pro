@@ -20,8 +20,8 @@ function MenuSider() {
   const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
   const items = [
     {
-      key: 'dashBoard',
-      label: 'Tổng quan',
+      key: '/admin/dashboard',
+      label: <Link to="/admin/dashboard">Tổng quan</Link>,
       icon: <HomeOutlined />,
     },
     {
