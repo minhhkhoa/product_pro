@@ -9,8 +9,9 @@ import EditProduct from "../../Ui/admin/Product/EditProduct.jsx";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 import { fetchDataProduct, changePosition, deleteItem, changeStatus } from "../../../api/admin/index.jsx";
 
-
 function Product() {
+
+
   const [data, setData] = useState([]);
   const [selectedType, setSelectedType] = useState("all");
   const [searchValue, setSearchValue] = useState("");

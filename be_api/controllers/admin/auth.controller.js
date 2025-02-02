@@ -82,6 +82,7 @@ module.exports.info = async (req, res) => {
         email: user.email,
         fullName: user.fullName,
         role: role.title,
+        permissions: role.permissions,
       },
     });
   } catch (err) {
