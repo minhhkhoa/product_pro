@@ -1,32 +1,36 @@
-import LayoutDefault from '../layout/LayoutDefault';
-import Product from '../components/admin/Product';
-import Category from '../components/admin/Category';
-import CreateCategory from '../pages/admin/Category/Create';
-import UpdateCategory from '../pages/admin/Category/Update';
-import ListProductDeleted from '../pages/admin/Product/ListProductDeleted/ListProductDeleted';
-import Role from '../components/admin/Role';
-import PermissionsTable from '../components/admin/Permissions';
-import Account from '../components/admin/Account';
-import Login from '../components/admin/Auth/Login';
-import DashBoard from '../components/admin/DashBoard';
+import LayoutDefault from "../layout/LayoutDefault";
+import Product from "../components/admin/Product";
+import Category from "../components/admin/Category";
+import CreateCategory from "../pages/admin/Category/Create";
+import UpdateCategory from "../pages/admin/Category/Update";
+import ListProductDeleted from "../pages/admin/Product/ListProductDeleted/ListProductDeleted";
+import Role from "../components/admin/Role";
+import PermissionsTable from "../components/admin/Permissions";
+import Account from "../components/admin/Account";
+import Login from "../components/admin/Auth/Login";
+import DashBoard from "../components/admin/DashBoard";
+import PrivateRoute from "../components/admin/PrivateRoute"; // Import PrivateRoute
 
-//-obj route
 export const routes = [
   {
     path: "/admin",
-    element: <LayoutDefault />,
+    element: (
+      <PrivateRoute> {/* Bọc LayoutDefault để bảo vệ toàn bộ route con */}
+        <LayoutDefault />
+      </PrivateRoute>
+    ),
     children: [
       {
         path: "dashboard",
-        element: <DashBoard />
+        element: <DashBoard />,
       },
       {
         path: "products",
-        element: <Product />
+        element: <Product />,
       },
       {
         path: "products-deleted",
-        element: <ListProductDeleted />
+        element: <ListProductDeleted />,
       },
       {
         path: "products-category",
@@ -34,28 +38,28 @@ export const routes = [
       },
       {
         path: "products-category/createCategory",
-        element: <CreateCategory />
+        element: <CreateCategory />,
       },
       {
         path: "products-category/updateCategory/:id",
-        element: <UpdateCategory />
+        element: <UpdateCategory />,
       },
       {
         path: "roles",
-        element: <Role />
+        element: <Role />,
       },
       {
         path: "permissions",
-        element: <PermissionsTable/>
+        element: <PermissionsTable />,
       },
       {
         path: "accounts",
-        element: <Account/>
+        element: <Account />,
       },
-    ]
+    ],
   },
   {
     path: "/admin/auth/login",
-    element: <Login />
+    element: <Login />,
   },
-]
+];
