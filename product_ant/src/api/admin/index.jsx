@@ -259,8 +259,6 @@ export const getAllRoles = async () => {
 //-end api roles
 
 //-start api account
-
-
 export const checkEmailExists = async (email) => {
   try {
     const res = await fetch(`http://localhost:3000/admin/accounts/check-email?email=${encodeURIComponent(email)}`);
