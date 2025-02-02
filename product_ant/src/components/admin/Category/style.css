@@ -19,7 +19,8 @@
 .btnCreateCategory{
   position: absolute;
   right: 10px;
-  top: 110px
+  top: 100px;
+  padding-top: 10pxK;
 }
 
 .btnDelete{

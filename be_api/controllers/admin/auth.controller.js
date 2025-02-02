@@ -1,7 +1,6 @@
 const Account = require("../../models/account.model")
 const Role = require("../../models/role.model")
 var md5 = require('md5') //-mã hóa mật khẩu của account
-const systemConfig = require("../../config/systems")
 
 //[post]: /admin/auth/login
 module.exports.loginPost = async (req, res) => {
@@ -38,7 +37,7 @@ module.exports.loginPost = async (req, res) => {
   }
 
   res.cookie("token", user.token, {
-    httpOnly: true,   // Bảo mật hơn (chỉ có backend đọc được khi là true)
+    httpOnly: false,   // Bảo mật hơn (chỉ có backend đọc được khi là true)
     secure: true,    // Để false nếu test trên HTTP, true nếu dùng HTTPS
     sameSite: "None",  // Cho phép gửi cookie giữa các domain khác nhau đi với secure: true
     maxAge: 24 * 60 * 60 * 1000 // Cookie hết hạn sau 24 giờ

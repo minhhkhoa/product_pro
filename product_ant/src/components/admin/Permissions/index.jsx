@@ -49,7 +49,10 @@ const PermissionsTable = () => {
     const url = `http://localhost:3000/admin/roles/getAllRole`;
 
     try {
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        method: "GET",
+        credentials: "include", // Đảm bảo gửi cookie kèm theo request
+      });
       const data = await res.json();
       const dataWithKeys = data.map((item) => ({
         ...item,
@@ -91,6 +94,7 @@ const PermissionsTable = () => {
     try {
       const res = await fetch("http://localhost:3000/admin/roles/permissions", {
         method: "PATCH",
+        credentials: "include", // Đảm bảo gửi cookie kèm theo request
         headers: {
           "Content-Type": "application/json",
         },

@@ -16,7 +16,10 @@ function ListProductDeleted() {
     let url = `http://localhost:3000/admin/products/getProductsDeleted`;
 
     try {
-      const res = await fetch(url);
+      const res = await fetch(url,{
+        method: "GET",
+        credentials: "include", // Đảm bảo gửi cookie kèm theo
+      });
       const data = await res.json();
       const dataWithKeys = data.map((item) => ({
         ...item,
@@ -42,6 +45,7 @@ function ListProductDeleted() {
   const handleDelete = () => {
     fetch(`http://localhost:3000/admin/products/deleteForever/${productID}`, {
       method: "DELETE",
+      credentials: "include", // Đảm bảo gửi cookie kèm theo request
     })
       .then((res) => {
         if (!res.ok) {
@@ -64,6 +68,7 @@ function ListProductDeleted() {
   const handleRollBack = (id) => {
     fetch(`http://localhost:3000/admin/products/rollbackProduct/${id}`, {
       method: "PATCH",
+      credentials: "include", // Đảm bảo gửi cookie kèm theo request
     })
       .then((res) => {
         if (!res.ok) {

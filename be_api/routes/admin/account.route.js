@@ -31,6 +31,4 @@ router.get("/check-email", controller.checkEmailExists);
 
 router.delete('/delete/:id', controller.deleteItem);
 
-
-
 module.exports = router;

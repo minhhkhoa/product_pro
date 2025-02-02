@@ -2,6 +2,8 @@ import Notification from "../../utils/Notification";
 import { convertToTree } from "../../utils/ConvertTreeData";
 
 //-start hàm dùng chung
+
+
 const nameAction = (typeRoute) => {
   switch (typeRoute) {
     case "products":
@@ -20,17 +22,18 @@ const nameAction = (typeRoute) => {
 //-create
 export const createItem = async (data, setLoading, typeRoute, isJSON = false) => {
   setLoading(true); // Bật trạng thái loading
-  console.log(data);
 
   try {
     const options = {
       method: 'POST',
+      credentials: "include", // Đảm bảo gửi cookie kèm theo request
       body: isJSON ? JSON.stringify(data) : data, // Nếu là JSON, chuyển thành chuỗi JSON
     };
 
     if (isJSON) {
       options.headers = {
         'Content-Type': 'application/json', // Thêm header nếu là JSON
+        // 'Authorization': `Bearer ${token}`
       };
     }
 
@@ -63,6 +66,7 @@ export const editItem = async (data, id, typeRoute, isJSON = false) => {
   try {
     const options = {
       method: 'PATCH',
+      credentials: "include", // Đảm bảo gửi cookie kèm theo request
       body: isJSON ? JSON.stringify(data) : data, // Nếu là JSON, chuyển đổi thành chuỗi
     };
 
@@ -100,6 +104,7 @@ export const editItem = async (data, id, typeRoute, isJSON = false) => {
 export const deleteItem = async (id, typeRoute) => {
   return fetch(`http://localhost:3000/admin/${typeRoute}/delete/${id}`, { //-trả về promise
     method: "DELETE",
+    credentials: "include", // Đảm bảo gửi cookie kèm theo request
   })
     .then((res) => {
       if (!res.ok) {
@@ -130,7 +135,10 @@ export const fetchDataProduct = async (status = "all", search = "", categoryId =
   }
 
   try {
-    const res = await fetch(url);
+    const res = await fetch(url,{
+      method: "GET",
+      credentials: "include", // Đảm bảo gửi cookie kèm theo
+    });
     if (!res.ok) {
       throw new Error('Network response was not ok');
     }
@@ -140,7 +148,6 @@ export const fetchDataProduct = async (status = "all", search = "", categoryId =
       key: item._id,
     }));
   } catch (error) {
-    Notification.error('Failed to fetch products');
     console.error('Fetch error:', error);
     throw error;
   }
@@ -151,6 +158,7 @@ export const changePosition = async (newPosition, productId) => {
     `http://localhost:3000/admin/products/change-position/${newPosition}/${productId}`,
     {
       method: "PATCH",
+      credentials: "include", // Đảm bảo gửi cookie kèm theo request
       headers: {
         "Content-Type": "application/json",
       },
@@ -176,6 +184,7 @@ export const changeStatus = async (newStatus, productId) => {
     `http://localhost:3000/admin/products/change-status/${newStatus}/${productId}`,
     {
       method: "PATCH",
+      credentials: "include", // Đảm bảo gửi cookie kèm theo request
     }
   )
     .then((res) => {
@@ -195,7 +204,12 @@ export const changeStatus = async (newStatus, productId) => {
 
 export const getDataCategory = async (typeData = null) => {
   try {
-    const res = await fetch("http://localhost:3000/admin/products/getCategory");
+    const res = await fetch("http://localhost:3000/admin/products/getCategory", {
+      method: "GET",
+      credentials: "include", // Đảm bảo gửi cookie kèm theo request
+    });
+
+
 
     if (!res.ok) {
       throw new Error('Network response was not ok');
@@ -206,7 +220,6 @@ export const getDataCategory = async (typeData = null) => {
     }
     return convertToTree(data);
   } catch (error) {
-    Notification.error('Failed to fetch categories');
     console.error('Fetch error:', error);
     throw error;
   }
@@ -219,7 +232,10 @@ export const getDataCategory = async (typeData = null) => {
 export const dataCategoryById = async (id) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/admin/products-category/getCategoryById/${id}`
+      `http://localhost:3000/admin/products-category/getCategoryById/${id}`,{
+        method: "GET",
+        credentials: "include", // Đảm bảo gửi cookie kèm theo request
+      }
     );
 
     // Kiểm tra nếu phản hồi không thành công
@@ -241,7 +257,12 @@ export const dataCategoryById = async (id) => {
 //-start api roles
 export const getAllRoles = async () => {
   try {
-    const res = await fetch("http://localhost:3000/admin/roles/getAllRole");
+    const res = await fetch("http://localhost:3000/admin/roles/getAllRole",
+      {
+        method: "GET",
+        credentials: "include", // Đảm bảo gửi cookie kèm theo request
+      }
+    );
 
     if (!res.ok) {
       throw new Error('Network response was not ok');
@@ -250,7 +271,6 @@ export const getAllRoles = async () => {
     return data;
 
   } catch (error) {
-    Notification.error('Failed to fetch roles');
     console.error('Fetch error:', error);
     throw error;
   }
@@ -300,7 +320,6 @@ export const login = async (email, password) => {
 
   } catch (error) {
     console.error('Error logging in:', error);
-    Notification.error('Failed to log in');
     throw error;
   }
 }

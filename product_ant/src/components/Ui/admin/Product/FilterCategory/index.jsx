@@ -25,7 +25,6 @@ function FilterCategory({ selectedType, searchValue, fetchDataProduct, setSelect
   // Xử lý khi thay đổi hoặc xóa danh mục
   const onChange = (value) => {
     if (value === undefined) {
-      console.log("first")
       // Khi người dùng xóa danh mục
       setSelectedCategory(null); // Xóa danh mục đã chọn
       fetchDataProduct(selectedType, searchValue, null); // Gửi giá trị null lên backend
