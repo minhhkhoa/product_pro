@@ -32,17 +32,24 @@ module.exports.loginPost = async (req, res) => {
   if (user.status == "inactive") {
     res.json({
       code: 2,
-      message: "Tài khoản đã bị khóa!"
+      message: "Tài khoản đã bị khóa!",
     })
     return
   }
 
-  res.cookie("token", user.token)
+  res.cookie("token", user.token, {
+    httpOnly: true,   // Bảo mật hơn (chỉ có backend đọc được)
+    secure: false,    // Để false nếu test trên HTTP, true nếu dùng HTTPS
+    sameSite: "Lax",  // Cho phép gửi cookie giữa các domain
+    maxAge: 24 * 60 * 60 * 1000 // Cookie hết hạn sau 24 giờ
+  });
+
 
   //-login success
   return res.json({
     code: 3,
-    message: "Đăng nhập thành công!"
+    message: "Đăng nhập thành công!",
+    token: user.token
   })
 }
 

@@ -1,10 +1,21 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const cookieParser = require("cookie-parser");
+const app = express();
+const port = 3000;
 
 //- cors se giup ket noi 2 server
 const cors = require("cors");
-app.use(cors());
+app.use(cookieParser()); // ✅ Đọc cookie từ request
+
+app.use(cors({
+  origin: "http://localhost:5173", // Frontend
+  credentials: true, // ✅ Cho phép gửi cookie
+}));
+
+// app.use(cors({
+//   origin: 'http://localhost:5173', // Địa chỉ frontend
+//   credentials: true // Quan trọng! Cho phép gửi cookie từ backend về frontend
+// }));
 
 //-.env 
 require("dotenv").config();

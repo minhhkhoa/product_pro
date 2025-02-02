@@ -11,7 +11,7 @@ function Login() {
 
   const onFinish = async (values) => {
     const res = await login(values.email, values.password);
-    const { code, message } = res;
+    const { code, message, } = res;
     switch (code) {
       case 0:
         Notification("warning", message, "Hãy xem lại thông tin");

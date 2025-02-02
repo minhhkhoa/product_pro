@@ -286,6 +286,7 @@ export const login = async (email, password) => {
   try {
     const res = await fetch('http://localhost:3000/admin/auth/login', {
       method: 'POST',
+      credentials: "include", // ✅ Bắt buộc để gửi cookie
       headers: {
         'Content-Type': 'application/json',
       },
