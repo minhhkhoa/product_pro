@@ -91,8 +91,8 @@ function MenuSider({ dataUser }) {
       permission: "account_view",
     },
     {
-      key: 'sub7',
-      label: 'Cài đặt chung',
+      key: '/admin/setting',
+      label: <Link to="/admin/setting">Cài đặt chung</Link>,
       icon: <SettingOutlined />,
       permission: "settings_view",
       alwaysShow: true,

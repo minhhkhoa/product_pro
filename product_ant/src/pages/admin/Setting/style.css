@@ -1,0 +1,20 @@
+/* Chế độ sáng */
+.light-mode {
+  background-color: white;
+  color: black;
+}
+
+/* Chế độ tối */
+.dark-mode {
+  background-color: #2e2e2e;
+  color: white;
+}
+
+/* Các thay đổi khác cho chế độ tối */
+.dark-mode .ant-card {
+  background-color: #333;
+}
+
+.dark-mode .ant-switch {
+  background-color: #4d4d4d;
+}

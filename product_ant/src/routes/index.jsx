@@ -10,6 +10,7 @@ import Account from "../components/admin/Account";
 import Login from "../components/admin/Auth/Login";
 import DashBoard from "../components/admin/DashBoard";
 import PrivateRoute from "../components/admin/PrivateRoute"; // Import PrivateRoute
+import Setting from "../pages/admin/Setting";
 
 export const routes = [
   {
@@ -55,6 +56,10 @@ export const routes = [
       {
         path: "accounts",
         element: <Account />,
+      },
+      {
+        path: "setting",
+        element: <Setting />,
       },
     ],
   },
