@@ -1,50 +1,43 @@
 import { Layout } from "antd";
-import Cookies from "js-cookie"; // import thư viện js-cookie
+import Cookies from "js-cookie";
 const { Sider, Content } = Layout;
 import "./style.css";
 import { Outlet, useNavigate } from "react-router-dom";
 import MenuSider from "../../components/admin/MenuSider";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getInfoCurrentUser } from "../../api/admin";
 
 function LayoutDefault() {
-  
   const [data, setData] = useState(null);
-  const navigate = useNavigate(); // Sử dụng navigate để điều hướng
+  const navigate = useNavigate();
 
   const getInfo = async () => {
     try {
-      const res = await fetch("http://localhost:3000/admin/auth/info", {
-        method: "GET",
-        credentials: "include", // Đảm bảo gửi cookie kèm theo request
-      });
-
-      if (res.ok) {
-        const data = await res.json();
+      const data = await getInfoCurrentUser();
+      if (data.ok) {
         setData(data);
+      } else {
+        console.error("Lỗi: Dữ liệu phản hồi không hợp lệ");
       }
     } catch (error) {
       console.error("Lỗi lấy thông tin user:", error);
     }
-  }
+  };
 
   useEffect(() => {
-    // Kiểm tra cookie token khi render
     getInfo();
-  }, []); // Sử dụng useEffect để thực hiện side effect
-  
+  }, []);
 
   const handleLogout = async () => {
     try {
       const res = await fetch("http://localhost:3000/admin/auth/logout", {
         method: "GET",
-        credentials: "include", // Đảm bảo gửi cookie kèm theo request
+        credentials: "include",
       });
 
       if (res.ok) {
-        // Xóa cookie (nếu muốn) trước khi điều hướng
         Cookies.remove("token");
-        navigate("/admin/auth/login"); // Chuyển hướng về trang đăng nhập
+        navigate("/admin/auth/login");
       }
     } catch (error) {
       console.error("Lỗi đăng xuất:", error);
@@ -64,10 +57,11 @@ function LayoutDefault() {
       </header>
       <Layout>
         <Sider className="sider">
-          <MenuSider />
+          <MenuSider dataUser={data} />
         </Sider>
         <Content>
-          <Outlet />
+          {/* Truyền `dataUser` xuống thông qua context */}
+          <Outlet context={{ dataUser: data }} />
         </Content>
       </Layout>
     </Layout>

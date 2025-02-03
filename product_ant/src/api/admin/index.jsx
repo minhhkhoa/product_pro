@@ -327,6 +327,21 @@ export const login = async (email, password) => {
 
 //-end api auth
 
+export const getInfoCurrentUser = async () => {
+  try {
+    const res = await fetch('http://localhost:3000/admin/auth/info', {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    const data = await res.json();
+
+    return { ok: res.ok, ...data }; // Thêm ok vào dữ liệu trả về
+  } catch (error) {
+    console.error('Error getting user info:', error);
+    throw error;
+  }
+};
 
 
 

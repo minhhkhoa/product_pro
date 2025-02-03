@@ -7,6 +7,7 @@ const permissionsData = [
   {
     group: "Danh mục sản phẩm",
     permissions: [
+      { key: "products_category_view", label: "Xem" },
       { key: "products_category_create", label: "Thêm mới" },
       { key: "products_category_edit", label: "Chỉnh sửa" },
       { key: "products_category_delete", label: "Xóa" },

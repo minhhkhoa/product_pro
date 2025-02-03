@@ -14,8 +14,12 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'; 
 import { Link } from 'react-router-dom';
 import { getDataCategory, deleteItem } from '../../../api/admin/index';
 
+// import { useOutletContext } from "react-router-dom"; //- lấy dữ liệu từ context truyền từ Outlet
 
 function Category() {
+
+  // const { dataUser } = useOutletContext(); // Lấy dữ liệu từ Outlet
+  // const permissions = dataUser?.user?.permissions || []; // Lấy danh sách quyền của user
 
   const [data, setData] = useState([]);
   const [idDelete, setIdDelete] = useState(null);
@@ -254,37 +258,45 @@ function Category() {
   ];
   //-end column
 
+  // if (permissions.includes("products_category_view")) {
+    return (
+      <>
+        <h1 className='namePage'>Danh mục sản phẩm</h1>
+        <Link to="/admin/products-category/createCategory">
+          <Button className="btnCreateCategory" type="primary">
+            <PlusOutlined />
+            Thêm mới
+          </Button>
+        </Link>
 
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={{
+            pageSize: 4,
+          }}
+        />
 
-  return (
-    <>
-      <h1 className='namePage'>Danh mục sản phẩm</h1>
-      <Link to="/admin/products-category/createCategory">
-        <Button className="btnCreateCategory" type="primary">
-          <PlusOutlined />
-          Thêm mới
-        </Button>
-      </Link>
-
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={{
-          pageSize: 4,
-        }}
-      />
-
-      <Modal
-        title="Thông báo"
-        open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
-      >
-        <p>Bạn có muốn xóa danh mục này không?</p>
-      </Modal>
-    </>
-  )
+        <Modal
+          title="Thông báo"
+          open={open}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}
+        >
+          <p>Bạn có muốn xóa danh mục này không?</p>
+        </Modal>
+      </>
+    );
+  // }else{
+  //   return (
+  //     <h1
+  //       style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}
+  //     >
+  //       Bạn không có quyền truy cập vào trang này
+  //     </h1>
+  //   );
+  // }
 }
 
 export default Category;
