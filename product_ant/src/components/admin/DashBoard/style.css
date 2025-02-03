@@ -1,0 +1,80 @@
+.dashboard {
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1890ff;
+}
+
+.stat-card {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card p {
+  font-size: 24px;
+  margin-top: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stat-card:nth-child(1) {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  color: white;
+}
+
+.stat-card:nth-child(2) {
+  background: linear-gradient(135deg, #42e695, #3bb2b8);
+  color: white;
+}
+
+.stat-card:nth-child(3) {
+  background: linear-gradient(135deg, #4776E6, #8E54E9);
+  color: white;
+}
+
+.stat-card:nth-child(4) {
+  background: linear-gradient(135deg, #fc4a1a, #f7b733);
+  color: white;
+}
+
+.stat-card .ant-card-head {
+  border-bottom: none;
+}
+
+.dashboard-section {
+  margin-top: 20px;
+}
+
+.dashboard-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-alert {
+  margin-top: 10px;
+}
+
+.table-header {
+  background: #1890ff;
+  color: white;
+  font-weight: bold;
+}
+
+.ant-table-thead>tr>th {
+  background: #fe058e !important;
+  color: white !important;
+  text-align: center;
+}
+
+.ant-table-tbody>tr:hover {
+  background: #e6f7ff !important;
+}

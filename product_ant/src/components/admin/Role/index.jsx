@@ -107,6 +107,7 @@ function Role() {
       <CreateRole fetchDataRoles={fetchDataRoles} />
 
       <Table
+        style={{ marginTop: "10px" }}
         columns={columns}
         dataSource={data}
         pagination={{
