@@ -14,7 +14,7 @@ const HeaderClient = () => {
         </Link>
       </div>
       <div className="search-bar">
-        <Input.Search placeholder="Tìm kiếm sản phẩm..." enterButton />
+        <Input.Search className="gido" placeholder="Tìm kiếm sản phẩm..." enterButton />
       </div>
       <div className="header-icons">
         <Link to="/cart">

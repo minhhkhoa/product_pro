@@ -27,8 +27,6 @@ function Home() {
     getProducts();
   }, []);
 
-  console.log(products);
-
   return (
     <div className='featured-products-container'>
       <h1 className='title'>Sản phẩm nổi bật</h1>

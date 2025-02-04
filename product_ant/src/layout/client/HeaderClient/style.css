@@ -4,17 +4,19 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 30px;
-  background-color: #fff;
+  background-color: #f7a8a8;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
   z-index: 100;
+  margin-bottom: 20px;
 }
 
 .header-client .logo {
   display: flex;
   align-items: center;
 }
+
 
 .header-client .logo .image {
   width: 50px;
@@ -24,9 +26,17 @@
 }
 
 .header-client .search-bar {
-  width: 40%;
+  width: 30%;
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.gido >  *:nth-child(1) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70%;
 }
 
 

@@ -4,7 +4,7 @@
   height: 450px;
   /* Đảm bảo chiều cao cố định cho tất cả các thẻ */
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(34, 159, 53, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: hidden;
   background-color: #fff;
@@ -14,8 +14,8 @@
 }
 
 .card-product:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 5px 6px 18px rgba(9, 219, 121, 0.15);
 }
 
 .card-product-thumbnail {

@@ -1,14 +1,18 @@
 .flash-sale {
-  padding: 40px 0;
-  background-color: #f7f7f7;
+  background: linear-gradient(135deg, #ff0000, #ff7300, #ffcc00);
+  color: white;
+  /* Màu chữ trắng để dễ đọc */
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 20px;
   text-align: center;
-  border-top: 4px solid #ff5722;
+  border-radius: 8px;
 }
 
 .flash-sale h2 {
   font-size: 28px;
   margin-bottom: 20px;
-  color: #ff5722;
+  color: #212324;
 }
 
 .flash-sale p {
