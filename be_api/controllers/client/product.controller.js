@@ -5,7 +5,7 @@ module.exports.getProductsFeatured = async (req, res) => {
     const products = await Product.find({
       featured: 1,
       status: "active"
-    }).limit(14);
+    }).limit(16);
     if(!products){
       return res.status(404).json({message: 'Products not found'});
     }
