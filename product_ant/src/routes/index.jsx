@@ -13,6 +13,7 @@ import PrivateRoute from "../components/admin/PrivateRoute"; // Import PrivateRo
 import Setting from "../pages/admin/Setting";
 import ClientLayout from "../layout/client/Layout";
 import Home from "../components/client/Home";
+import DetailProduct from "../components/client/DetailProduct";
 
 export const routes = [
   {
@@ -76,7 +77,11 @@ export const routes = [
       {
         path: "/",
         element: <Home/>,
-      }
+      },
+      {
+        path: "/product/:slug",
+        element: <DetailProduct/>,
+      },
     ],
   },
 ];

@@ -4820,6 +4820,7 @@ __metadata:
     react-highlight-words: "npm:^0.21.0"
     react-redux: "npm:^9.2.0"
     react-router-dom: "npm:^7.0.2"
+    swiper: "npm:^11.2.2"
     vite: "npm:^6.0.5"
   languageName: unknown
   linkType: soft
@@ -6247,6 +6248,13 @@ __metadata:
   version: 1.1.0
   resolution: "svg-path-parser@npm:1.1.0"
   checksum: 10c0/de3afe74a87e60e54261d8bf9e20f24e9b4eb2d7da70b7d967053fcc4b445c5c1996e2c31f8b935e5f4d5e7e5d83363f61626d5babed80f1e913fda70e613359
+  languageName: node
+  linkType: hard
+
+"swiper@npm:^11.2.2":
+  version: 11.2.2
+  resolution: "swiper@npm:11.2.2"
+  checksum: 10c0/1edb67949c5957877f3c30370e0eb188bbf044f80e482376db97b1923f7f7c07e41f84bb0dacae766c77f01ee6be1b4cab839ec1dd3811adebd7ce36d00571bf
   languageName: node
   linkType: hard
 

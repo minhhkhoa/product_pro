@@ -1,0 +1,41 @@
+/* Định dạng tổng thể của container */
+.container {
+  display: flex;
+  justify-content: center;
+  margin-left: 150px;
+}
+
+/* Khu vực sản phẩm liên quan */
+.sameProduct {
+  margin: 30px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
+  position: relative;
+}
+
+/* Tiêu đề */
+.sameProduct h2 {
+  text-align: start;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Swiper tổng thể */
+.swiper-container {
+  padding-bottom: 40px;
+}
+
+/* Swiper Slide căn giữa nội dung */
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+}
+
+
+/* Ẩn nút điều hướng khi không cần thiết */
+.swiper-button-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

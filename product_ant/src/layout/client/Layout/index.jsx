@@ -5,9 +5,14 @@ import FooterClient from "../FooterClient/index";
 import FlashSale from "../FlashSale/index";
 import "./style.css";
 
+import { useParams } from "react-router-dom";
+
 const { Content } = Layout;
 
 const ClientLayout = () => {
+
+  const { slug } = useParams();
+
   return (
     <Layout className="layout-client">
       {/* Header */}
@@ -16,9 +21,15 @@ const ClientLayout = () => {
       {/* Nội dung trang chính */}
       <Content style={{ padding: "0 50px" }}>
         {/* Flash Sale */}
-        <div className="flash-sale-container">
-          <FlashSale />
-        </div>
+        {
+          slug ?
+            <div>
+            </div> :
+            <div className="flash-sale-container">
+              <FlashSale />
+            </div>
+        }
+
 
         {/* Nội dung trang con */}
         <div className="content-outlet">
