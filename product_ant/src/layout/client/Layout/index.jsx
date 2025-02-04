@@ -11,7 +11,7 @@ const { Content } = Layout;
 
 const ClientLayout = () => {
 
-  const { slug } = useParams();
+  const { slugProduct } = useParams();
 
   return (
     <Layout className="layout-client">
@@ -22,7 +22,7 @@ const ClientLayout = () => {
       <Content style={{ padding: "0 50px" }}>
         {/* Flash Sale */}
         {
-          slug ?
+          slugProduct ?
             <div>
             </div> :
             <div className="flash-sale-container">
