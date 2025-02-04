@@ -9,13 +9,13 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 function DetailProduct() {
-  const { slug } = useParams();
+  const { slugProduct } = useParams();
   const [product, setProduct] = useState();
   const [sameProducts, setSameProducts] = useState();
-
+  
   const getProduct = useCallback(async () => {
     try {
-      const result = await findProductBySlug(slug);
+      const result = await findProductBySlug(slugProduct);
       if (result.ok) {
         setProduct(result.data);
         const sameProduct = result.sameProduct.filter((item) => item._id !== result.data._id);
@@ -26,7 +26,7 @@ function DetailProduct() {
     } catch (error) {
       console.error("Request failed:", error);
     }
-  }, [slug]);
+  }, [slugProduct]);
 
   useEffect(() => {
     getProduct();

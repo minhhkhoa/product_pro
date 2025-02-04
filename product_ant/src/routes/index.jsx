@@ -79,7 +79,7 @@ export const routes = [
         element: <Home/>,
       },
       {
-        path: "/product/:slug",
+        path: "/product/:slugProduct",
         element: <DetailProduct/>,
       },
     ],

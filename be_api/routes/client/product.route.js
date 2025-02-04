@@ -7,7 +7,7 @@ const controller = require("../../controllers/client/product.controller");
 
 router.get('/featured', controller.getProductsFeatured);
 
-router.get('/findProductBySlug/:slug', controller.findProductBySlug);
+router.get('/findProductBySlug/:slugProduct', controller.findProductBySlug);
 
 
 module.exports = router

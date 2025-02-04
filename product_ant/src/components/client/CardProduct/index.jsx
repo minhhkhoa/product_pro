@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 const { Meta } = Card;
 
 const CardProduct = ({ product }) => {
-  const { slug } = useParams();
+  const { slugProduct } = useParams();
   if (!product) {
     return <div>Loading...</div>;  // Hiển thị Loading nếu product chưa có dữ liệu
   } else {
@@ -17,6 +17,7 @@ const CardProduct = ({ product }) => {
       discountPercentage,
       stock,
       thumbnail,
+      slug
     } = product;
 
 
@@ -47,7 +48,7 @@ const CardProduct = ({ product }) => {
             </div>
           </div>
           {
-            slug ?
+            slugProduct ?
               <div style={{ display: "flex", justifyContent: "space-around", paddingTop: "5px" }}>
                 <p>Số lượng mua</p>
                 <InputNumber min={1} max={stock} defaultValue={1} />
@@ -58,7 +59,7 @@ const CardProduct = ({ product }) => {
           }
 
           {
-            slug ?
+            slugProduct ?
               <Button
                 type="primary"
                 // href={`/product/${slug}`}

@@ -17,7 +17,7 @@ module.exports.getProductsFeatured = async (req, res) => {
 }
 
 module.exports.findProductBySlug = async (req, res) => {
-  const slug = req.params.slug;
+  const slug = req.params.slugProduct;
   try {
     const result = await Product.findOne({
       status: "active",
