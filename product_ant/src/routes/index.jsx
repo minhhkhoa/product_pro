@@ -11,6 +11,8 @@ import Login from "../components/admin/Auth/Login";
 import DashBoard from "../components/admin/DashBoard";
 import PrivateRoute from "../components/admin/PrivateRoute"; // Import PrivateRoute
 import Setting from "../pages/admin/Setting";
+import ClientLayout from "../layout/client/Layout";
+import Home from "../components/client/Home";
 
 export const routes = [
   {
@@ -66,5 +68,15 @@ export const routes = [
   {
     path: "/admin/auth/login",
     element: <Login />,
+  },
+  {
+    path: "/",
+    element: <ClientLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home/>,
+      }
+    ],
   },
 ];

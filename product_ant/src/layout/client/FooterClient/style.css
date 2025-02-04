@@ -1,0 +1,17 @@
+.footer-client {
+  background-color: #f8f9fa;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+
+.footer-client .footer-links a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.footer-client .footer-links a:hover {
+  color: #007bff;
+}

@@ -1,0 +1,22 @@
+/* Container cho các sản phẩm nổi bật */
+.featured-products-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #11c82c;
+  text-align: start;
+  margin-bottom: 20px;
+}
+
+/* Bao quanh các sản phẩm */
+.featured-products {
+  padding: 20px;
+}

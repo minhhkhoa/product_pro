@@ -25,6 +25,7 @@ dataBase.connect();
 
 //-connect route
 const routeAdmin = require("./routes/admin/index.route");
+const routeClient = require("./routes/client/index.route");
 
 //start thay thế cho body-parser
 // Middleware để xử lý dữ liệu JSON
@@ -36,6 +37,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 routeAdmin(app);
+routeClient(app);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
