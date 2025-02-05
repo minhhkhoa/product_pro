@@ -100,3 +100,25 @@ export const dataCategoryById = async (id) => {
   }
 };
 
+export const searchProduct = async (value) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/products/search?search=${value}`, {
+      method: "GET",
+    }
+    );
+
+    // Kiểm tra nếu phản hồi không thành công
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Chuyển đổi phản hồi thành JSON
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error fetching category by ID:', error);
+    throw error; // Ném lỗi để nơi sử dụng hàm này biết và xử lý
+  }
+};
+

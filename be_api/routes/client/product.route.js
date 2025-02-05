@@ -9,7 +9,7 @@ router.get('/featured', controller.getProductsFeatured);
 
 router.get('/findProductBySlug/:slugProduct', controller.findProductBySlug);
 
-router.get('/filter', controller.filter);
+router.get('/search', controller.search);
 
 router.get('/getProductsByCategoryId/:CategoryId', controller.getProductsByCategoryId);
 

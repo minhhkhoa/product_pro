@@ -47,15 +47,15 @@ module.exports.findProductBySlug = async (req, res) => {
   }
 }
 
-module.exports.filter = async (req, res) => {
+module.exports.search = async (req, res) => {
   try {
-    const { search, category } = req.query;  // Lấy category từ query string
+    const { search } = req.query;  // Lấy category từ query string
 
     // Tạo query để tìm sản phẩm
     const query = {
+      status: "active",
       deleted: false,
       ...(search && { title: { $regex: search, $options: 'i' } }), // Nếu có search, tìm theo title
-      ...(category && { product_category_id: category }), // Nếu có category, lọc theo categoryId
     };
 
     // Tìm các sản phẩm theo query

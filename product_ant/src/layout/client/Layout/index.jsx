@@ -5,13 +5,20 @@ import FooterClient from "../FooterClient/index";
 import FlashSale from "../FlashSale/index";
 import "./style.css";
 
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 const { Content } = Layout;
 
 const ClientLayout = () => {
 
   const { slugProduct, categoryId } = useParams();
+
+  //-lay query tu url
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  const query = searchParams.get("search");
+
   return (
     <Layout className="layout-client">
       {/* Header */}
@@ -21,7 +28,7 @@ const ClientLayout = () => {
       <Content style={{ padding: "0 50px" }}>
         {/* Flash Sale */}
         {
-          (slugProduct || categoryId )?
+          (slugProduct || categoryId || query )?
             <div>
             </div> :
             <div className="flash-sale-container">

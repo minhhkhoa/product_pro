@@ -15,6 +15,7 @@ import ClientLayout from "../layout/client/Layout";
 import Home from "../components/client/Home";
 import DetailProduct from "../components/client/DetailProduct";
 import PageProducts from "../pages/client/PageProducts";
+import Search from "../components/client/Search";
 
 export const routes = [
   {
@@ -86,6 +87,10 @@ export const routes = [
       {
         path: "products-category/:categoryId",
         element: <PageProducts/>,
+      },
+      {
+        path: "/search",
+        element: <Search/>,
       },
     ],
   },
