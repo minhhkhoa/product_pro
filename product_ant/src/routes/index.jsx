@@ -80,11 +80,11 @@ export const routes = [
         element: <Home/>,
       },
       {
-        path: "/product/:slugProduct",
+        path: "product/:slugProduct",
         element: <DetailProduct/>,
       },
       {
-        path: "/products-category/:categoryId",
+        path: "products-category/:categoryId",
         element: <PageProducts/>,
       },
     ],
