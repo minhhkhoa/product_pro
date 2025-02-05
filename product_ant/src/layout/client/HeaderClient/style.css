@@ -32,13 +32,6 @@
   align-items: center;
 }
 
-.gido >  *:nth-child(1) {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 70%;
-}
-
 
 .header-client .header-icons {
   display: flex;

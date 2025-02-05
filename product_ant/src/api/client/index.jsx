@@ -50,3 +50,53 @@ export const findProductBySlug = async (slug) => {
     };
   }
 }
+
+export const fetchDataProduct = async ( search, categoryId) => {
+  let url = `http://localhost:3000/products`;
+  if (search) {
+    url += `&search=${search}`;
+  }
+  if (categoryId) {
+    url += `&category=${categoryId}`;
+  }
+
+  try {
+    const res = await fetch(url, {
+      method: "GET",
+    });
+    if (!res.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await res.json();
+    return data.map((item) => ({
+      ...item,
+      key: item._id,
+    }));
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+};
+
+export const dataCategoryById = async (id) => {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/products/getProductsByCategoryId/${id}`, {
+      method: "GET",
+    }
+    );
+
+    // Kiểm tra nếu phản hồi không thành công
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Chuyển đổi phản hồi thành JSON
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error('Error fetching category by ID:', error);
+    throw error; // Ném lỗi để nơi sử dụng hàm này biết và xử lý
+  }
+};
+

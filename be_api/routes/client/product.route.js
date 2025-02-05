@@ -9,5 +9,9 @@ router.get('/featured', controller.getProductsFeatured);
 
 router.get('/findProductBySlug/:slugProduct', controller.findProductBySlug);
 
+router.get('/filter', controller.filter);
+
+router.get('/getProductsByCategoryId/:CategoryId', controller.getProductsByCategoryId);
+
 
 module.exports = router

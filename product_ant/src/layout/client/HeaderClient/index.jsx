@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
-import { Input } from "antd";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import "./style.css";
 import logo from './logo.webp';
-import SelectCategory from "../../../components/client/SelectCategory";
+import Filter from "../Filter";
 
 
 const HeaderClient = () => {
@@ -15,12 +14,11 @@ const HeaderClient = () => {
         </Link>
         <h1 className="pageHome">Products</h1>
       </div>
-      <div className="search-bar">
-        <Input.Search className="gido" placeholder="Tìm kiếm sản phẩm..." enterButton />
+
+      <div className="header-util">
+        <Filter/>
       </div>
-      <div className="select-category">
-        <SelectCategory/>
-      </div>
+
       <div className="header-icons">
         <Link to="/cart">
           <ShoppingCartOutlined className="icon" />

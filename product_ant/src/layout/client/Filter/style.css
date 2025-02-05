@@ -1,0 +1,15 @@
+.container-filter{
+  display: flex;
+  justify-content: space-between;
+  width: 650px;
+  align-items: center;
+}
+
+
+.search>*:nth-child(1) {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 250px;
+}
+
