@@ -13,6 +13,7 @@ const HeaderClient = () => {
         <Link to="/">
           <img className="image" src={logo} alt="Logo" />
         </Link>
+        <h1 className="pageHome">Products</h1>
       </div>
       <div className="search-bar">
         <Input.Search className="gido" placeholder="Tìm kiếm sản phẩm..." enterButton />

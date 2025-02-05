@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { Spin } from "antd";
 
 function DetailProduct() {
   const { slugProduct } = useParams();
@@ -64,7 +65,11 @@ function DetailProduct() {
       </>
     );
   } else {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <Spin className="spin"/>
+      </>
+    );
   }
 }
 

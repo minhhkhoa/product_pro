@@ -1,4 +1,4 @@
-import { Card, Col, Tag, Button, InputNumber, Image } from 'antd';
+import { Card, Col, Tag, Button, InputNumber, Image, Spin } from 'antd';
 import './style.css';
 import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
@@ -8,7 +8,12 @@ const { Meta } = Card;
 const CardProduct = ({ product }) => {
   const { slugProduct } = useParams();
   if (!product) {
-    return <div>Loading...</div>;  // Hiển thị Loading nếu product chưa có dữ liệu
+    // Hiển thị Loading nếu product chưa có dữ liệu
+    return (
+      <>
+        <Spin className="spin" />
+      </>
+    ) 
   } else {
     const {
       title,
@@ -29,7 +34,7 @@ const CardProduct = ({ product }) => {
           hoverable
           cover={
             <Image
-              style={{ height: "200px", width: "200px", marginLeft: '30px'}}
+              style={{ height: "200px", width: "200px", marginLeft: '30px' }}
               className="card-product-thumbnail"
               alt={title} src={thumbnail}
             />
