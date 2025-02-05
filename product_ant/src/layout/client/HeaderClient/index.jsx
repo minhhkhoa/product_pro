@@ -3,6 +3,7 @@ import { Input } from "antd";
 import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import "./style.css";
 import logo from './logo.webp';
+import SelectCategory from "../../../components/client/SelectCategory";
 
 
 const HeaderClient = () => {
@@ -15,6 +16,9 @@ const HeaderClient = () => {
       </div>
       <div className="search-bar">
         <Input.Search className="gido" placeholder="Tìm kiếm sản phẩm..." enterButton />
+      </div>
+      <div className="select-category">
+        <SelectCategory/>
       </div>
       <div className="header-icons">
         <Link to="/cart">
