@@ -1,6 +1,5 @@
 export const getProductsFeatured = async () => {
   try {
-    // const response = await fetch('https://be-pv7fns04p-minhkhoas-projects.vercel.app/products/featured');
     const response = await fetch('http://localhost:3000/products/featured');
 
     // Kiểm tra nếu response không hợp lệ
@@ -27,7 +26,7 @@ export const getProductsFeatured = async () => {
 
 export const findProductBySlug = async (slug) => {
   try {
-    const response = await fetch(`https://be-pv7fns04p-minhkhoas-projects.vercel.app/products/findProductBySlug/${slug}`);
+    const response = await fetch(`http://localhost:3000/products/findProductBySlug/${slug}`);
 
     // Kiểm tra nếu response không hợp lệ
     if (!response.ok) {
@@ -53,7 +52,7 @@ export const findProductBySlug = async (slug) => {
 }
 
 export const fetchDataProduct = async ( search, categoryId) => {
-  let url = `https://be-pv7fns04p-minhkhoas-projects.vercel.app/products`;
+  let url = `http://localhost:3000/products`;
   if (search) {
     url += `&search=${search}`;
   }
@@ -82,7 +81,7 @@ export const fetchDataProduct = async ( search, categoryId) => {
 export const dataCategoryById = async (id) => {
   try {
     const response = await fetch(
-      `https://be-pv7fns04p-minhkhoas-projects.vercel.app/products/getProductsByCategoryId/${id}`, {
+      `http://localhost:3000/products/getProductsByCategoryId/${id}`, {
       method: "GET",
     }
     );
@@ -104,7 +103,7 @@ export const dataCategoryById = async (id) => {
 export const searchProduct = async (value) => {
   try {
     const response = await fetch(
-      `https://be-pv7fns04p-minhkhoas-projects.vercel.app/products/search?search=${value}`, {
+      `http://localhost:3000/products/search?search=${value}`, {
       method: "GET",
     }
     );
