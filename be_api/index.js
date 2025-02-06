@@ -8,7 +8,7 @@ const cors = require("cors");
 app.use(cookieParser()); // ✅ Đọc cookie từ request
 
 app.use(cors({
-  origin: "http://localhost:5173", // Frontend
+  origin: ["http://localhost:5173", "https://product-qetdq7i34-minhkhoas-projects.vercel.app/"],
   credentials: true, // ✅ Cho phép gửi cookie
 }));
 

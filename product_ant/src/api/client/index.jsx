@@ -1,6 +1,7 @@
 export const getProductsFeatured = async () => {
   try {
     const response = await fetch('https://be-pv7fns04p-minhkhoas-projects.vercel.app/products/featured');
+    // const response = await fetch('http://localhost:3000/products/featured');
 
     // Kiểm tra nếu response không hợp lệ
     if (!response.ok) {
