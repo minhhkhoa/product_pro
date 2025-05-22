@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button, Table, Modal } from "antd";
+import { Button, Table, Modal, Tooltip } from "antd";
 import "./style.css";
-import { DeleteOutlined, UndoOutlined } from '@ant-design/icons'; // Thêm import icon
+import { CheckCircleOutlined, DeleteOutlined, StopOutlined, UndoOutlined } from '@ant-design/icons'; // Thêm import icon
 import Notification from "../../../../utils/Notification";
 
 function ListProductDeleted() {
@@ -93,14 +93,14 @@ function ListProductDeleted() {
       title: "Hình ảnh",
       dataIndex: "thumbnail",
       render: (thumbnail) => (
-        <div className="image" >
+        <div className="image">
           <img
             src={thumbnail}
             alt="product"
             style={{
               maxWidth: "100%",
               maxHeight: "100%",
-              objectFit: "contain"
+              objectFit: "contain",
             }}
           />
         </div>
@@ -131,40 +131,28 @@ function ListProductDeleted() {
       sorter: (a, b) => a.position - b.position,
     },
     {
-      title: "Trạng thái",
-      dataIndex: "status",
-      render: (_, record) => (
-          <Button
-            type="primary"
-            className="btn status"
-          >
-            {record.status}
-          </Button>
-      ),
-    },
-    {
       title: "Hành động",
       dataIndex: "_id",
       render: (_, record) => (
         <div>
-          <Button
-            className="btn rollback"
-            type="primary"
-            danger
-            onClick={() => handleRollBack(record._id)}
-          >
-            <UndoOutlined />
-            Khôi phục
-          </Button>
-
+          <Tooltip title="Khôi phục">
+            <Button
+              className="btn rollback"
+              type="primary"
+              danger
+              onClick={() => handleRollBack(record._id)}
+            >
+              <UndoOutlined />
+            </Button>
+          </Tooltip>
           <Button
             className="btn danger"
             type="primary"
             danger
             onClick={() => showModalDelete(record._id)}
+            style={{ borderColor: "red" }}
           >
             <DeleteOutlined />
-            Xóa vĩnh viễn
           </Button>
         </div>
       ),

@@ -14,3 +14,7 @@
   align-items: center;
   margin-right: 30px;
 }
+
+.ant-input-search-button {
+  margin: 0 !important;
+}

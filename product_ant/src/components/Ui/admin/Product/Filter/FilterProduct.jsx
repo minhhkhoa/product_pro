@@ -21,20 +21,21 @@ const FilterProduct = ({ selectedType, setSelectedType, searchValue, setSearchVa
         <div className="card-groupsearch">
           <div className="frm-search_left">
             <Button
-              type={selectedType === 'all' ? 'primary' : 'default'}
-              onClick={() => handleClick('all')}
+              type={selectedType === "all" ? "primary" : "default"}
+              onClick={() => handleClick("all")}
+              style={{ color: "volcano" }}
             >
               Tất cả
             </Button>
             <Button
-              type={selectedType === 'active' ? 'primary' : 'default'}
-              onClick={() => handleClick('active')}
+              type={selectedType === "active" ? "primary" : "default"}
+              onClick={() => handleClick("active")}
             >
               Hoạt động
             </Button>
             <Button
-              type={selectedType === 'inactive' ? 'primary' : 'default'}
-              onClick={() => handleClick('inactive')}
+              type={selectedType === "inactive" ? "primary" : "default"}
+              onClick={() => handleClick("inactive")}
             >
               Dừng hoạt động
             </Button>
@@ -43,7 +44,7 @@ const FilterProduct = ({ selectedType, setSelectedType, searchValue, setSearchVa
             <Search
               placeholder="Nhập tên sản phẩm"
               allowClear
-              enterButton="Tìm kiếm"
+              // enterButton="Tìm kiếm"
               size="large"
               onSearch={handleSearch}
               style={{ width: 300 }}

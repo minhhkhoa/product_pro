@@ -4,7 +4,14 @@ import "./style.css";
 import ShowProduct from "../../Ui/admin/Product/ShowProduct";
 import FilterProduct from "../../Ui/admin/Product/Filter/FilterProduct.jsx";
 import FilterCategory from "../../Ui/admin/Product/FilterCategory";
-import { CheckCircleOutlined, DeleteOutlined, EditOutlined, PlusOutlined, StopOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  EyeFilled,
+  PlusOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
 import {
   fetchDataProduct,
   changePosition,
@@ -95,16 +102,18 @@ function Product() {
 
   const columns = [
     {
-      title: "Hình ảnh",
+      title: () => <div style={{ textAlign: "center" }}>Hình ảnh</div>,
+      width: 230,
       dataIndex: "thumbnail",
+      align: "center",
       render: (thumbnail) => (
-        <div className="image">
+        <div className="imageProduct">
           <img
             src={thumbnail}
             alt="product"
             style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
+              height: "80px",
+              width: "80px",
               objectFit: "contain",
             }}
           />
@@ -112,19 +121,25 @@ function Product() {
       ),
     },
     {
-      title: "Tiêu đề",
+      title: () => <div style={{ textAlign: "center" }}>Tiêu đề</div>,
+      align: "center",
       dataIndex: "title",
       sorter: (a, b) => a.title.localeCompare(b.title),
+      width: 350,
     },
     {
-      title: "Giá",
+      title: () => <div style={{ textAlign: "center" }}>Giá</div>,
+      align: "center",
       dataIndex: "price",
       render: (price) => `$${price}`,
       sorter: (a, b) => a.price - b.price,
+      width: 170,
     },
     {
-      title: "Vị trí",
+      title: () => <div style={{ textAlign: "center" }}>Vị trí</div>,
+      align: "center",
       dataIndex: "position",
+      width: 170,
       render: (_, record) => (
         <input
           type="number"
@@ -137,61 +152,83 @@ function Product() {
       sorter: (a, b) => a.position - b.position,
     },
     {
-      title: "Trạng thái",
+      title: () => <div style={{ textAlign: "center" }}>Trạng thái</div>,
+      align: "center",
       dataIndex: "status",
       render: (_, record) => (
-        <Button
-          type="primary"
-          className="btn status"
-          style={{
-            backgroundColor: record.status === "active" ? "#13c2c2" : "#722ed1",
-            borderColor: record.status === "active" ? "#13c2c2" : "#722ed1",
-          }}
-          onClick={() => handleClickStatus(record)}
+        <Tooltip
+          title={record.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
         >
-          <Tooltip
-            title={record.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+          <Button
+            type="primary"
+            className="btn status"
+            style={{
+              backgroundColor:
+                record.status === "active" ? "#13c2c2" : "#722ed1",
+              borderColor: record.status === "active" ? "#13c2c2" : "#722ed1",
+            }}
+            onClick={() => handleClickStatus(record)}
           >
             {record.status === "active" ? (
               <CheckCircleOutlined />
             ) : (
               <StopOutlined />
             )}
-          </Tooltip>
-        </Button>
+          </Button>
+        </Tooltip>
       ),
     },
     {
-      title: "Hành động",
+      title: () => <div style={{ textAlign: "center" }}>Hành động</div>,
+      width: 220,
       dataIndex: "_id",
       render: (_, record) => (
-        <div>
-          <Button onClick={() => setDrawerOpen(record._id)}>
-            Xem chi tiết
-          </Button>
+        <>
+          <div className="actionContainer">
+            <div className="actionButton">
+              <Button
+                className="btn"
+                style={{ backgroundColor: "#FFCE47", borderColor: "#FFCE47" }}
+                type="primary"
+                onClick={() => setDrawerOpen(record._id)}
+              >
+                <EyeFilled />
+              </Button>
 
-          <Link
-            to={`/admin/products/updateProduct/${record._id}`}
-            state={{
-              data: dataRow(record._id),
-            }}
-          >
-            <Button className="btn editProduct" type="primary">
-              <EditOutlined />
-              Sửa
-            </Button>
-          </Link>
+              <Link
+                to={`/admin/products/updateProduct/${record._id}`}
+                state={{
+                  data: dataRow(record._id),
+                }}
+              >
+                <Button className="btn editProduct" type="primary">
+                  <EditOutlined />
+                </Button>
+              </Link>
 
-          <Button
-            className="btn danger"
-            type="primary"
-            danger
-            onClick={() => showDeleteModal(record._id)}
-          >
-            <DeleteOutlined />
-            Xóa
-          </Button>
-        </div>
+              <Button
+                className="btn danger"
+                type="primary"
+                danger
+                style={{ borderColor: "red" }}
+                onClick={() => showDeleteModal(record._id)}
+              >
+                <DeleteOutlined />
+              </Button>
+            </div>
+            <p>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  color: "#98593B",
+                }}
+              >
+                {record.featured === "1" ? "Nổi bật" : "Ưu đãi lớn"}
+              </span>
+            </p>
+          </div>
+        </>
       ),
     },
   ];
@@ -231,6 +268,8 @@ function Product() {
           pageSize: 5,
         }}
         loading={loading}
+        size="small"
+        className="tableProduct"
       />
 
       <Modal

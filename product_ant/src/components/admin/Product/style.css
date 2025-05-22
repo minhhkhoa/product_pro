@@ -41,6 +41,10 @@ h1 {
   margin-left: 10px;
 }
 
+.btn {
+  padding: 8px 10px;
+}
+
 .btn:hover {
   transform: scale(0.9);
 }
@@ -56,4 +60,30 @@ h1 {
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
+}
+
+.actionContainer .actionButton{
+  display: none;
+}
+
+.tableProduct .ant-table-row:hover .actionContainer .actionButton{
+  display: block;
+}
+
+.tableProduct .ant-table-row:hover .actionContainer p {
+  display: none;
+}
+
+.tableProduct .ant-table-row .actionContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ant-table-cell:has(.imageProduct) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
 }
