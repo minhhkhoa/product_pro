@@ -113,10 +113,10 @@ module.exports.checkEmailExists = async (req, res) => {
       return res.json({ exists: true }); // Email đã tồn tại
     }
 
-    res.json({ exists: false }); // Email chưa tồn tại
+    return res.json({ exists: false }); // Email chưa tồn tại
   } catch (error) {
     console.error("Lỗi khi kiểm tra email:", error);
-    res.status(500).json({ message: "Lỗi server" });
+    return res.status(500).json({ message: "Lỗi server" });
   }
 }
 

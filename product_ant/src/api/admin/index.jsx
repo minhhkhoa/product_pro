@@ -281,11 +281,9 @@ export const getAllRoles = async () => {
 //-start api account
 export const checkEmailExists = async (email) => {
   try {
-    const res = await fetch(`http://localhost:3000/admin/accounts/check-email?email=${encodeURIComponent(email)}`);
-
-    if (!res.ok) {
-      throw new Error("Network response was not ok");
-    }
+    const res = await fetch(
+      `http://localhost:3000/admin/accounts/check-email?email=${email}`
+    );
 
     const data = await res.json();
     return data.exists; // Giả sử API trả về { exists: true } nếu email đã tồn tại

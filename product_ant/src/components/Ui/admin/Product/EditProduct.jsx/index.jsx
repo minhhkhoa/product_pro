@@ -1,286 +1,259 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
-  Button,
-  Modal,
+  Card,
   Form,
   Input,
+  InputNumber,
   Select,
   Radio,
-  InputNumber,
   Upload,
-} from 'antd';
-import { PlusOutlined, EditOutlined } from '@ant-design/icons';
-const { Option } = Select;
-import { Editor } from '@tinymce/tinymce-react';
+  Button,
+  Spin,
+  Typography,
+  Row,
+  Col,
+  Space,
+} from "antd";
+import { PlusOutlined, EditOutlined } from "@ant-design/icons";
+import { Editor } from "@tinymce/tinymce-react";
+import PropTypes from "prop-types";
 import "./style.css";
-import PropTypes from 'prop-types';
-import Notification from '../../../../../utils/Notification';
-import { getDataCategory, editItem } from '../../../../../api/admin/index';
+import Notification from "../../../../../utils/Notification";
+import { getDataCategory, editItem } from "../../../../../api/admin/index";
+import { useLocation } from "react-router-dom";
 
+const { Title } = Typography;
+const { Option } = Select;
 
-const uploadButton = (
-  <div>
-    <PlusOutlined />
-    <div style={{ marginTop: 8 }}>Thêm ảnh</div>
-  </div>
-);
-
-// eslint-disable-next-line react/prop-types
-function EditProduct({ typeTitle, data, handleRefreshData }) {
+const EditProduct = ({ onProductUpdated }) => {
+  const location = useLocation();
+  const data = location.state?.data || {};
 
   const [dataCategory, setDataCategory] = useState([]);
-  const [editorContent, setEditorContent] = useState(data?.description || ''); // Mô tả từ props
+  const [editorContent, setEditorContent] = useState(data.description || "");
   const [fileList, setFileList] = useState([]);
-  const [previewImage, setPreviewImage] = useState('');
-  const [previewOpen, setPreviewOpen] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Fetch dữ liệu danh mục sản phẩm
-  const fetchData = async () => {
-    try {
-      const categoryData = await getDataCategory("flat"); // Chờ dữ liệu trả về
-      setDataCategory(categoryData);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
 
   useEffect(() => {
-    // Gọi API để lấy danh mục sản phẩm
-    fetchData();
+    (async () => {
+      try {
+        const list = await getDataCategory("flat");
+        setDataCategory(list);
+      } catch {
+        Notification("error", "Lỗi", "Không tải được danh mục");
+      }
+    })();
+  }, []);
 
-    // Cập nhật fileList nếu có ảnh thumbnail
-    if (data?.thumbnail) {
+  // Populate form when data changes
+  useEffect(() => {
+    form.setFieldsValue({
+      title: data.title,
+      product_category_id: data.product_category_id,
+      featured: data.featured?.toString() || "0",
+      price: data.price,
+      discountPercentage: data.discountPercentage,
+      stock: data.stock,
+      position: data.position,
+      status: data.status,
+    });
+    setEditorContent(data.description || "");
+    if (data.thumbnail) {
       setFileList([
         {
-          uid: '-1',
-          name: 'thumbnail.png',
-          status: 'done',
+          uid: "-1",
+          name: "thumbnail.png",
+          status: "done",
           url: data.thumbnail,
         },
       ]);
     }
+  }, [data, form]);
 
-    // Cập nhật giá trị form khi data thay đổi
-    if (data && form) { //-nếu data thay đổi
-      if (isModalOpen) { //-nếu model đã được mở
-        form.setFieldsValue({ //- mới bắt đầu gán dữ liệu vào form
-          title: data?.title || '',
-          product_category_id: data?.product_category_id || '',
-          featured: data?.featured || '0',
-          price: data?.price || '',
-          discountPercentage: data?.discountPercentage || '',
-          stock: data?.stock || '',
-          position: data?.position || '',
-          status: data?.status || 'active',
-        });
-      }
-    }
-  }, [data, form, isModalOpen]);
-
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    form.submit();
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  // Xử lý form submit
   const onFinish = async (values) => {
-    values.description = editorContent;
-    const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('product_category_id', values.product_category_id);
-    formData.append('featured', values.featured);
-    formData.append('description', editorContent);
-    formData.append('price', values.price);
-    formData.append('discountPercentage', values.discountPercentage);
-    formData.append('stock', values.stock);
-    formData.append('position', values.position || "");
-    formData.append('status', values.status);
-
-    if (fileList.length > 0 && fileList[0]?.originFileObj) {
-      formData.append('thumbnail', fileList[0].originFileObj);
-    }
-
+    setLoading(true);
     try {
+      const formData = new FormData();
+      Object.entries({
+        title: values.title,
+        product_category_id: values.product_category_id,
+        featured: values.featured,
+        description: editorContent,
+        price: values.price,
+        discountPercentage: values.discountPercentage,
+        stock: values.stock,
+        position: values.position || "",
+        status: values.status,
+      }).forEach(([key, val]) => formData.append(key, val));
+      if (fileList[0]?.originFileObj) {
+        formData.append("thumbnail", fileList[0].originFileObj);
+      }
+
       await editItem(formData, data._id, "products");
-      form.resetFields(); // Reset form
-      setFileList([]); // Reset fileList
-      setEditorContent(''); // Reset nội dung Editor
-      handleRefreshData();
-    } catch (error) {
-      console.log('Đã có lỗi xảy ra khi cập nhật sản phẩm!', error);
-      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật sản phẩm!");
+      onProductUpdated?.();
+    } catch {
+      Notification("error", "Lỗi", "Cập nhật sản phẩm thất bại!");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
-    setPreviewImage(file.url || file.preview);
-    setPreviewOpen(true);
-  };
-
+  const handleChange = ({ fileList: newList }) => setFileList(newList);
   const getBase64 = (file) =>
-    new Promise((resolve, reject) => {
+    new Promise((res, rej) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
+      reader.onload = () => res(reader.result);
+      reader.onerror = (e) => rej(e);
     });
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview)
+      file.preview = await getBase64(file.originFileObj);
+    // preview logic omitted or use a lightbox component
+  };
 
   return (
-    <>
-      <Button
-        className="btn editProduct"
-        type="primary"
-        onClick={showModal}>
-        <EditOutlined />
-        {typeTitle}
-      </Button>
-      <Modal
-        title={typeTitle}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
+    <Card className="create-product-card">
+      <Title level={3} className="form-title">
+        <EditOutlined /> Chỉnh sửa sản phẩm
+      </Title>
+      <Form
+        form={form}
+        layout="vertical"
+        onFinish={onFinish}
+        initialValues={{ featured: "0", status: "active" }}
       >
-        <Form
-          name={data._id} //-vì có rất nhiều modal chứa form nên phải có tên riêng
-          form={form}
-          layout="vertical"
-          onFinish={onFinish}
-          initialValues={{}} //-để rỗng và sẽ cập nhật trên useEffect
-        >
-
-          <Form.Item
-            label="Tên sản phẩm"
-            name="title"
-            rules={[{ required: true, message: 'Vui lòng nhập tên sản phẩm!' }]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            name="product_category_id"
-            label="Danh mục sản phẩm"
-            rules={[{ required: true, message: 'Vui lòng chọn danh mục!' }]}
-          >
-            <Select allowClear>
-              {dataCategory.map((item) => (
-                <Option key={item._id} value={item._id}>
-                  {item.title}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-
-          <Form.Item label="Đặt làm nổi bật" name="featured">
-            <Radio.Group>
-              <Radio value="1"> Có </Radio>
-              <Radio value="0"> Không </Radio>
-            </Radio.Group>
-          </Form.Item>
-
-          <Form.Item label="Mô tả" name="description">
-            <Editor
-              apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
-              value={editorContent}
-              onEditorChange={(newValue) => setEditorContent(newValue)}
-              init={{
-                plugins:
-                  'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                toolbar:
-                  'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-              }}
-              initialValue={data.description}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Giá"
-            name="price"
-            rules={[{ required: true, message: 'Vui lòng nhập giá sản phẩm!' }]}
-          >
-            <InputNumber min={1} style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item label="Phần trăm giảm giá" name="discountPercentage">
-            <InputNumber min={1} style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item
-            label="Số lượng"
-            name="stock"
-            rules={[{ required: true, message: 'Vui lòng nhập số lượng!' }]}
-          >
-            <InputNumber min={1} style={{ width: '100%' }} />
-          </Form.Item>
-
-          <Form.Item label="Ảnh sản phẩm" name="thumbnail">
-            <Upload
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={handlePreview}
-              onChange={handleChange}
-              beforeUpload={() => false}
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item
+              name="title"
+              label="Tên sản phẩm"
+              rules={[{ required: true, message: "Nhập tên sản phẩm!" }]}
             >
-              {fileList.length < 1 && uploadButton}
-            </Upload>
-            {previewOpen && (
-              <Modal
-                open={previewOpen}
-                footer={null}
-                onCancel={() => setPreviewOpen(false)}
+              <Input placeholder="Tên sản phẩm" />
+            </Form.Item>
+
+            <Form.Item
+              name="product_category_id"
+              label="Danh mục"
+              rules={[{ required: true, message: "Chọn danh mục!" }]}
+            >
+              <Select placeholder="Chọn danh mục">
+                {dataCategory.map((c) => (
+                  <Option key={c._id} value={c._id}>
+                    {c.title}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item name="featured" label="Đặt nổi bật">
+              <Radio.Group>
+                <Radio value="1">Có</Radio>
+                <Radio value="0">Không</Radio>
+              </Radio.Group>
+            </Form.Item>
+
+            <Form.Item name="price" label="Giá (USD)">
+              <InputNumber min={0} style={{ width: "100%" }} />
+            </Form.Item>
+
+            <Form.Item name="discountPercentage" label="Giảm giá (%)">
+              <InputNumber min={0} max={100} style={{ width: "100%" }} />
+            </Form.Item>
+
+            <Form.Item
+              name="stock"
+              label="Số lượng"
+              rules={[{ required: true, message: "Nhập số lượng!" }]}
+            >
+              <InputNumber min={0} style={{ width: "100%" }} />
+            </Form.Item>
+          </Col>
+
+          <Col span={12}>
+            <Form.Item label="Ảnh sản phẩm">
+              <Upload
+                listType="picture-card"
+                fileList={fileList}
+                onChange={handleChange}
+                onPreview={handlePreview}
+                beforeUpload={() => false}
               >
-                <img
-                  alt="example"
-                  style={{ width: '100%' }}
-                  src={previewImage}
-                />
-              </Modal>
-            )}
-          </Form.Item>
+                {fileList.length < 1 && (
+                  <div>
+                    <PlusOutlined />
+                    <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+                  </div>
+                )}
+              </Upload>
+            </Form.Item>
 
-          <Form.Item
-            label="Vị trí"
-            name="position"
-            rules={[{ required: false, message: 'Vui lòng nhập vị trí!' }]}
-          >
-            <InputNumber
-              min={1}
-              style={{ width: '100%' }}
-              placeholder={'Tự động tăng nếu bỏ trống'}
-            />
-          </Form.Item>
+            <Form.Item name="position" label="Vị trí (tùy chọn)">
+              <InputNumber
+                min={1}
+                style={{ width: "100%" }}
+                placeholder="Tự tăng nếu để trống"
+              />
+            </Form.Item>
 
-          <Form.Item label="Trạng thái" name="status">
-            <Radio.Group>
-              <Radio value="active"> Hoạt động </Radio>
-              <Radio value="inactive"> Dừng hoạt động </Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Form>
-      </Modal>
-    </>
+            <Form.Item name="status" label="Trạng thái">
+              <Radio.Group>
+                <Radio value="active">Hoạt động</Radio>
+                <Radio value="inactive">Dừng hoạt động</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Form.Item label="Mô tả">
+          <Editor
+            apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
+            value={editorContent}
+            onEditorChange={setEditorContent}
+            init={{
+              plugins: "autolink lists link image table code",
+              toolbar:
+                "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code",
+            }}
+          />
+        </Form.Item>
+
+        <Form.Item>
+          <Space>
+            <Button type="primary" htmlType="submit">
+              Lưu thay đổi
+            </Button>
+          </Space>
+        </Form.Item>
+      </Form>
+
+      {loading && (
+        <div
+          className="loading-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(255, 255, 255, 0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 999,
+          }}
+        >
+          <Spin size="large" />
+        </div>
+      )}
+    </Card>
   );
-}
-
-export default EditProduct;
+};
 
 EditProduct.propTypes = {
-  typeTitle: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,  // Dữ liệu sản phẩm
+  onProductUpdated: PropTypes.func,
 };
+
+export default EditProduct;

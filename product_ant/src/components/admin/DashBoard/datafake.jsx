@@ -22,7 +22,7 @@ const fakeData = {
   ],
   newCustomers: [
     { name: "Minh Khoa", email: "minhkhoa@gmail.com", date: "02/02/2025" },
-    { name: "Chúc Ngọc", email: "chucngoc@gmail.com", date: "03/02/2025" },
+    { name: "Bồ Khoa", email: "bokhoa@gmail.com", date: "03/02/2025" },
   ],
   notifications: [
     { message: "Có 5 đơn hàng mới cần xử lý!", type: "warning" },

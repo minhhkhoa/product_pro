@@ -16,12 +16,18 @@ import Home from "../components/client/Home";
 import DetailProduct from "../components/client/DetailProduct";
 import PageProducts from "../pages/client/PageProducts";
 import Search from "../components/client/Search";
+import Invoice from "../components/admin/Invoice";
+import TableInvoice from "../components/admin/Invoice/TableInvoice";
+import CreateProduct from "../components/Ui/admin/Product/CreateProduct.jsx";
+import EditProduct from "../components/Ui/admin/Product/EditProduct.jsx/index.jsx";
 
 export const routes = [
   {
     path: "/admin",
     element: (
-      <PrivateRoute> {/* Bọc LayoutDefault để bảo vệ toàn bộ route con */}
+      <PrivateRoute>
+        {" "}
+        {/* Bọc LayoutDefault để bảo vệ toàn bộ route con */}
         <LayoutDefault />
       </PrivateRoute>
     ),
@@ -33,6 +39,14 @@ export const routes = [
       {
         path: "products",
         element: <Product />,
+      },
+      {
+        path: "products/createProduct",
+        element: <CreateProduct />,
+      },
+      {
+        path: "products/updateProduct/:id",
+        element: <EditProduct />,
       },
       {
         path: "products-deleted",
@@ -59,6 +73,14 @@ export const routes = [
         element: <PermissionsTable />,
       },
       {
+        path: "invoice",
+        element: <TableInvoice />,
+      },
+      {
+        path: "invoice/createInvoice",
+        element: <Invoice />,
+      },
+      {
         path: "accounts",
         element: <Account />,
       },
@@ -78,19 +100,19 @@ export const routes = [
     children: [
       {
         path: "/",
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: "product/:slugProduct",
-        element: <DetailProduct/>,
+        element: <DetailProduct />,
       },
       {
         path: "products-category/:categoryId",
-        element: <PageProducts/>,
+        element: <PageProducts />,
       },
       {
         path: "/search",
-        element: <Search/>,
+        element: <Search />,
       },
     ],
   },

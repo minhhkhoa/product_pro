@@ -32,6 +32,15 @@ const permissionsData = [
     ],
   },
   {
+    group: "Hóa đơn",
+    permissions: [
+      { key: "orders_view", label: "Xem" },
+      { key: "orders_create", label: "Thêm mới" },
+      { key: "orders_edit", label: "Chỉnh sửa" },
+      { key: "orders_delete", label: "Xóa" },
+    ],
+  },
+  {
     group: "Tài khoản",
     permissions: [
       { key: "account_view", label: "Xem" },

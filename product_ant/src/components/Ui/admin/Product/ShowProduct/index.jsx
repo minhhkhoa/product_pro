@@ -1,92 +1,131 @@
-import { useState } from 'react';
-import { Button, Modal, Typography, Space, Image } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
-import PropTypes from 'prop-types';
-import './style.css';
+import { Card, Descriptions, Image, Typography, Tag, Space } from "antd";
+import PropTypes from "prop-types";
+import "./style.css";
 
 const { Title, Text } = Typography;
 
-// eslint-disable-next-line react/prop-types
-const ShowProduct = ({ typeTitle, data }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+/**
+ * Component hiển thị chi tiết sản phẩm đẹp hơn ngay bên trong Drawer
+ * @param {{ data: { title: string, price: number, stock: number, description: string, status: string, thumbnail: string, discountPercentage?: number, featured?: string | number } }} props
+ */
+const ShowProduct = ({ data }) => {
+  if (!data) {
+    return <Text type="secondary">Không có dữ liệu sản phẩm.</Text>;
+  }
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const getButtonType = () => {
-    switch (typeTitle) {
-      case 'Chi tiết':
-        return 'btn primary';
-      case 'Xóa':
-        return 'btn danger';
-      case 'Sửa':
-        return 'btn warning';
+  const statusTag = () => {
+    switch (data.status) {
+      case "active":
+        return <Tag color="green">Hoạt động</Tag>;
+      case "inactive":
+        return <Tag color="red">Dừng hoạt động</Tag>;
       default:
-        return '';
+        return <Tag>{data.status}</Tag>;
     }
   };
 
-  return (
-    <>
-      <Button
-        type="default"
-        className={getButtonType()}
-        style={{ marginRight: '10px' }}
-        onClick={showModal}
-      >
-        <EyeOutlined />
-        {typeTitle}
-      </Button>
+  const featuredTag = () => {
+    if (data.featured == null || data.featured === "0" || data.featured === 0) {
+      return null;
+    }
+    return <Tag color="gold">Nổi bật</Tag>;
+  };
 
-      <Modal
-        title={`${typeTitle} sản phẩm`}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={null}  // Tắt footer mặc định của Modal
-        className="custom-modal"
-      >
-        <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          <div>
-            <Title level={4}>{data.title}</Title>
-            <Text strong>Giá:</Text> <Text>${data.price}</Text>
-          </div>
-          <div>
-            <Text strong>Số lượng còn: </Text><Text>{data.stock}</Text>
-          </div>
-          <div>
-            <Text strong>Mô tả: </Text><p dangerouslySetInnerHTML={{ __html: data.description }} />
-          </div>
-          <div>
-            <Text strong>Trạng thái: </Text><Text>{data.status}</Text>
-          </div>
-          <div className="modal-thumbnail">
+  // Tính giá sau giảm giá nếu có
+  const hasDiscount = data.discountPercentage != null && data.discountPercentage > 0;
+  const formattedOriginalPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(data.price);
+  const discountedPrice = hasDiscount
+    ? data.price * (1 - data.discountPercentage / 100)
+    : data.price;
+  const formattedDiscountedPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(discountedPrice);
+
+  return (
+    <Card
+      bordered
+      hoverable
+      bodyStyle={{ padding: "24px" }}
+      className="show-product-card"
+    >
+      <div className="show-product-header">
+        <Title level={4} ellipsis={{ tooltip: data.title }}>
+          {data.title}
+        </Title>
+        <Space>
+          {featuredTag()}
+          {statusTag()}
+        </Space>
+      </div>
+
+      <div className="show-product-content">
+        <div className="show-product-image">
+          {data.thumbnail && (
             <Image
               src={data.thumbnail}
               alt={data.title}
-              width={200}
-              style={{ borderRadius: '8px' }}
+              width={240}
+              style={{ borderRadius: "8px" }}
+              placeholder
             />
-          </div>
-        </Space>
-      </Modal>
-    </>
+          )}
+        </div>
+
+        <Descriptions column={1} bordered className="show-product-descriptions">
+          <Descriptions.Item label="Giá bán">
+            <div className="price-display">
+              {hasDiscount ? (
+                <>
+                  <Text delete>{formattedOriginalPrice}</Text>
+                  <Title level={5} className="price-text">
+                    {formattedDiscountedPrice}
+                  </Title>
+                </>
+              ) : (
+                <Title level={5} className="price-text">
+                  {formattedOriginalPrice}
+                </Title>
+              )}
+            </div>
+          </Descriptions.Item>
+
+          {hasDiscount && (
+            <Descriptions.Item label="Giảm giá">
+              <Text type="danger">{`${data.discountPercentage}%`}</Text>
+            </Descriptions.Item>
+          )}
+
+          <Descriptions.Item label="Số lượng còn">
+            <Text>{data.stock}</Text>
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Mô tả">
+            <div
+              className="description-text"
+              dangerouslySetInnerHTML={{ __html: data.description }}
+            />
+          </Descriptions.Item>
+        </Descriptions>
+      </div>
+    </Card>
   );
 };
 
-// Định nghĩa kiểu `props` cho `ShowProduct`
 ShowProduct.propTypes = {
-  typeTitle: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,  // Dữ liệu sản phẩm
+  data: PropTypes.shape({
+    title: PropTypes.string,
+    price: PropTypes.number,
+    stock: PropTypes.number,
+    description: PropTypes.string,
+    status: PropTypes.string,
+    thumbnail: PropTypes.string,
+    discountPercentage: PropTypes.number,
+    featured: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  }).isRequired,
 };
 
 export default ShowProduct;
