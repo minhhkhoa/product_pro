@@ -4,7 +4,7 @@ import "./style.css";
 import ShowProduct from "../../Ui/admin/Product/ShowProduct";
 import FilterProduct from "../../Ui/admin/Product/Filter/FilterProduct.jsx";
 import FilterCategory from "../../Ui/admin/Product/FilterCategory";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, DeleteOutlined, EditOutlined, PlusOutlined, StopOutlined } from "@ant-design/icons";
 import {
   fetchDataProduct,
   changePosition,
@@ -140,15 +140,25 @@ function Product() {
       title: "Trạng thái",
       dataIndex: "status",
       render: (_, record) => (
-        <Tooltip title="Click to change status">
-          <Button
-            type="primary"
-            className="btn status"
-            onClick={() => handleClickStatus(record)}
+        <Button
+          type="primary"
+          className="btn status"
+          style={{
+            backgroundColor: record.status === "active" ? "#13c2c2" : "#722ed1",
+            borderColor: record.status === "active" ? "#13c2c2" : "#722ed1",
+          }}
+          onClick={() => handleClickStatus(record)}
+        >
+          <Tooltip
+            title={record.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
           >
-            {record.status}
-          </Button>
-        </Tooltip>
+            {record.status === "active" ? (
+              <CheckCircleOutlined />
+            ) : (
+              <StopOutlined />
+            )}
+          </Tooltip>
+        </Button>
       ),
     },
     {
