@@ -238,7 +238,6 @@ function Category() {
             <Link to={`/admin/products-category/updateCategory/${record._id}`}>
               <Button className="btn" type="primary">
                 <EditOutlined />
-                Sửa
               </Button>
             </Link>
 
@@ -247,9 +246,9 @@ function Category() {
               type="primary"
               danger
               onClick={() => showModal(record._id)}
+              style={{ borderColor: "red" }}
             >
               <DeleteOutlined />
-              Xóa
             </Button>
           </div>
         )

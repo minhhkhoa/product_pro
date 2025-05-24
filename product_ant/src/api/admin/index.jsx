@@ -38,6 +38,7 @@ export const createItem = async (data, setLoading, typeRoute, isJSON = false) =>
     }
 
     const res = await fetch(`http://localhost:3000/admin/${typeRoute}/create`, options);
+    console.log("response", res);
 
     if (res.ok) {
       Notification(
@@ -45,11 +46,14 @@ export const createItem = async (data, setLoading, typeRoute, isJSON = false) =>
         "Thành công",
         `${nameAction(typeRoute)} đã được tạo thành công!`
       );
+
+
     } else {
       Notification(
         "error",
         "Lỗi",
-        `Đã có lỗi xảy ra khi tạo ${nameAction(typeRoute)}!`
+        // `Đã có lỗi xảy ra khi tạo ${nameAction(typeRoute)}!`
+        "Email đã tồn tại, hãy chọn email khác!"
       );
     }
   } catch (error) {

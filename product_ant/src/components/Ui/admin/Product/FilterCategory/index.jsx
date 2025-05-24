@@ -37,7 +37,7 @@ function FilterCategory({ selectedType, searchValue, fetchDataProduct, setSelect
   };
 
   return (
-    <Card className="cardCategory" title="Lọc theo danh mục" size="small">
+    <Card className="cardCategory" title="Lọc theo danh mục" size="small" style={{ marginTop: 20 }}>
       <Cascader
         style={{
           width: "100%",

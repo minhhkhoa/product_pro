@@ -56,9 +56,9 @@ function EditRole({ fetchDataRoles, data }) {
       <Button
         type="primary"
         onClick={showModal}
+        className='btn'
       >
         <EditOutlined />
-        Chỉnh sửa
       </Button>
       <Modal
         title="Chỉnh sửa nhóm quyền"

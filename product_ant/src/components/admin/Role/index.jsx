@@ -86,10 +86,10 @@ function Role() {
             className="btn danger"
             type="primary"
             danger
+            style={{ borderColor: "red" }}
             onClick={() => showModalDelete(record._id)}
           >
             <DeleteOutlined />
-            Xóa
           </Button>
         </div>
       ),

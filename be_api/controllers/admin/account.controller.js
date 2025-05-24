@@ -53,6 +53,10 @@ module.exports.deleteItem = async (req, res) => {
 module.exports.createPost = async (req, res) => {
   try {
     // Tạo tài khoản mới
+    //-check email 
+    if (await Account.findOne({ email: req.body.email })) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
     const newAccount = new Account(req.body);
     await newAccount.save();
 

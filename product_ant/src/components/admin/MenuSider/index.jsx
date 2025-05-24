@@ -89,7 +89,7 @@ function MenuSider({ dataUser }) {
       permission: "roles_permissions",
     },
     {
-      key: "/admin/invoice",
+      key: "rootInvoice",
       label: <p>Hóa đơn</p>,
       icon: <AuditOutlined />,
       permission: "orders_view",

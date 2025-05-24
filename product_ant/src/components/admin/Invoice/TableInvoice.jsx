@@ -1,26 +1,155 @@
-import { useEffect, useState } from "react";
-import { Table, Typography, Space, Button, message, Drawer, Modal } from "antd";
+import { useEffect, useRef, useState } from "react";
+import {
+  Table,
+  Typography,
+  Space,
+  Button,
+  message,
+  Drawer,
+  Modal,
+  Input,
+} from "antd";
 import moment from "moment";
-import InvoiceDetail from "./InvoiceDetail"; 
+import InvoiceDetail from "./InvoiceDetail";
 import Notification from "../../../utils/Notification";
-
+import Highlighter from "react-highlight-words";
+import { DeleteOutlined, EyeFilled, SearchOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
 const TableInvoice = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedInvoice, setSelectedInvoice] = useState(null); 
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef(null);
 
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+        onKeyDown={(e) => e.stopPropagation()}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: "block",
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? "#1677ff" : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    filterDropdownProps: {
+      onOpenChange(open) {
+        if (open) {
+          setTimeout(() => searchInput.current?.select(), 100);
+        }
+      },
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: "#ffc069",
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const columns = [
     {
       title: "Mã hóa đơn",
       dataIndex: "invoice_number",
       key: "invoice_number",
+      ...getColumnSearchProps("invoice_number"),
     },
     {
       title: "Ngày tạo",
@@ -53,15 +182,21 @@ const TableInvoice = () => {
       key: "actions",
       render: (_, record) => (
         <Space>
-          <Button type="link" onClick={() => handleView(record.invoice_number)}>
-            Xem
+          <Button
+            type="primary"
+            className="btn"
+            onClick={() => handleView(record.invoice_number)}
+          >
+            <EyeFilled />
           </Button>
           <Button
-            type="link"
+            type="primary"
             danger
             onClick={() => showDeleteModal(record.invoice_number)}
+            className="btn"
+            style={{ borderColor: "red" }}
           >
-            Xóa
+            <DeleteOutlined />
           </Button>
         </Space>
       ),
@@ -133,7 +268,7 @@ const TableInvoice = () => {
         loading={loading}
         dataSource={invoices}
         columns={columns}
-        pagination={{ pageSize: 10 }}
+        pagination={{ pageSize: 5 }}
       />
 
       <Drawer

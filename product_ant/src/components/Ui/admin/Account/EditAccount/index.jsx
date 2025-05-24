@@ -98,7 +98,6 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
     formData.append('fullName', values.fullName);
     formData.append('email', values.email);
     formData.append('password', values.password);
-    formData.append('phone', values.phone);
     formData.append('role_id', values.role_id);
     formData.append('status', values.status);
 
@@ -111,6 +110,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
     // });
 
     try {
+      console.log("formData", formData);
       await editItem(formData, data._id, "accounts");
       form.resetFields(); // Reset form
       setFileList([]); // Reset fileList
@@ -184,14 +184,6 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
             rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]} // Sửa lại message cho đúng
           >
             <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            label="Số điện thoại"
-            name="phone"
-            rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
-          >
-            <Input />
           </Form.Item>
 
           <Form.Item
