@@ -255,7 +255,7 @@ function Product() {
           setSelectedCategory={setSelectedCategory}
         />
 
-        <Link to="/admin/products/createProduct" style={{ marginTop: 20 }}>
+        <Link to="/admin/products/createProduct" style={{ paddingTop: 80 }}>
           <Button type="primary" className="btnCreate">
             <PlusOutlined />
             Thêm mới
