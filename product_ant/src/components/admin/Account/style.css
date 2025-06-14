@@ -1,0 +1,12 @@
+.actionContainer .actionButton{
+  display: none;
+}
+
+.tableAccount .ant-table-row:hover .actionContainer .actionButton{
+  display: block;
+  text-align: center;
+}
+
+.tableAccount .ant-table-row:hover .actionContainer p {
+  display: none;
+}

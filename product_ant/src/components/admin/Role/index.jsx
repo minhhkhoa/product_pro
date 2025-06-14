@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Table, Modal } from "antd";
+import { Button, Table, Modal, Tooltip } from "antd";
 import "./style.css";
 import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
 import Notification from "../../../utils/Notification";
@@ -57,14 +57,21 @@ function Role() {
 
 
   const columns = [
-
     {
-      title: "Tiêu đề",
+      title: () => (
+        <Tooltip title="Ấn để sắp xếp">
+          <div>Tiêu đề</div>
+        </Tooltip>
+      ),
       dataIndex: "title",
       sorter: (a, b) => a.title.localeCompare(b.title),
     },
     {
-      title: "Mô tả",
+      title: () => (
+        <Tooltip title="Ấn để sắp xếp">
+          <div>Mô tả</div>
+        </Tooltip>
+      ),
       dataIndex: "description",
       render: (description) => (
         <div
@@ -75,22 +82,36 @@ function Role() {
     },
     {
       title: "Hành động",
+      width: 250,
       dataIndex: "_id",
       render: (_, record) => (
-        <div>
-          <EditRole
-            data={dataRow(record._id)}
-            fetchDataRoles={fetchDataRoles}
-          />
-          <Button
-            className="btn danger"
-            type="primary"
-            danger
-            style={{ borderColor: "red" }}
-            onClick={() => showModalDelete(record._id)}
-          >
-            <DeleteOutlined />
-          </Button>
+        <div className="actionContainer">
+          <div className="actionButton">
+            <EditRole
+              data={dataRow(record._id)}
+              fetchDataRoles={fetchDataRoles}
+            />
+            <Button
+              className="btn btnDelete"
+              type="primary"
+              danger
+              style={{ borderColor: "red" }}
+              onClick={() => showModalDelete(record._id)}
+            >
+              <DeleteOutlined />
+            </Button>
+          </div>
+          <p>
+            <span
+              style={{
+                fontWeight: "bold",
+                fontSize: "16px",
+                color: "#98593B",
+              }}
+            >
+              Hoạt động
+            </span>
+          </p>
         </div>
       ),
     },
@@ -103,10 +124,11 @@ function Role() {
 
   return (
     <>
-      <h1 className='namePage'>Các nhóm quyền</h1>
+      <h1 className="namePage">Các nhóm quyền</h1>
       <CreateRole fetchDataRoles={fetchDataRoles} />
 
       <Table
+        className="tableRole"
         style={{ marginTop: "10px" }}
         columns={columns}
         dataSource={data}
@@ -114,6 +136,8 @@ function Role() {
           pageSize: 5,
         }}
         loading={loading}
+        showSorterTooltip={false}
+        size="large"
       />
 
       <Modal
@@ -127,7 +151,7 @@ function Role() {
         <p>Bạn có muốn xóa nhóm quyền này không?</p>
       </Modal>
     </>
-  )
+  );
 }
 
 export default Role;

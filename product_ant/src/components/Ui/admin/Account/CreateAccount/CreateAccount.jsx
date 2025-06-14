@@ -13,6 +13,7 @@ import md5 from "md5";
 import { PlusOutlined } from "@ant-design/icons";
 import Notification from "../../../../../utils/Notification";
 import { createItem, checkEmailExists, getAllRoles } from "../../../../../api/admin/index";
+import "./style.css";
 
 const { Option } = Select;
 
@@ -120,7 +121,7 @@ function CreateAccount({ handleRefreshData }) {
   return (
     <>
       <Button type="primary" onClick={showModal} className="btnCreate">
-        <PlusOutlined /> Thêm tài khoản
+        <PlusOutlined /> Thêm mới
       </Button>
 
       <Modal

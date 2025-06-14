@@ -38,7 +38,6 @@ export const createItem = async (data, setLoading, typeRoute, isJSON = false) =>
     }
 
     const res = await fetch(`http://localhost:3000/admin/${typeRoute}/create`, options);
-    console.log("response", res);
 
     if (res.ok) {
       Notification(

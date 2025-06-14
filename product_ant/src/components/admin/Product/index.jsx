@@ -6,11 +6,10 @@ import FilterProduct from "../../Ui/admin/Product/Filter/FilterProduct.jsx";
 import FilterCategory from "../../Ui/admin/Product/FilterCategory";
 import {
   CheckCircleOutlined,
+  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
-  EyeFilled,
   PlusOutlined,
-  StopOutlined,
 } from "@ant-design/icons";
 import {
   fetchDataProduct,
@@ -121,14 +120,22 @@ function Product() {
       ),
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>Tiêu đề</div>,
-      align: "center",
+      title: () => (
+        <Tooltip title="Ấn để sắp xếp">
+          <div style={{ textAlign: "center" }}>Tiêu đề</div>
+        </Tooltip>
+      ),
+      // align: "center",
       dataIndex: "title",
       sorter: (a, b) => a.title.localeCompare(b.title),
-      width: 350,
+      width: 300,
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>Giá</div>,
+      title: () => (
+        <Tooltip title="Ấn để sắp xếp">
+          <div style={{ textAlign: "center" }}>Giá</div>
+        </Tooltip>
+      ),
       align: "center",
       dataIndex: "price",
       render: (price) => `$${price}`,
@@ -136,7 +143,11 @@ function Product() {
       width: 170,
     },
     {
-      title: () => <div style={{ textAlign: "center" }}>Vị trí</div>,
+      title: () => (
+        <Tooltip title="Ấn để sắp xếp">
+          <div style={{ textAlign: "center" }}>Vị trí</div>
+        </Tooltip>
+      ),
       align: "center",
       dataIndex: "position",
       width: 170,
@@ -164,15 +175,15 @@ function Product() {
             className="btn status"
             style={{
               backgroundColor:
-                record.status === "active" ? "#13c2c2" : "#722ed1",
-              borderColor: record.status === "active" ? "#13c2c2" : "#722ed1",
+              record.status === "active" ? "#13c2c2" : "black",
+              borderColor: record.status === "active" ? "#13c2c2" : "black",
             }}
             onClick={() => handleClickStatus(record)}
           >
             {record.status === "active" ? (
               <CheckCircleOutlined />
             ) : (
-              <StopOutlined />
+              <CloseOutlined />
             )}
           </Button>
         </Tooltip>
@@ -186,31 +197,22 @@ function Product() {
         <>
           <div className="actionContainer">
             <div className="actionButton">
-              <Button
-                className="btn"
-                style={{ backgroundColor: "#FFCE47", borderColor: "#FFCE47" }}
-                type="primary"
-                onClick={() => setDrawerOpen(record._id)}
-              >
-                <EyeFilled />
-              </Button>
-
               <Link
                 to={`/admin/products/updateProduct/${record._id}`}
                 state={{
                   data: dataRow(record._id),
                 }}
               >
-                <Button className="btn editProduct" type="primary">
+                <Button className="btn btnEdit" type="primary">
                   <EditOutlined />
                 </Button>
               </Link>
 
               <Button
-                className="btn danger"
+                className="btn btnDelete"
                 type="primary"
                 danger
-                style={{ borderColor: "red" }}
+                // style={{ borderColor: "red" }}
                 onClick={() => showDeleteModal(record._id)}
               >
                 <DeleteOutlined />
@@ -256,7 +258,7 @@ function Product() {
         <Link to="/admin/products/createProduct" style={{ marginTop: 20 }}>
           <Button type="primary" className="btnCreate">
             <PlusOutlined />
-            Thêm sản phẩm
+            Thêm mới
           </Button>
         </Link>
       </div>
@@ -270,6 +272,11 @@ function Product() {
         loading={loading}
         size="small"
         className="tableProduct"
+        showSorterTooltip={false}
+        // Gắn sự kiện click lên từng hàng
+        onRow={(record) => ({
+          onClick: () => setDrawerOpen(record._id),
+        })}
       />
 
       <Modal

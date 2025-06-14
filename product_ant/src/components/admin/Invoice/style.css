@@ -1,0 +1,16 @@
+.actionContainer .actionButton{
+  display: none;
+}
+
+.tableInvoice .ant-table-row:hover .actionContainer .actionButton{
+  display: block;
+  text-align: center;
+}
+
+.tableInvoice .ant-table-row:hover .actionContainer p {
+  display: none;
+}
+
+.tableInvoice .ant-table-row {
+  height: 90px;
+}

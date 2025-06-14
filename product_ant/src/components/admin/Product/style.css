@@ -44,6 +44,7 @@ h1 {
 .btn {
   padding: 10px;
   border-radius: 50%;
+  height: 40px !important;
 }
 
 .btn:hover {

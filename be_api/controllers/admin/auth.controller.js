@@ -83,6 +83,7 @@ module.exports.info = async (req, res) => {
         fullName: user.fullName,
         role: role.title,
         permissions: role.permissions,
+        avatar: user.avatar
       },
     });
   } catch (err) {

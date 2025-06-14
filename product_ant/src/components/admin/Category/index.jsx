@@ -1,23 +1,15 @@
-import { useRef, useState, useEffect } from 'react';
-import { SearchOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Input,
-  Space,
-  Table,
-  Modal,
-}
-  from 'antd';
+import { useRef, useState, useEffect } from "react";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Input, Space, Table, Modal } from "antd";
 import "./style.css";
-import Highlighter from 'react-highlight-words';
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons'; // Thêm import icon
-import { Link } from 'react-router-dom';
-import { getDataCategory, deleteItem } from '../../../api/admin/index';
+import Highlighter from "react-highlight-words";
+import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons"; // Thêm import icon
+import { Link } from "react-router-dom";
+import { getDataCategory, deleteItem } from "../../../api/admin/index";
 
 // import { useOutletContext } from "react-router-dom"; //- lấy dữ liệu từ context truyền từ Outlet
 
 function Category() {
-
   // const { dataUser } = useOutletContext(); // Lấy dữ liệu từ Outlet
   // const permissions = dataUser?.user?.permissions || []; // Lấy danh sách quyền của user
 
@@ -27,10 +19,9 @@ function Category() {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-
 
   // Lấy dữ liệu danh mục từ API
   const fetchData = async () => {
@@ -49,11 +40,9 @@ function Category() {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, []);
-
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -63,11 +52,17 @@ function Category() {
 
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearchText('');
+    setSearchText("");
   };
 
   const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
       <div
         style={{
           padding: 8,
@@ -78,11 +73,13 @@ function Category() {
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
-            display: 'block',
+            display: "block",
           }}
         />
         <Space>
@@ -131,10 +128,10 @@ function Category() {
         </Space>
       </div>
     ),
-    filterIcon: (filtered) => (
+    filterIcon: () => (
       <SearchOutlined
         style={{
-          color: filtered ? '#1677ff' : undefined,
+          color: "white",
         }}
       />
     ),
@@ -151,18 +148,17 @@ function Category() {
       searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{
-            backgroundColor: '#ffc069',
+            backgroundColor: "#ffc069",
             padding: 0,
           }}
           searchWords={[searchText]}
           autoEscape
-          textToHighlight={text ? text.toString() : ''}
+          textToHighlight={text ? text.toString() : ""}
         />
       ) : (
         text
       ),
   });
-
 
   const showModal = (id) => {
     setIdDelete(id);
@@ -183,110 +179,128 @@ function Category() {
 
   const handleCancel = () => {
     setOpen(false);
-  }
-
+  };
 
   const handleDelete = async (id) => {
     try {
-      deleteItem(id, "products-category")
-        .then(() => {
-          // Sau khi xóa thành công, gọi lại API để tải dữ liệu mới
-          fetchData();
-          setOpen(false);
-        })
+      deleteItem(id, "products-category").then(() => {
+        // Sau khi xóa thành công, gọi lại API để tải dữ liệu mới
+        fetchData();
+        setOpen(false);
+      });
     } catch (error) {
       // Xử lý lỗi nếu có
       console.error("Error:", error);
     }
   };
 
-
   //-start column
   const columns = [
     {
-      title: 'Hình ảnh',
-      dataIndex: 'thumbnail',
-      key: 'thumbnail',
+      title: "Hình ảnh",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      width: 230,
       render: (thumbnail) => (
-        <div className="image" >
+        <div className="image" style={{ transform: "TranslateX(40%)" }}>
           <img
             src={thumbnail}
             alt="product"
             style={{
               maxWidth: "100%",
               maxHeight: "100%",
-              objectFit: "contain"
+              objectFit: "contain",
             }}
           />
         </div>
       ),
-      width: '30%',
     },
     {
-      title: 'Tiêu đề',
-      dataIndex: 'title',
-      key: 'title',
-      width: '40%',
-      ...getColumnSearchProps('title'),
+      title: "Tiêu đề",
+      dataIndex: "title",
+      key: "title",
+      width: "40%",
+      ...getColumnSearchProps("title"),
     },
     {
-      title: 'Hành động',
-      key: 'action',
+      title: "Hành động",
+      key: "action",
       render: (_, record) => {
         return (
-          <div>
-            <Link to={`/admin/products-category/updateCategory/${record._id}`}>
-              <Button className="btn" type="primary">
-                <EditOutlined />
-              </Button>
-            </Link>
+          <div className="actionContainer">
+            <div className="actionButton">
+              <Link
+                to={`/admin/products-category/updateCategory/${record._id}`}
+              >
+                <Button
+                  className="btn btnEdit"
+                  type="primary"
+                  // style={{ background: "#EBFCE4 !important" }}
+                >
+                  <EditOutlined style={{ color: "green" }} />
+                </Button>
+              </Link>
 
-            <Button
-              className="btn btnDelete"
-              type="primary"
-              danger
-              onClick={() => showModal(record._id)}
-              style={{ borderColor: "red" }}
-            >
-              <DeleteOutlined />
-            </Button>
+              <Button
+                className="btn btnDelete"
+                type="primary"
+                danger
+                onClick={() => showModal(record._id)}
+                style={{ borderColor: "red" }}
+              >
+                <DeleteOutlined />
+              </Button>
+            </div>
+            <p>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  color: "#98593B",
+                }}
+              >
+                Hoạt động
+              </span>
+            </p>
           </div>
-        )
-      }
+        );
+      },
     },
   ];
   //-end column
 
   // if (permissions.includes("products_category_view")) {
-    return (
-      <>
-        <h1 className='namePage'>Danh mục sản phẩm</h1>
-        <Link to="/admin/products-category/createCategory">
-          <Button className="btnCreateCategory" type="primary">
-            <PlusOutlined />
-            Thêm mới
-          </Button>
-        </Link>
+  return (
+    <>
+      <h1 className="namePage">Danh mục sản phẩm</h1>
+      <Link to="/admin/products-category/createCategory">
+        <Button className="btnCreateCategory" type="primary">
+          <PlusOutlined />
+          Thêm mới
+        </Button>
+      </Link>
 
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={{
-            pageSize: 4,
-          }}
-        />
+      <Table
+        className="tableCate"
+        columns={columns}
+        dataSource={data}
+        pagination={{
+          pageSize: 4,
+        }}
+        size="small"
+      />
 
-        <Modal
-          title="Thông báo"
-          open={open}
-          onOk={handleOk}
-          confirmLoading={confirmLoading}
-          onCancel={handleCancel}
-        >
-          <p>Bạn có muốn xóa danh mục này không?</p>
-        </Modal>
-      </>
-    );
+      <Modal
+        title="Thông báo"
+        open={open}
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
+      >
+        <p>Bạn có muốn xóa danh mục này không?</p>
+      </Modal>
+    </>
+  );
   // }else{
   //   return (
   //     <h1

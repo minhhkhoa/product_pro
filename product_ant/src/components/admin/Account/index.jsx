@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Tooltip, Modal } from "antd";
-import "./style.css";
-// import ShowProduct from "../../Ui/admin/Product/ShowProduct";
 import EditAccount from "../../Ui/admin/Account/EditAccount/index.jsx";
-import { DeleteOutlined } from '@ant-design/icons'; // Thêm import icon
+import { CheckCircleOutlined, CloseOutlined, DeleteOutlined } from "@ant-design/icons";
 import Notification from "../../../utils/Notification";
 import CreateAccount from "../../Ui/admin/Account/CreateAccount/CreateAccount.jsx";
-
+import "./style.css";
 
 function Account() {
   const [data, setData] = useState([]);
@@ -18,9 +16,8 @@ function Account() {
     setLoading(true);
     let url = `http://localhost:3000/admin/accounts/getAllAccount`;
 
-
     try {
-      const res = await fetch(url,{
+      const res = await fetch(url, {
         method: "GET",
         credentials: "include", // Đảm bảo gửi cookie kèm theo
       });
@@ -41,7 +38,6 @@ function Account() {
     fetchData(); // Gọi API với bộ lọc danh mục
   }, []);
 
-
   const showDeleteModal = (id) => {
     setAccountToDelete(id);
     setIsDeleteModalVisible(true);
@@ -59,12 +55,16 @@ function Account() {
         return res.json();
       })
       .then(() => {
-        Notification("success", "Thành công", "Tài khoản đã được xóa thành công!");
+        Notification(
+          "success",
+          "Thành công",
+          "Tài khoản đã được xóa thành công!"
+        );
         fetchData();
         setIsDeleteModalVisible(false);
       })
       .catch((error) => {
-        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa tài khoản!")
+        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa tài khoản!");
 
         console.error("Error:", error);
       });
@@ -91,7 +91,11 @@ function Account() {
         return res.json();
       })
       .then(() => {
-        Notification("success", "Thành công", "Thay đổi trạng thái tài khoản thành công!");
+        Notification(
+          "success",
+          "Thành công",
+          "Thay đổi trạng thái tài khoản thành công!"
+        );
         fetchData();
       })
       .catch((error) => {
@@ -101,34 +105,37 @@ function Account() {
   };
 
   const handleRefreshData = () => {
-    fetchData();// Gọi lại API với các bộ lọc hiện tại
+    fetchData(); // Gọi lại API với các bộ lọc hiện tại
   };
 
   const dataRow = (id) => {
     return data.find((item) => item._id === id); // Trả về sản phẩm có id khớp
   };
 
-
   const columns = [
     {
       title: "Hình ảnh",
       dataIndex: "avatar",
       render: (avatar) => (
-        <div className="image" >
+        <div className="image">
           <img
             src={avatar}
             alt="product"
             style={{
               maxWidth: "100%",
               maxHeight: "100%",
-              objectFit: "contain"
+              objectFit: "contain",
             }}
           />
         </div>
       ),
     },
     {
-      title: "Họ tên",
+      title: () => (
+        <Tooltip title="Họ tên">
+          <div style={{ textAlign: "center" }}>Họ tên</div>
+        </Tooltip>
+      ),
       dataIndex: "fullName",
       sorter: (a, b) => a.fullName.localeCompare(b.fullName),
     },
@@ -145,38 +152,52 @@ function Account() {
       sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
-      title: "Trạng thái",
+      title: () => <div style={{ textAlign: "center" }}>Trạng thái</div>,
+      align: "center",
       dataIndex: "status",
       render: (_, record) => (
-        <Tooltip title="Click to change status">
+        <Tooltip
+          title={record.status === "active" ? "Hoạt động" : "Dừng hoạt động"}
+        >
           <Button
             type="primary"
             className="btn status"
+            style={{
+              backgroundColor: record.status === "active" ? "#13c2c2" : "black",
+              borderColor: record.status === "active" ? "#13c2c2" : "black",
+            }}
             onClick={() => handleClickStatus(record)}
           >
-            {record.status}
+            {record.status === "active" ? (
+              <CheckCircleOutlined />
+            ) : (
+              <CloseOutlined />
+            )}
           </Button>
         </Tooltip>
       ),
     },
     {
       title: "Hành động",
+      width: 150,
       dataIndex: "_id",
       render: (_, record) => (
-        <div>
-          <EditAccount
-            typeTitle={"Sửa tài khoản"}
-            data={dataRow(record._id)}
-            handleRefreshData={handleRefreshData} />
-          <Button
-            className="btn danger"
-            type="primary"
-            danger
-            onClick={() => showDeleteModal(record._id)}
-          >
-            <DeleteOutlined />
-            Xóa
-          </Button>
+        <div className="actionContainer">
+          <div className="actionButton">
+            <EditAccount
+              data={dataRow(record._id)}
+              handleRefreshData={handleRefreshData}
+            />
+            <Button
+              className="btn btnDelete"
+              type="primary"
+              danger
+              onClick={() => showDeleteModal(record._id)}
+              style={{ borderColor: "red" }}
+            >
+              <DeleteOutlined />
+            </Button>
+          </div>
         </div>
       ),
     },
@@ -184,11 +205,11 @@ function Account() {
 
   return (
     <>
-      <h1 className='namePage'>Danh sách tài khoản</h1>
+      <h1 className="namePage">Danh sách tài khoản</h1>
 
-      <CreateAccount
-        handleRefreshData={handleRefreshData}
-      />
+      <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+        <CreateAccount handleRefreshData={handleRefreshData} />
+      </div>
 
       <Table
         columns={columns}
@@ -197,6 +218,9 @@ function Account() {
           pageSize: 5,
         }}
         loading={loading}
+        showSorterTooltip={false}
+        className="tableAccount"
+        size="middle"
       />
 
       <Modal

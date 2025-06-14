@@ -1,0 +1,15 @@
+.actionContainer .actionButton{
+  display: none;
+}
+
+.tableRole .ant-table-row:hover .actionContainer .actionButton{
+  display: block;
+}
+
+.tableRole .ant-table-row:hover .actionContainer p {
+  display: none;
+}
+
+.tableRole .ant-table-row {
+  height: 90px;
+}

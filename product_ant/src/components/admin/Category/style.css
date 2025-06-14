@@ -23,10 +23,24 @@
   padding-top: 10pxK;
 }
 
-.btnDelete{
-  margin-left: 10px;
+
+.tableCate .ant-table-cell{
+  text-align: center !important;
 }
 
-.btnDelete:hover {
-  background: crimson !important;
+
+.tableCate .ant-table-column-title{
+  text-align: center !important;
+}
+
+.actionContainer .actionButton{
+  display: none;
+}
+
+.tableCate .ant-table-row:hover .actionContainer .actionButton{
+  display: block;
+}
+
+.tableCate .ant-table-row:hover .actionContainer p {
+  display: none;
 }

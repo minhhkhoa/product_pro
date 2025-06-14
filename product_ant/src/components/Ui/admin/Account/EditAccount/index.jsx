@@ -141,10 +141,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
 
   return (
     <>
-      <Button
-        className="btn editAccount"
-        type="primary"
-        onClick={showModal}>
+      <Button className="btn btnEdit" type="primary" onClick={showModal}>
         <EditOutlined />
         {typeTitle}
       </Button>
@@ -161,11 +158,10 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           onFinish={onFinish}
           initialValues={{}} //-để rỗng và sẽ cập nhật trên useEffect
         >
-
           <Form.Item
             label="Họ tên"
             name="fullName"
-            rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
+            rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
           >
             <Input />
           </Form.Item>
@@ -173,7 +169,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           <Form.Item
             label="Email"
             name="email"
-            rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
+            rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
           >
             <Input />
           </Form.Item>
@@ -181,7 +177,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           <Form.Item
             label="Mật khẩu"
             name="password"
-            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]} // Sửa lại message cho đúng
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]} // Sửa lại message cho đúng
           >
             <Input.Password />
           </Form.Item>
@@ -189,7 +185,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           <Form.Item
             label="Phân quyền"
             name="role_id"
-            rules={[{ required: true, message: 'Vui lòng chọn quyền hạn!' }]}
+            rules={[{ required: true, message: "Vui lòng chọn quyền hạn!" }]}
           >
             <Select allowClear>
               {dataRole.map((item) => (
@@ -218,7 +214,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
               >
                 <img
                   alt="example"
-                  style={{ width: '100%' }}
+                  style={{ width: "100%" }}
                   src={previewImage}
                 />
               </Modal>

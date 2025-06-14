@@ -13,7 +13,8 @@ import moment from "moment";
 import InvoiceDetail from "./InvoiceDetail";
 import Notification from "../../../utils/Notification";
 import Highlighter from "react-highlight-words";
-import { DeleteOutlined, EyeFilled, SearchOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SearchOutlined } from "@ant-design/icons";
+import "./style.css";
 
 const { Title } = Typography;
 
@@ -112,10 +113,10 @@ const TableInvoice = () => {
         </Space>
       </div>
     ),
-    filterIcon: (filtered) => (
+    filterIcon: () => (
       <SearchOutlined
         style={{
-          color: filtered ? "#1677ff" : undefined,
+          color: "white",
         }}
       />
     ),
@@ -180,25 +181,32 @@ const TableInvoice = () => {
     {
       title: "Hành động",
       key: "actions",
+      width: 160,
       render: (_, record) => (
-        <Space>
-          <Button
-            type="primary"
-            className="btn"
-            onClick={() => handleView(record.invoice_number)}
-          >
-            <EyeFilled />
-          </Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => showDeleteModal(record.invoice_number)}
-            className="btn"
-            style={{ borderColor: "red" }}
-          >
-            <DeleteOutlined />
-          </Button>
-        </Space>
+        <div className="actionContainer">
+          <div className="actionButton">
+            <Button
+              type="primary"
+              danger
+              onClick={() => showDeleteModal(record.invoice_number)}
+              className="btn btnDelete"
+              style={{ borderColor: "red" }}
+            >
+              <DeleteOutlined />
+            </Button>
+          </div>
+          <p>
+            <span
+              style={{
+                fontWeight: "bold",
+                fontSize: "16px",
+                color: "#98593B",
+              }}
+            >
+              Cần thanh toán
+            </span>
+          </p>
+        </div>
       ),
     },
   ];
@@ -262,13 +270,21 @@ const TableInvoice = () => {
 
   return (
     <div>
-      <Title level={4}>Danh sách hóa đơn</Title>
+      <Title level={6}>Danh sách hóa đơn</Title>
       <Table
         rowKey="_id"
         loading={loading}
         dataSource={invoices}
         columns={columns}
         pagination={{ pageSize: 5 }}
+        className="tableInvoice"
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              handleView(record.invoice_number);
+            },
+          };
+        }}
       />
 
       <Drawer

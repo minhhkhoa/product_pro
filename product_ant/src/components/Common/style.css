@@ -1,0 +1,31 @@
+.user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  gap: 10px;
+  background-color: aliceblue;
+  border-radius: 16px;
+  padding: 5px 16px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.user-info__name {
+  font-size: large;
+  color: black;
+  font-weight: 600;
+}
+
+.user-info__role {
+  font-size: small;
+  color: black;
+  font-weight: 400;
+}

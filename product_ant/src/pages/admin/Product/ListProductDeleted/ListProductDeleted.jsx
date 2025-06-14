@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Modal, Tooltip } from "antd";
 import "./style.css";
-import { CheckCircleOutlined, DeleteOutlined, StopOutlined, UndoOutlined } from '@ant-design/icons'; // Thêm import icon
+import { DeleteOutlined, UndoOutlined } from "@ant-design/icons"; // Thêm import icon
 import Notification from "../../../../utils/Notification";
 
 function ListProductDeleted() {
-
   const [data, setData] = useState([]);
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [productID, setProductID] = useState(null);
@@ -16,7 +15,7 @@ function ListProductDeleted() {
     let url = `http://localhost:3000/admin/products/getProductsDeleted`;
 
     try {
-      const res = await fetch(url,{
+      const res = await fetch(url, {
         method: "GET",
         credentials: "include", // Đảm bảo gửi cookie kèm theo
       });
@@ -54,12 +53,16 @@ function ListProductDeleted() {
         return res.json();
       })
       .then(() => {
-        Notification("success", "Thành công", "Sản phẩm đã được xóa thành công!");
+        Notification(
+          "success",
+          "Thành công",
+          "Sản phẩm đã được xóa thành công!"
+        );
         fetchData();
         setIsDeleteModalVisible(false);
       })
       .catch((error) => {
-        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!")
+        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!");
 
         console.error("Error:", error);
       });
@@ -77,12 +80,16 @@ function ListProductDeleted() {
         return res.json();
       })
       .then(() => {
-        Notification("success", "Thành công", "Sản phẩm đã được Khôi phục thành công!");
+        Notification(
+          "success",
+          "Thành công",
+          "Sản phẩm đã được Khôi phục thành công!"
+        );
         fetchData();
         setIsDeleteModalVisible(false);
       })
       .catch((error) => {
-        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!")
+        Notification("error", "Lỗi", "Có lỗi xảy ra khi xóa sản phẩm!");
 
         console.error("Error:", error);
       });
@@ -92,8 +99,10 @@ function ListProductDeleted() {
     {
       title: "Hình ảnh",
       dataIndex: "thumbnail",
+      align: "center",
+      width: '230px',
       render: (thumbnail) => (
-        <div className="image">
+        <div className="image" style={{ transform: "TranslateX(40%)" }}>
           <img
             src={thumbnail}
             alt="product"
@@ -108,17 +117,20 @@ function ListProductDeleted() {
     },
     {
       title: "Tiêu đề",
+      align: "center",
       dataIndex: "title",
       sorter: (a, b) => a.title.localeCompare(b.title),
     },
     {
       title: "Giá",
+      align: "center",
       dataIndex: "price",
       render: (price) => `$${price}`,
       sorter: (a, b) => a.price - b.price,
     },
     {
       title: "Vị trí",
+      align: "center",
       dataIndex: "position",
       render: (_, record) => (
         <input
@@ -132,6 +144,7 @@ function ListProductDeleted() {
     },
     {
       title: "Hành động",
+      align: "center",
       dataIndex: "_id",
       render: (_, record) => (
         <div>
@@ -163,10 +176,9 @@ function ListProductDeleted() {
     setIsDeleteModalVisible(false);
   };
 
-
   return (
     <>
-      <h1 className='namePage'>Các sản phẩm đã xóa</h1>
+      <h1 className="namePage">Các sản phẩm đã xóa</h1>
       <Table
         columns={columns}
         dataSource={data}
@@ -174,6 +186,8 @@ function ListProductDeleted() {
           pageSize: 5,
         }}
         loading={loading}
+        size="small"
+        showSorterTooltip={false}
       />
 
       <Modal
@@ -187,7 +201,7 @@ function ListProductDeleted() {
         <p>Sau lần xóa này sản phẩm sẽ mất vĩnh viễn, bạn có muốn xóa không?</p>
       </Modal>
     </>
-  )
+  );
 }
 
 export default ListProductDeleted;
