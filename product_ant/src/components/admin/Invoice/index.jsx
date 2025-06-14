@@ -43,8 +43,6 @@ export default function Invoice() {
       total_amount: values.total_amount,
     };
 
-    console.log("Payload:", payload);
-
     try {
       const res = await fetch(
         "http://localhost:3000/admin/invoice/createInvoice",
@@ -117,7 +115,7 @@ export default function Invoice() {
         discount_total: 0,
       }}
     >
-      <Title level={4}>Create Invoice</Title>
+      <Title style={{ fontSize: "30px" }} level={4}>Tạo hóa đơn</Title>
 
       <Form.List name="items">
         {(fields, { add, remove }) => (
@@ -128,7 +126,7 @@ export default function Invoice() {
                   <Form.Item
                     name={[field.name, "product_id"]}
                     fieldKey={[field.fieldKey, "product_id"]}
-                    label="Sản phẩm"
+                    label="Sản phẩm: "
                     rules={[{ required: true, message: "Hãy chọn 1 sản phẩm" }]}
                   >
                     <Select
@@ -156,7 +154,7 @@ export default function Invoice() {
                   <Form.Item
                     name={[field.name, "quantity"]}
                     fieldKey={[field.fieldKey, "quantity"]}
-                    label="Số lượng"
+                    label="Số lượng: "
                     rules={[{ required: true }]}
                   >
                     <InputNumber min={1} value={1} />
@@ -166,7 +164,7 @@ export default function Invoice() {
                   <Form.Item
                     name={[field.name, "unit_price"]}
                     fieldKey={[field.fieldKey, "unit_price"]}
-                    label="Giá"
+                    label="Giá:"
                   >
                     <InputNumber disabled />
                   </Form.Item>
@@ -175,13 +173,13 @@ export default function Invoice() {
                   <Form.Item
                     name={[field.name, "discount"]}
                     fieldKey={[field.fieldKey, "discount"]}
-                    label="Giảm giá (%)"
+                    label="Giảm giá (%): "
                   >
                     <InputNumber disabled />
                   </Form.Item>
                 </Col>
                 <Col span={4}>
-                  <Form.Item label="Thành tiền">
+                  <Form.Item label="Thành tiền:">
                     <Text>
                       {(() => {
                         const items = form.getFieldValue("items") || [];
@@ -220,17 +218,17 @@ export default function Invoice() {
       <Row gutter={16}>
         <Col span={6} />
         <Col span={6}>
-          <Form.Item name="sub_total" label="Tổng tiền">
+          <Form.Item name="sub_total" label="Tổng tiền: ">
             <InputNumber disabled style={{ width: "100%" }} />
           </Form.Item>
         </Col>
         <Col span={6}>
-          <Form.Item name="discount_total" label="thêm giảm giá (%)">
+          <Form.Item name="discount_total" label="thêm giảm giá (%): ">
             <InputNumber min={0} style={{ width: "100%" }} />
           </Form.Item>
         </Col>
         <Col span={6}>
-          <Form.Item name="total_amount" label="Tổng thành tiền">
+          <Form.Item name="total_amount" label="Tổng thành tiền: ">
             <InputNumber disabled style={{ width: "100%" }} />
           </Form.Item>
         </Col>

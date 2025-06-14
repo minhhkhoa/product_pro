@@ -63,7 +63,7 @@ function EditRole({ fetchDataRoles, data }) {
       >
         <Form name={data._id} form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
-            label="Tên nhóm quyền"
+            label="Tên nhóm quyền:"
             name="title"
             rules={[
               {
@@ -75,7 +75,7 @@ function EditRole({ fetchDataRoles, data }) {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Mô tả nhóm quyền" name="description">
+          <Form.Item label="Mô tả nhóm quyền:" name="description">
             <Editor
               apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
               onEditorChange={(newValue) => setEditorContent(newValue)}

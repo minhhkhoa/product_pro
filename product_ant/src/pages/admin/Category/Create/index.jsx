@@ -111,7 +111,7 @@ function CreateCategory() {
           <Divider orientation="left">Thông tin cơ bản</Divider>
 
           <Form.Item
-            label="Tiêu đề"
+            label="Tiêu đề:"
             name="title"
             rules={[{ required: true, message: 'Vui lòng nhập tên danh mục!' }]}
           >
@@ -120,7 +120,7 @@ function CreateCategory() {
 
           <Form.Item
             name="parent_id"
-            label="Danh mục cha"
+            label="Danh mục cha:"
           // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
           >
             <Select allowClear placeholder="Chọn danh mục cha">
@@ -135,7 +135,7 @@ function CreateCategory() {
             </Select>
           </Form.Item>
 
-          <Form.Item label="Mô tả">
+          <Form.Item label="Mô tả:">
             <Editor
               apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
               value={editorContent}
@@ -151,7 +151,7 @@ function CreateCategory() {
 
           <Divider orientation="left">Hình ảnh</Divider>
 
-          <Form.Item label="Ảnh danh mục">
+          <Form.Item label="Ảnh danh mục:">
             <Upload
               listType="picture-card"
               fileList={fileList}
@@ -174,7 +174,7 @@ function CreateCategory() {
 
           <Divider orientation="left">Cài đặt nâng cao</Divider>
 
-          <Form.Item label="Vị trí" name="position">
+          <Form.Item label="Vị trí:" name="position">
             <InputNumber
               min={1}
               style={{ width: '100%' }}
@@ -182,7 +182,7 @@ function CreateCategory() {
             />
           </Form.Item>
 
-          <Form.Item label="Trạng thái" name="status">
+          <Form.Item label="Trạng thái:" name="status">
             <Radio.Group>
               <Radio value="active">Hoạt động</Radio>
               <Radio value="inactive">Dừng hoạt động</Radio>

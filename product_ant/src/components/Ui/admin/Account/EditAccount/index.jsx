@@ -159,7 +159,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           initialValues={{}} //-để rỗng và sẽ cập nhật trên useEffect
         >
           <Form.Item
-            label="Họ tên"
+            label="Họ tên:"
             name="fullName"
             rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
           >
@@ -167,7 +167,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           </Form.Item>
 
           <Form.Item
-            label="Email"
+            label="Email:"
             name="email"
             rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
           >
@@ -175,7 +175,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           </Form.Item>
 
           <Form.Item
-            label="Mật khẩu"
+            label="Mật khẩu:"
             name="password"
             rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]} // Sửa lại message cho đúng
           >
@@ -183,7 +183,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
           </Form.Item>
 
           <Form.Item
-            label="Phân quyền"
+            label="Phân quyền:"
             name="role_id"
             rules={[{ required: true, message: "Vui lòng chọn quyền hạn!" }]}
           >
@@ -196,7 +196,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
             </Select>
           </Form.Item>
 
-          <Form.Item label="Avatar" name="avatar">
+          <Form.Item label="Avatar:" name="avatar">
             <Upload
               listType="picture-card"
               fileList={fileList}
@@ -221,7 +221,7 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
             )}
           </Form.Item>
 
-          <Form.Item label="Trạng thái" name="status">
+          <Form.Item label="Trạng thái:" name="status">
             <Radio.Group>
               <Radio value="active"> Hoạt động </Radio>
               <Radio value="inactive"> Dừng hoạt động </Radio>

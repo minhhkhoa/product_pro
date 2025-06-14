@@ -35,28 +35,28 @@ const InvoiceDetail = ({ invoice_number }) => {
 
   const columns = [
     {
-      title: "Sản phẩm",
+      title: "Sản phẩm:",
       dataIndex: "product_id",
       key: "product_id",
     },
     {
-      title: "Số lượng",
+      title: "Số lượng:",
       dataIndex: "quantity",
       key: "quantity",
     },
     {
-      title: "Đơn giá",
+      title: "Đơn giá:",
       dataIndex: "unit_price",
       key: "unit_price",
       render: (price) => `${price.toLocaleString()} đ`,
     },
     {
-      title: "Giảm giá (%)",
+      title: "Giảm giá (%):",
       dataIndex: "discount",
       key: "discount",
     },
     {
-      title: "Thành tiền",
+      title: "Thành tiền:",
       dataIndex: "line_total",
       key: "line_total",
       render: (total) => `${total.toFixed(2)} đ`,

@@ -138,7 +138,7 @@ function CreateAccount({ handleRefreshData }) {
           initialValues={{ role: "user", status: "active" }}
         >
           <Form.Item
-            label="Họ và tên"
+            label="Họ và tên:"
             name="fullName"
             rules={[{ required: true, message: "Vui lòng nhập họ và tên!" }]}
           >
@@ -146,7 +146,7 @@ function CreateAccount({ handleRefreshData }) {
           </Form.Item>
 
           <Form.Item
-            label="Email"
+            label="Email:"
             name="email"
             rules={[
               { required: true, message: "Vui lòng nhập email!" },
@@ -160,13 +160,13 @@ function CreateAccount({ handleRefreshData }) {
             rules={[
               { required: true, message: "Vui lòng nhập mật khẩu!" },
             ]}
-            label="Mật khẩu"
+            label="Mật khẩu:"
             name="password">
             <Input.Password autoComplete="new-password" />
           </Form.Item>
 
           <Form.Item
-            label="Vai trò"
+            label="Vai trò:"
             name="role_id"
             rules={[{ required: true, message: "Vui lòng chọn vai trò!" }]}
           >
@@ -180,7 +180,7 @@ function CreateAccount({ handleRefreshData }) {
           </Form.Item>
 
           {/* Phần chọn ảnh và hiển thị preview */}
-          <Form.Item label="Ảnh sản phẩm" name="avatar">
+          <Form.Item label="Ảnh sản phẩm:" name="avatar">
             <Upload
               listType="picture-card"
               fileList={fileList}
@@ -197,7 +197,7 @@ function CreateAccount({ handleRefreshData }) {
             )}
           </Form.Item>
 
-          <Form.Item label="Trạng thái" name="status">
+          <Form.Item label="Trạng thái:" name="status">
             <Radio.Group>
               <Radio value="active"> Hoạt động </Radio>
               <Radio value="inactive"> Dừng hoạt động </Radio>

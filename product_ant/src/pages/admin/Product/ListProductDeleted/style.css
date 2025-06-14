@@ -2,3 +2,15 @@
   background: #81C44B !important;
   border-color: #81C44B !important;
 }
+
+.actionContainer .actionButton{
+  display: none;
+}
+
+.tableRollbackProduct .ant-table-row:hover .actionContainer .actionButton{
+  display: block;
+}
+
+.tableRollbackProduct .ant-table-row:hover .actionContainer p {
+  display: none;
+}

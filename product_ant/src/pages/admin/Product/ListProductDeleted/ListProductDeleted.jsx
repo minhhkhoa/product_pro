@@ -100,7 +100,7 @@ function ListProductDeleted() {
       title: "Hình ảnh",
       dataIndex: "thumbnail",
       align: "center",
-      width: '230px',
+      width: "230px",
       render: (thumbnail) => (
         <div className="image" style={{ transform: "TranslateX(40%)" }}>
           <img
@@ -117,7 +117,7 @@ function ListProductDeleted() {
     },
     {
       title: "Tiêu đề",
-      align: "center",
+      width: "400px",
       dataIndex: "title",
       sorter: (a, b) => a.title.localeCompare(b.title),
     },
@@ -145,28 +145,42 @@ function ListProductDeleted() {
     {
       title: "Hành động",
       align: "center",
+      width: "200px",
       dataIndex: "_id",
       render: (_, record) => (
-        <div>
-          <Tooltip title="Khôi phục">
+        <div className="actionContainer">
+          <div className="actionButton">
+            <Tooltip title="Khôi phục">
+              <Button
+                className="btn btnEdit"
+                type="primary"
+                danger
+                onClick={() => handleRollBack(record._id)}
+              >
+                <UndoOutlined />
+              </Button>
+            </Tooltip>
             <Button
-              className="btn rollback"
+              className="btn btnDelete"
               type="primary"
               danger
-              onClick={() => handleRollBack(record._id)}
+              onClick={() => showModalDelete(record._id)}
+              style={{ borderColor: "red" }}
             >
-              <UndoOutlined />
+              <DeleteOutlined />
             </Button>
-          </Tooltip>
-          <Button
-            className="btn danger"
-            type="primary"
-            danger
-            onClick={() => showModalDelete(record._id)}
-            style={{ borderColor: "red" }}
-          >
-            <DeleteOutlined />
-          </Button>
+          </div>
+          <p>
+            <span
+              style={{
+                fontWeight: "bold",
+                fontSize: "16px",
+                color: "#98593B",
+              }}
+            >
+              Đã xóa
+            </span>
+          </p>
         </div>
       ),
     },
@@ -188,6 +202,7 @@ function ListProductDeleted() {
         loading={loading}
         size="small"
         showSorterTooltip={false}
+        className="tableRollbackProduct"
       />
 
       <Modal

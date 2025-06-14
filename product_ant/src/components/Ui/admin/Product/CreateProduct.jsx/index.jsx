@@ -108,7 +108,7 @@ const CreateProduct = ({ onProductCreated }) => {
           <Col span={12}>
             <Form.Item
               name="title"
-              label="Tên sản phẩm"
+              label="Tên sản phẩm:"
               rules={[{ required: true, message: "Nhập tên sản phẩm!" }]}
             >
               <Input placeholder="Ví dụ: Áo thun cổ tròn" />
@@ -116,7 +116,7 @@ const CreateProduct = ({ onProductCreated }) => {
 
             <Form.Item
               name="product_category_id"
-              label="Danh mục"
+              label="Danh mục:"
               rules={[{ required: true, message: "Chọn danh mục!" }]}
             >
               <Select placeholder="Chọn danh mục">
@@ -128,7 +128,7 @@ const CreateProduct = ({ onProductCreated }) => {
               </Select>
             </Form.Item>
 
-            <Form.Item name="featured" label="Đặt nổi bật">
+            <Form.Item name="featured" label="Đặt nổi bật:">
               <Radio.Group>
                 <Radio value="1">Có</Radio>
                 <Radio value="0">Không</Radio>
@@ -137,7 +137,7 @@ const CreateProduct = ({ onProductCreated }) => {
 
             <Form.Item
               name="price"
-              label="Giá (USD)"
+              label="Giá (USD):"
               rules={[{ required: true, message: "Nhập giá!" }]}
             >
               <InputNumber min={0} style={{ width: "100%" }} />
@@ -149,7 +149,7 @@ const CreateProduct = ({ onProductCreated }) => {
 
             <Form.Item
               name="stock"
-              label="Số lượng"
+              label="Số lượng:"
               rules={[{ required: true, message: "Nhập số lượng!" }]}
             >
               <InputNumber min={0} style={{ width: "100%" }} />
@@ -157,7 +157,7 @@ const CreateProduct = ({ onProductCreated }) => {
           </Col>
 
           <Col span={12}>
-            <Form.Item label="Ảnh sản phẩm">
+            <Form.Item label="Ảnh sản phẩm:">
               <Upload
                 listType="picture-card"
                 fileList={fileList}
@@ -174,7 +174,7 @@ const CreateProduct = ({ onProductCreated }) => {
               </Upload>
             </Form.Item>
 
-            <Form.Item name="position" label="Vị trí (tùy chọn)">
+            <Form.Item name="position" label="Vị trí (tùy chọn):">
               <InputNumber
                 min={1}
                 style={{ width: "100%" }}
@@ -182,7 +182,7 @@ const CreateProduct = ({ onProductCreated }) => {
               />
             </Form.Item>
 
-            <Form.Item name="status" label="Trạng thái">
+            <Form.Item name="status" label="Trạng thái:">
               <Radio.Group>
                 <Radio value="active">Hoạt động</Radio>
                 <Radio value="inactive">Dừng</Radio>
@@ -191,7 +191,7 @@ const CreateProduct = ({ onProductCreated }) => {
           </Col>
         </Row>
 
-        <Form.Item label="Mô tả">
+        <Form.Item label="Mô tả:">
           <Editor
             apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
             value={editorContent}
