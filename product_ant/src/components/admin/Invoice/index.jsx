@@ -234,25 +234,25 @@ export default function Invoice() {
 
         <Divider />
         <Row gutter={16}>
-          <Col span={6} />
-          <Col span={6}>
+          {/* <Col span={6} /> */}
+          <Col span={8}>
             <Form.Item name="sub_total" label="Tổng tiền: ">
               <InputNumber disabled style={{ width: "100%" }} />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item name="discount_total" label="thêm giảm giá (%): ">
               <InputNumber min={0} style={{ width: "100%" }} />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={8}>
             <Form.Item name="total_amount" label="Tổng thành tiền: ">
               <InputNumber disabled style={{ width: "100%" }} />
             </Form.Item>
           </Col>
         </Row>
 
-        <Form.Item>
+        <Form.Item style={{ display: "flex", flexDirection: "row-reverse" }}>
           <Button type="primary" htmlType="submit">
             Lưu hóa đơn
           </Button>

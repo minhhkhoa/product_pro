@@ -35,7 +35,6 @@ function EditAccount() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-
   const fetchDataRoles = async () => {
     try {
       const resultData = await getAllRoles();
@@ -202,7 +201,10 @@ function EditAccount() {
             </Radio.Group>
           </Form.Item>
 
-          <div className="btn-submit">
+          <div
+            className="btn-submit"
+            style={{ display: "flex", flexDirection: "row-reverse" }}
+          >
             <Button type="primary" htmlType="submit" form="editAccount">
               Sửa tài khoản
             </Button>

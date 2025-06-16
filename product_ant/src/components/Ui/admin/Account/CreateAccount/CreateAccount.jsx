@@ -190,7 +190,7 @@ function CreateAccount() {
           </Form.Item>
         </Form>
 
-        <div className="btn-submit">
+        <div className="btn-submit" style={{ display: "flex", flexDirection: "row-reverse" }}>
           <Button type="primary" htmlType="submit" form="create-account">
             Tạo tài khoản
           </Button>
