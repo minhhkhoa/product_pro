@@ -219,11 +219,11 @@ function Category() {
       title: "Tiêu đề",
       dataIndex: "title",
       key: "title",
-      width: "40%",
       ...getColumnSearchProps("title"),
     },
     {
       title: "Hành động",
+      width: 300,
       key: "action",
       render: (_, record) => {
         return (

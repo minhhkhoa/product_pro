@@ -1,18 +1,13 @@
 import { useState, useEffect } from "react";
-import {
-  Button,
-  Modal,
-  Form,
-  Input,
-  Select,
-  Radio,
-  Spin,
-  Upload
-} from "antd";
+import { Modal, Form, Input, Select, Radio, Spin, Upload, Card, Divider, Button } from "antd";
 import md5 from "md5";
 import { PlusOutlined } from "@ant-design/icons";
 import Notification from "../../../../../utils/Notification";
-import { createItem, checkEmailExists, getAllRoles } from "../../../../../api/admin/index";
+import {
+  createItem,
+  checkEmailExists,
+  getAllRoles,
+} from "../../../../../api/admin/index";
 import "./style.css";
 
 const { Option } = Select;
@@ -25,13 +20,12 @@ const uploadButton = (
 );
 
 // eslint-disable-next-line react/prop-types
-function CreateAccount({ handleRefreshData }) {
+function CreateAccount() {
   const [form] = Form.useForm();
   const [dataRole, setDataRole] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fileList, setFileList] = useState([]);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
 
   const fetchDataRoles = async () => {
@@ -51,13 +45,6 @@ function CreateAccount({ handleRefreshData }) {
     fetchDataRoles();
   }, []);
 
-  const showModal = () => setIsModalOpen(true);
-  const handleCancel = () => setIsModalOpen(false);
-  const handleOk = () => {
-    form.submit();
-    setIsModalOpen(false);
-  };
-
   const onFinish = async (values) => {
     const formData = new FormData();
     formData.append("fullName", values.fullName);
@@ -65,7 +52,7 @@ function CreateAccount({ handleRefreshData }) {
     formData.append("role_id", values.role_id);
     formData.append("status", values.status);
     if (fileList.length > 0) {
-      formData.append('avatar', fileList[0].originFileObj); // Chỉ gửi ảnh đầu tiên
+      formData.append("avatar", fileList[0].originFileObj); // Chỉ gửi ảnh đầu tiên
     } // Đảm bảo avatar là file
 
     try {
@@ -90,8 +77,6 @@ function CreateAccount({ handleRefreshData }) {
       // Gửi data lên server
       await createItem(formData, setLoading, "accounts");
       form.resetFields();
-      setIsModalOpen(false);
-      handleRefreshData(); // Gọi callback để reload danh sách
     } catch (error) {
       console.error("Lỗi tạo tài khoản:", error);
       Notification("error", "Lỗi", "Có lỗi xảy ra khi tạo tài khoản!");
@@ -119,17 +104,9 @@ function CreateAccount({ handleRefreshData }) {
     });
 
   return (
-    <>
-      <Button type="primary" onClick={showModal} className="btnCreate">
-        <PlusOutlined /> Thêm mới
-      </Button>
-
-      <Modal
-        title="Thêm tài khoản"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
+    <div>
+      <h1>Tạo tài khoản</h1>
+      <Card bordered={false} className="form-container">
         <Form
           name="create-account"
           form={form}
@@ -137,6 +114,7 @@ function CreateAccount({ handleRefreshData }) {
           onFinish={onFinish}
           initialValues={{ role: "user", status: "active" }}
         >
+          <Divider orientation="left">Thông tin cơ bản</Divider>
           <Form.Item
             label="Họ và tên:"
             name="fullName"
@@ -157,11 +135,10 @@ function CreateAccount({ handleRefreshData }) {
           </Form.Item>
 
           <Form.Item
-            rules={[
-              { required: true, message: "Vui lòng nhập mật khẩu!" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu!" }]}
             label="Mật khẩu:"
-            name="password">
+            name="password"
+          >
             <Input.Password autoComplete="new-password" />
           </Form.Item>
 
@@ -191,8 +168,16 @@ function CreateAccount({ handleRefreshData }) {
               {fileList.length < 1 && uploadButton}
             </Upload>
             {previewOpen && (
-              <Modal open={previewOpen} footer={null} onCancel={() => setPreviewOpen(false)}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
+              <Modal
+                open={previewOpen}
+                footer={null}
+                onCancel={() => setPreviewOpen(false)}
+              >
+                <img
+                  alt="example"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
               </Modal>
             )}
           </Form.Item>
@@ -204,10 +189,15 @@ function CreateAccount({ handleRefreshData }) {
             </Radio.Group>
           </Form.Item>
         </Form>
-      </Modal>
 
+        <div className="btn-submit">
+          <Button type="primary" htmlType="submit" form="create-account">
+            Tạo tài khoản
+          </Button>
+        </div>
+      </Card>
       {loading && <Spin className="spin" />}
-    </>
+    </div>
   );
 }
 

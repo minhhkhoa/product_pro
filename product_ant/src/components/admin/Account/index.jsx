@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Tooltip, Modal } from "antd";
-import EditAccount from "../../Ui/admin/Account/EditAccount/index.jsx";
-import { CheckCircleOutlined, CloseOutlined, DeleteOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, CloseOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import Notification from "../../../utils/Notification";
-import CreateAccount from "../../Ui/admin/Account/CreateAccount/CreateAccount.jsx";
 import "./style.css";
+import { Link } from "react-router-dom";
 
 function Account() {
   const [data, setData] = useState([]);
@@ -104,10 +103,6 @@ function Account() {
       });
   };
 
-  const handleRefreshData = () => {
-    fetchData(); // Gọi lại API với các bộ lọc hiện tại
-  };
-
   const dataRow = (id) => {
     return data.find((item) => item._id === id); // Trả về sản phẩm có id khớp
   };
@@ -184,10 +179,16 @@ function Account() {
       render: (_, record) => (
         <div className="actionContainer">
           <div className="actionButton">
-            <EditAccount
-              data={dataRow(record._id)}
-              handleRefreshData={handleRefreshData}
-            />
+            <Link
+              to={`/admin/account/updateAccount/${record._id}`}
+              state={{
+                data: dataRow(record._id),
+              }}
+            >
+              <Button className="btn btnEdit" type="primary">
+                <EditOutlined />
+              </Button>
+            </Link>
             <Button
               className="btn btnDelete"
               type="primary"
@@ -208,7 +209,12 @@ function Account() {
       <h1 className="namePage">Danh sách tài khoản</h1>
 
       <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-        <CreateAccount handleRefreshData={handleRefreshData} />
+        <Link to="/admin/account/create">
+          <Button type="primary" className="btnCreate">
+            <PlusOutlined />
+            Thêm mới
+          </Button>
+        </Link>
       </div>
 
       <Table

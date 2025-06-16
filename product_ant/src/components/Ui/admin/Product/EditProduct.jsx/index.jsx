@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Card,
   Form,
@@ -27,7 +27,8 @@ const { Option } = Select;
 
 const EditProduct = ({ onProductUpdated }) => {
   const location = useLocation();
-  const data = location.state?.data || {};
+  const data = useMemo(() => location.state?.data || {}, [location.state]);
+
 
   const [dataCategory, setDataCategory] = useState([]);
   const [editorContent, setEditorContent] = useState(data.description || "");

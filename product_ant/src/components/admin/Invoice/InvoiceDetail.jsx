@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card, Descriptions, Table, Typography, Spin, Alert } from "antd";
 import PropTypes from "prop-types";
 
@@ -9,7 +9,7 @@ const InvoiceDetail = ({ invoice_number }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchInvoice = async () => {
+  const fetchInvoice = useCallback(async () => {
     try {
       const res = await fetch(
         `http://localhost:3000/admin/invoice/${invoice_number}`
@@ -22,13 +22,13 @@ const InvoiceDetail = ({ invoice_number }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [invoice_number]);
 
   useEffect(() => {
     if (invoice_number) {
       fetchInvoice();
     }
-  }, [invoice_number]);
+  }, [invoice_number, fetchInvoice]);
 
   if (loading) return <Spin tip="Đang tải dữ liệu..." />;
   if (error) return <Alert type="error" message="Lỗi" description={error} />;

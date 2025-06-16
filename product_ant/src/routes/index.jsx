@@ -20,6 +20,8 @@ import Invoice from "../components/admin/Invoice";
 import TableInvoice from "../components/admin/Invoice/TableInvoice";
 import CreateProduct from "../components/Ui/admin/Product/CreateProduct.jsx";
 import EditProduct from "../components/Ui/admin/Product/EditProduct.jsx/index.jsx";
+import CreateAccount from "../components/Ui/admin/Account/CreateAccount/CreateAccount.jsx";
+import EditAccount from "../components/Ui/admin/Account/EditAccount/index.jsx";
 
 export const routes = [
   {
@@ -83,6 +85,14 @@ export const routes = [
       {
         path: "accounts",
         element: <Account />,
+      },
+      {
+        path: "account/create",
+        element: <CreateAccount />,
+      },
+      {
+        path: "account/updateAccount/:id",
+        element: <EditAccount />,
       },
       {
         path: "setting",

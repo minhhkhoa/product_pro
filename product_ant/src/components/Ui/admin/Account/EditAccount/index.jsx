@@ -1,20 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from "react";
 import {
-  Button,
   Modal,
   Form,
   Input,
   Select,
   Radio,
   Upload,
-} from 'antd';
-import { PlusOutlined, EditOutlined } from '@ant-design/icons';
+  Card,
+  Divider,
+  Button,
+} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 const { Option } = Select;
+import PropTypes from "prop-types";
+import Notification from "../../../../../utils/Notification";
+import { getAllRoles, editItem } from "../../../../../api/admin/index";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./style.css";
-import PropTypes from 'prop-types';
-import Notification from '../../../../../utils/Notification';
-import { getAllRoles, editItem } from '../../../../../api/admin/index';
-
 
 const uploadButton = (
   <div>
@@ -23,16 +25,16 @@ const uploadButton = (
   </div>
 );
 
-// eslint-disable-next-line react/prop-types
-function EditAccount({ typeTitle, data, handleRefreshData }) {
-
+function EditAccount() {
+  const location = useLocation();
+  const data = useMemo(() => location.state?.data || {}, [location.state]);
   const [dataRole, setDataRole] = useState([]);
   const [fileList, setFileList] = useState([]);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
-
   const [form] = Form.useForm();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
 
   const fetchDataRoles = async () => {
     try {
@@ -50,73 +52,52 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
   useEffect(() => {
     // Gọi API để lấy danh mục sản phẩm
     fetchDataRoles();
-
     // Cập nhật fileList nếu có ảnh avatar
     if (data?.avatar) {
       setFileList([
         {
-          uid: '-1',
-          name: 'avatar.png',
-          status: 'done',
+          uid: "-1",
+          name: "avatar.png",
+          status: "done",
           url: data.avatar,
         },
       ]);
     }
 
     // Cập nhật giá trị form khi data thay đổi
-    if (data && form) { //-nếu data thay đổi
-      if (isModalOpen) { //-nếu model đã được mở
-        form.setFieldsValue({ //- mới bắt đầu gán dữ liệu vào form
-          fullName: data?.fullName || '',
-          email: data?.email || '',
-          password: data?.password || '***********',
-          phone: data?.phone || '',
-          role_id: data?.role_id || '',
-          status: data?.status || '',
-        });
-      }
+    if (data) {
+      form.setFieldsValue({
+        fullName: data?.fullName || "",
+        email: data?.email || "",
+        password: data?.password || "***********",
+        phone: data?.phone || "",
+        role_id: data?.role_id || "",
+        status: data?.status || "",
+      });
     }
-  }, [data, form, isModalOpen]);
-
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    form.submit();
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  }, [data, form]);
 
   // Xử lý form submit
   const onFinish = async (values) => {
     const formData = new FormData();
-    formData.append('fullName', values.fullName);
-    formData.append('email', values.email);
-    formData.append('password', values.password);
-    formData.append('role_id', values.role_id);
-    formData.append('status', values.status);
+    formData.append("fullName", values.fullName);
+    formData.append("email", values.email);
+    formData.append("password", values.password);
+    formData.append("role_id", values.role_id);
+    formData.append("status", values.status);
 
     if (fileList.length > 0 && fileList[0]?.originFileObj) {
-      formData.append('avatar', fileList[0].originFileObj);
+      formData.append("avatar", fileList[0].originFileObj);
     }
-    // Duyệt qua FormData và in ra dữ liệu
-    // formData.forEach((value, key) => {
-    //   console.log(key, value);
-    // });
 
     try {
       console.log("formData", formData);
       await editItem(formData, data._id, "accounts");
-      form.resetFields(); // Reset form
-      setFileList([]); // Reset fileList
-      handleRefreshData();
+      form.resetFields();
+      setFileList([]);
+      navigate("/admin/accounts");
     } catch (error) {
-      console.log('Đã có lỗi xảy ra khi cập nhật tài khoản!', error);
+      console.log("Đã có lỗi xảy ra khi cập nhật tài khoản!", error);
       Notification("error", "Lỗi", "Đã có lỗi xảy ra khi cập nhật tài khoản!");
     }
   };
@@ -140,24 +121,17 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
     });
 
   return (
-    <>
-      <Button className="btn btnEdit" type="primary" onClick={showModal}>
-        <EditOutlined />
-        {typeTitle}
-      </Button>
-      <Modal
-        title={typeTitle}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
+    <div>
+      <h1 className="namePage">Sửa tài khoản</h1>
+      <Card bordered={false} className="form-container">
         <Form
-          name={data._id} //-vì có rất nhiều modal chứa form nên phải có tên riêng
+          name="editAccount"
           form={form}
           layout="vertical"
           onFinish={onFinish}
           initialValues={{}} //-để rỗng và sẽ cập nhật trên useEffect
         >
+          <Divider orientation="left">Thông tin cơ bản</Divider>
           <Form.Item
             label="Họ tên:"
             name="fullName"
@@ -227,9 +201,15 @@ function EditAccount({ typeTitle, data, handleRefreshData }) {
               <Radio value="inactive"> Dừng hoạt động </Radio>
             </Radio.Group>
           </Form.Item>
+
+          <div className="btn-submit">
+            <Button type="primary" htmlType="submit" form="editAccount">
+              Sửa tài khoản
+            </Button>
+          </div>
         </Form>
-      </Modal>
-    </>
+      </Card>
+    </div>
   );
 }
 
@@ -237,5 +217,5 @@ export default EditAccount;
 
 EditAccount.propTypes = {
   typeTitle: PropTypes.string.isRequired,
-  data: PropTypes.object.isRequired,  // Dữ liệu tài khoản
+  data: PropTypes.object.isRequired, // Dữ liệu tài khoản
 };

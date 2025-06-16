@@ -174,8 +174,7 @@ function Product() {
             type="primary"
             className="btn status"
             style={{
-              backgroundColor:
-              record.status === "active" ? "#13c2c2" : "black",
+              backgroundColor: record.status === "active" ? "#13c2c2" : "black",
               borderColor: record.status === "active" ? "#13c2c2" : "black",
             }}
             onClick={() => handleClickStatus(record)}
@@ -212,8 +211,10 @@ function Product() {
                 className="btn btnDelete"
                 type="primary"
                 danger
-                // style={{ borderColor: "red" }}
-                onClick={() => showDeleteModal(record._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  showDeleteModal(record._id);
+                }}
               >
                 <DeleteOutlined />
               </Button>
@@ -273,7 +274,6 @@ function Product() {
         size="small"
         className="tableProduct"
         showSorterTooltip={false}
-        // Gắn sự kiện click lên từng hàng
         onRow={(record) => ({
           onClick: () => setDrawerOpen(record._id),
         })}

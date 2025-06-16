@@ -188,7 +188,10 @@ const TableInvoice = () => {
             <Button
               type="primary"
               danger
-              onClick={() => showDeleteModal(record.invoice_number)}
+              onClick={(e) => {
+                e.stopPropagation();
+                showDeleteModal(record.invoice_number);
+              }}
               className="btn btnDelete"
               style={{ borderColor: "red" }}
             >

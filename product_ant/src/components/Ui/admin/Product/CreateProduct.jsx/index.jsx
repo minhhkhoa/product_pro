@@ -94,7 +94,7 @@ const CreateProduct = ({ onProductCreated }) => {
 
   return (
     <Card className="create-product-card">
-      <Title level={3} className="form-title">
+      <Title level={2} className="form-title">
         Tạo Sản Phẩm Mới
       </Title>
 
