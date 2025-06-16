@@ -60,6 +60,8 @@ function EditRole({ fetchDataRoles, data }) {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        okText="Lưu"
+        cancelText="Hủy"
       >
         <Form name={data._id} form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item

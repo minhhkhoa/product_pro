@@ -306,6 +306,7 @@ const TableInvoice = () => {
         onCancel={handleCancelDelete}
         okText="Xóa"
         cancelText="Hủy"
+        okButtonProps={{ danger: true, ghost: true }}
       >
         <p>Bạn có chắc chắn muốn xóa hóa đơn này không?</p>
       </Modal>

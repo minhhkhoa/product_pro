@@ -44,11 +44,7 @@ function CreateRole({ fetchDataRoles }) {
 
   return (
     <>
-      <Button
-        className='btnCreateRole'
-        type="primary"
-        onClick={showModal}
-      >
+      <Button className="btnCreateRole" type="primary" onClick={showModal}>
         <PlusOutlined />
         Thêm mới
       </Button>
@@ -57,6 +53,8 @@ function CreateRole({ fetchDataRoles }) {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        okText="Lưu"
+        cancelText="Hủy"
       >
         <Form
           name="create-product"
@@ -70,7 +68,7 @@ function CreateRole({ fetchDataRoles }) {
             rules={[
               {
                 required: true,
-                message: 'Please input your title!',
+                message: "Please input your title!",
               },
             ]}
           >
@@ -82,8 +80,10 @@ function CreateRole({ fetchDataRoles }) {
               apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
               onEditorChange={(newValue) => setEditorContent(newValue)}
               init={{
-                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                plugins:
+                  "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
+                toolbar:
+                  "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
               }}
             />
           </Form.Item>
@@ -92,8 +92,7 @@ function CreateRole({ fetchDataRoles }) {
 
       {/* Thêm class spin vào thẻ Spin */}
       {loading && <Spin className="spin" />}
-
     </>
-  )
+  );
 }
 export default CreateRole;

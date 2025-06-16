@@ -147,6 +147,7 @@ function Role() {
         onCancel={handleCancelDelete}
         okText="Xóa"
         cancelText="Hủy"
+        okButtonProps={{ danger: true, ghost: true }}
       >
         <p>Bạn có muốn xóa nhóm quyền này không?</p>
       </Modal>

@@ -286,6 +286,7 @@ function Product() {
         onCancel={handleCancelDelete}
         okText="Xóa"
         cancelText="Hủy"
+        okButtonProps={{ danger: true, ghost: true }}
       >
         <p>Bạn có chắc chắn muốn xóa sản phẩm này không?</p>
       </Modal>

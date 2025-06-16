@@ -294,8 +294,11 @@ function Category() {
         title="Thông báo"
         open={open}
         onOk={handleOk}
-        confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        confirmLoading={confirmLoading}
+        okText="Xóa"
+        cancelText="Hủy"
+        okButtonProps={{ danger: true, ghost: true }}
       >
         <p>Bạn có muốn xóa danh mục này không?</p>
       </Modal>

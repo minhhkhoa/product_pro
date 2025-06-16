@@ -212,6 +212,7 @@ function ListProductDeleted() {
         onCancel={handleCancelDelete}
         okText="Xóa"
         cancelText="Hủy"
+        okButtonProps={{ danger: true, ghost: true }}
       >
         <p>Sau lần xóa này sản phẩm sẽ mất vĩnh viễn, bạn có muốn xóa không?</p>
       </Modal>
