@@ -1,11 +1,10 @@
 const Invoice = require("../../models/invoice.model");
+const Product = require("../../models/product.model");
 const mongoose = require("mongoose");
 
 module.exports.getAllInvoice = async (req, res) => {
   try {
-    const invoices = await Invoice.find({ deleted: false }).sort({
-      createdAt: -1,
-    });
+    const invoices = await Invoice.find({ deleted: false });
     const reverseData = invoices.reverse();
 
     return res.status(200).json(reverseData);
@@ -63,6 +62,7 @@ module.exports.getInvoiceById = async (req, res) => {
   const { id } = req.params;
 
   try {
+    // Tìm invoice trước
     const invoice = await Invoice.findOne({
       invoice_number: id,
       deleted: false,
@@ -72,7 +72,24 @@ module.exports.getInvoiceById = async (req, res) => {
       return res.status(404).json({ message: "Invoice not found" });
     }
 
-    return res.status(200).json(invoice);
+    // Map và chờ resolve tất cả Promise để gắn thêm tên sản phẩm
+    const itemsWithName = await Promise.all(
+      invoice.items.map(async (item) => {
+        const product = await Product.findById(item.product_id);
+        return {
+          ...item.toObject(), // nếu item là Mongoose subdocument
+          nameProduct: product?.title || "Unknown",
+        };
+      })
+    );
+
+    // Nếu muốn gửi lại toàn bộ invoice kèm items đã bổ sung nameProduct
+    const result = {
+      ...invoice.toObject(),
+      items: itemsWithName,
+    };
+
+    return res.status(200).json(result);
   } catch (error) {
     console.error("Error fetching invoice:", error);
     return res.status(500).json({ message: "Internal server error" });

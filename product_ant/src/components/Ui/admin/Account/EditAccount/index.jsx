@@ -15,7 +15,7 @@ const { Option } = Select;
 import PropTypes from "prop-types";
 import Notification from "../../../../../utils/Notification";
 import { getAllRoles, editItem } from "../../../../../api/admin/index";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./style.css";
 
 const uploadButton = (
@@ -205,9 +205,17 @@ function EditAccount() {
             className="btn-submit"
             style={{ display: "flex", flexDirection: "row-reverse" }}
           >
-            <Button type="primary" htmlType="submit" form="editAccount">
+            <Button
+              style={{ color: "white", backgroundColor: "blue" }}
+              htmlType="submit"
+              form="editAccount"
+            >
               Sửa tài khoản
             </Button>
+
+            <Link to="/admin/accounts">
+              <Button>Trở về</Button>
+            </Link>
           </div>
         </Form>
       </Card>

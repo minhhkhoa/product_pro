@@ -24,6 +24,7 @@ const InvoiceDetail = ({ invoice_number }) => {
     }
   }, [invoice_number]);
 
+
   useEffect(() => {
     if (invoice_number) {
       fetchInvoice();
@@ -36,8 +37,8 @@ const InvoiceDetail = ({ invoice_number }) => {
   const columns = [
     {
       title: "Sản phẩm:",
-      dataIndex: "product_id",
-      key: "product_id",
+      dataIndex: "nameProduct",
+      key: "nameProduct",
     },
     {
       title: "Số lượng:",
@@ -48,7 +49,7 @@ const InvoiceDetail = ({ invoice_number }) => {
       title: "Đơn giá:",
       dataIndex: "unit_price",
       key: "unit_price",
-      render: (price) => `${price.toLocaleString()} đ`,
+      render: (price) => `${price.toLocaleString()} $`,
     },
     {
       title: "Giảm giá (%):",
@@ -59,7 +60,7 @@ const InvoiceDetail = ({ invoice_number }) => {
       title: "Thành tiền:",
       dataIndex: "line_total",
       key: "line_total",
-      render: (total) => `${total.toFixed(2)} đ`,
+      render: (total) => `${total.toFixed(2)} $`,
     },
   ];
 
@@ -75,13 +76,13 @@ const InvoiceDetail = ({ invoice_number }) => {
           {new Date(data.date).toLocaleString()}
         </Descriptions.Item>
         <Descriptions.Item label="Tổng tiền trước giảm giá">
-          {data.sub_total.toFixed(2)} đ
+          {data.sub_total.toFixed(2)} $
         </Descriptions.Item>
         <Descriptions.Item label="Giảm giá hóa đơn (%)">
           {data.discount_total}%
         </Descriptions.Item>
         <Descriptions.Item label="Tổng tiền thanh toán" span={2}>
-          <strong>{data.total_amount.toFixed(2)} đ</strong>
+          <strong>{data.total_amount.toFixed(2)} $</strong>
         </Descriptions.Item>
       </Descriptions>
 

@@ -9,26 +9,23 @@ import {
   Upload,
   Button,
   Spin,
-  Typography,
   Row,
   Col,
   Space,
 } from "antd";
-import { PlusOutlined, EditOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { Editor } from "@tinymce/tinymce-react";
 import PropTypes from "prop-types";
 import "./style.css";
 import Notification from "../../../../../utils/Notification";
 import { getDataCategory, editItem } from "../../../../../api/admin/index";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-const { Title } = Typography;
 const { Option } = Select;
 
 const EditProduct = ({ onProductUpdated }) => {
   const location = useLocation();
   const data = useMemo(() => location.state?.data || {}, [location.state]);
-
 
   const [dataCategory, setDataCategory] = useState([]);
   const [editorContent, setEditorContent] = useState(data.description || "");
@@ -115,141 +112,148 @@ const EditProduct = ({ onProductUpdated }) => {
   };
 
   return (
-    <Card className="create-product-card">
-      <Title level={3} className="form-title">
-        <EditOutlined /> Chỉnh sửa sản phẩm
-      </Title>
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={onFinish}
-        initialValues={{ featured: "0", status: "active" }}
-      >
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item
-              name="title"
-              label="Tên sản phẩm:"
-              rules={[{ required: true, message: "Nhập tên sản phẩm!" }]}
-            >
-              <Input placeholder="Tên sản phẩm" />
-            </Form.Item>
-
-            <Form.Item
-              name="product_category_id"
-              label="Danh mục:"
-              rules={[{ required: true, message: "Chọn danh mục!" }]}
-            >
-              <Select placeholder="Chọn danh mục">
-                {dataCategory.map((c) => (
-                  <Option key={c._id} value={c._id}>
-                    {c.title}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-
-            <Form.Item name="featured" label="Đặt nổi bật:">
-              <Radio.Group>
-                <Radio value="1">Có</Radio>
-                <Radio value="0">Không</Radio>
-              </Radio.Group>
-            </Form.Item>
-
-            <Form.Item name="price" label="Giá (USD):">
-              <InputNumber min={0} style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item name="discountPercentage" label="Giảm giá (%):">
-              <InputNumber min={0} max={100} style={{ width: "100%" }} />
-            </Form.Item>
-
-            <Form.Item
-              name="stock"
-              label="Số lượng:"
-              rules={[{ required: true, message: "Nhập số lượng!" }]}
-            >
-              <InputNumber min={0} style={{ width: "100%" }} />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item label="Ảnh sản phẩm:">
-              <Upload
-                listType="picture-card"
-                fileList={fileList}
-                onChange={handleChange}
-                onPreview={handlePreview}
-                beforeUpload={() => false}
-              >
-                {fileList.length < 1 && (
-                  <div>
-                    <PlusOutlined />
-                    <div style={{ marginTop: 8 }}>Thêm ảnh</div>
-                  </div>
-                )}
-              </Upload>
-            </Form.Item>
-
-            <Form.Item name="position" label="Vị trí (tùy chọn):">
-              <InputNumber
-                min={1}
-                style={{ width: "100%" }}
-                placeholder="Tự tăng nếu để trống"
-              />
-            </Form.Item>
-
-            <Form.Item name="status" label="Trạng thái:">
-              <Radio.Group>
-                <Radio value="active">Hoạt động</Radio>
-                <Radio value="inactive">Dừng hoạt động</Radio>
-              </Radio.Group>
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Form.Item label="Mô tả:">
-          <Editor
-            apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
-            value={editorContent}
-            onEditorChange={setEditorContent}
-            init={{
-              plugins: "autolink lists link image table code",
-              toolbar:
-                "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code",
-            }}
-          />
-        </Form.Item>
-
-        <Form.Item>
-          <Space>
-            <Button type="primary" htmlType="submit">
-              Lưu thay đổi
-            </Button>
-          </Space>
-        </Form.Item>
-      </Form>
-
-      {loading && (
-        <div
-          className="loading-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(255, 255, 255, 0.7)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 999,
-          }}
+    <>
+      <h1 className="namePage">Chỉnh sửa sản phẩm</h1>
+      <Card className="create-product-card">
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          initialValues={{ featured: "0", status: "active" }}
         >
-          <Spin size="large" />
-        </div>
-      )}
-    </Card>
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item
+                name="title"
+                label="Tên sản phẩm:"
+                rules={[{ required: true, message: "Nhập tên sản phẩm!" }]}
+              >
+                <Input placeholder="Tên sản phẩm" />
+              </Form.Item>
+
+              <Form.Item
+                name="product_category_id"
+                label="Danh mục:"
+                rules={[{ required: true, message: "Chọn danh mục!" }]}
+              >
+                <Select placeholder="Chọn danh mục">
+                  {dataCategory.map((c) => (
+                    <Option key={c._id} value={c._id}>
+                      {c.title}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
+              <Form.Item name="featured" label="Đặt nổi bật:">
+                <Radio.Group>
+                  <Radio value="1">Có</Radio>
+                  <Radio value="0">Không</Radio>
+                </Radio.Group>
+              </Form.Item>
+
+              <Form.Item name="price" label="Giá (USD):">
+                <InputNumber min={0} style={{ width: "100%" }} />
+              </Form.Item>
+
+              <Form.Item name="discountPercentage" label="Giảm giá (%):">
+                <InputNumber min={0} max={100} style={{ width: "100%" }} />
+              </Form.Item>
+
+              <Form.Item
+                name="stock"
+                label="Số lượng:"
+                rules={[{ required: true, message: "Nhập số lượng!" }]}
+              >
+                <InputNumber min={0} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+
+            <Col span={12}>
+              <Form.Item label="Ảnh sản phẩm:">
+                <Upload
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={handleChange}
+                  onPreview={handlePreview}
+                  beforeUpload={() => false}
+                >
+                  {fileList.length < 1 && (
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>Thêm ảnh</div>
+                    </div>
+                  )}
+                </Upload>
+              </Form.Item>
+
+              <Form.Item name="position" label="Vị trí (tùy chọn):">
+                <InputNumber
+                  min={1}
+                  style={{ width: "100%" }}
+                  placeholder="Tự tăng nếu để trống"
+                />
+              </Form.Item>
+
+              <Form.Item name="status" label="Trạng thái:">
+                <Radio.Group>
+                  <Radio value="active">Hoạt động</Radio>
+                  <Radio value="inactive">Dừng hoạt động</Radio>
+                </Radio.Group>
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <Form.Item label="Mô tả:">
+            <Editor
+              apiKey="tlv55er0rp1owbi1sqrk0s9ha1v7xxnbir624071vyp33l2h"
+              value={editorContent}
+              onEditorChange={setEditorContent}
+              init={{
+                plugins: "autolink lists link image table code",
+                toolbar:
+                  "undo redo | bold italic | alignleft aligncenter alignright | bullist numlist | code",
+              }}
+            />
+          </Form.Item>
+
+          <Form.Item>
+            <Space style={{ display: "flex", flexDirection: "row-reverse" }}>
+              <Button
+                style={{ backgroundColor: "blue", color: "white" }}
+                htmlType="submit"
+              >
+                Lưu thay đổi
+              </Button>
+
+              <Link to={`/admin/products`}>
+                <Button>Trở về</Button>
+              </Link>
+            </Space>
+          </Form.Item>
+        </Form>
+
+        {loading && (
+          <div
+            className="loading-overlay"
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 999,
+            }}
+          >
+            <Spin size="large" />
+          </div>
+        )}
+      </Card>
+    </>
   );
 };
 

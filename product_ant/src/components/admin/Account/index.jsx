@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, Table, Tooltip, Modal } from "antd";
-import { CheckCircleOutlined, CloseOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import Notification from "../../../utils/Notification";
 import "./style.css";
 import { Link } from "react-router-dom";
@@ -236,6 +242,7 @@ function Account() {
         onCancel={handleCancelDelete}
         okText="Xóa"
         cancelText="Hủy"
+        okButtonProps={{ danger: true, ghost: true }}
       >
         <p>Bạn có chắc chắn muốn xóa tài khoản này không?</p>
       </Modal>

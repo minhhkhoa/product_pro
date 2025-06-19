@@ -16,7 +16,7 @@ import {
 import { PlusOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import './style.css'; // Import file CSS tùy chỉnh
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useParams } from 'react-router-dom';
 import { getDataCategory, dataCategoryById, editItem } from '../../../../api/admin/index';
@@ -147,7 +147,7 @@ function UpdateCategory() {
 
   return (
     <>
-      <h1 className='namePage'>Sửa Danh Mục Sản Phẩm</h1>
+      <h1 className="namePage">Sửa Danh Mục Sản Phẩm</h1>
 
       <Card bordered={false} className="form-container">
         <Form
@@ -155,22 +155,19 @@ function UpdateCategory() {
           layout="vertical"
           name="create-category"
           onFinish={onFinish}
-          initialValues={{ status: 'active' }}
+          initialValues={{ status: "active" }}
         >
           <Divider orientation="left">Thông tin cơ bản</Divider>
 
           <Form.Item
             label="Tiêu đề"
             name="title"
-            rules={[{ required: true, message: 'Vui lòng nhập tên danh mục!' }]}
+            rules={[{ required: true, message: "Vui lòng nhập tên danh mục!" }]}
           >
             <Input placeholder="Nhập tên danh mục sản phẩm" />
           </Form.Item>
 
-          <Form.Item
-            name="parent_id"
-            label="Danh mục cha"
-          >
+          <Form.Item name="parent_id" label="Danh mục cha">
             <Select allowClear placeholder="Chọn danh mục cha">
               <Option key="none" value="">
                 Danh mục mới
@@ -190,9 +187,9 @@ function UpdateCategory() {
               onEditorChange={(newValue) => setEditorContent(newValue)}
               init={{
                 plugins:
-                  'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                  "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
                 toolbar:
-                  'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                  "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
               }}
             />
           </Form.Item>
@@ -215,7 +212,11 @@ function UpdateCategory() {
                 footer={null}
                 onCancel={() => setPreviewOpen(false)}
               >
-                <img alt="preview" style={{ width: '100%' }} src={previewImage} />
+                <img
+                  alt="preview"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
               </Modal>
             )}
           </Form.Item>
@@ -225,7 +226,7 @@ function UpdateCategory() {
           <Form.Item label="Vị trí" name="position">
             <InputNumber
               min={1}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               placeholder="Tự động tăng nếu để trống"
             />
           </Form.Item>
@@ -237,11 +238,20 @@ function UpdateCategory() {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
+          <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+            <Button
+              style={{ color: "white", backgroundColor: "blue", padding: "8px" }}
+              htmlType="submit"
+            >
               Sửa Danh Mục
             </Button>
-          </Form.Item>
+            <Link
+              to={"/admin/products-category"}
+              style={{ marginLeft: "10px" }}
+            >
+              <Button>Trở về</Button>
+            </Link>
+          </div>
         </Form>
       </Card>
     </>

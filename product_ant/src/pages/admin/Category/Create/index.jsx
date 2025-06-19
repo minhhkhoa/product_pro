@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Modal,
   Form,
@@ -10,13 +10,14 @@ import {
   Button,
   Divider,
   Card,
-  Spin
-} from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import { Editor } from '@tinymce/tinymce-react';
-import './style.css'; // Import file CSS tùy chỉnh
-import Notification from '../../../../utils/Notification';
-import { getDataCategory, createItem } from '../../../../api/admin/index';
+  Spin,
+} from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { Editor } from "@tinymce/tinymce-react";
+import "./style.css"; // Import file CSS tùy chỉnh
+import Notification from "../../../../utils/Notification";
+import { getDataCategory, createItem } from "../../../../api/admin/index";
+import { Link } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -31,20 +32,19 @@ function CreateCategory() {
   const [form] = Form.useForm();
 
   const [dataCategory, setDataCategory] = useState([]);
-  const [editorContent, setEditorContent] = useState('');
+  const [editorContent, setEditorContent] = useState("");
   const [fileList, setFileList] = useState([]);
-  const [previewImage, setPreviewImage] = useState('');
+  const [previewImage, setPreviewImage] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
 
-  const [loading, setLoading] = useState(false);//-muc dich de hien spin khi dang tao danh muc
-
+  const [loading, setLoading] = useState(false); //-muc dich de hien spin khi dang tao danh muc
 
   const fetchData = async () => {
     try {
       const categoryData = await getDataCategory("flat"); // Chờ dữ liệu trả về
       setDataCategory(categoryData);
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -57,24 +57,28 @@ function CreateCategory() {
 
     // Tạo formData và thêm dữ liệu
     const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('parent_id', values.parent_id);
-    formData.append('description', editorContent);
-    formData.append('position', values.position || '');
-    formData.append('status', values.status);
+    formData.append("title", values.title);
+    formData.append("parent_id", values.parent_id);
+    formData.append("description", editorContent);
+    formData.append("position", values.position || "");
+    formData.append("status", values.status);
 
     if (fileList.length > 0) {
-      formData.append('thumbnail', fileList[0].originFileObj);
+      formData.append("thumbnail", fileList[0].originFileObj);
     }
 
     try {
       await createItem(formData, setLoading, "products-category");
       form.resetFields(); // Reset form
       setFileList([]); // Reset fileList
-      setEditorContent(''); // Reset nội dung Editor
+      setEditorContent(""); // Reset nội dung Editor
     } catch (error) {
-      console.log('Đã có lỗi xảy ra!', error);
-      Notification("error", "Lỗi", "Đã có lỗi xảy ra khi tạo danh mục sản phẩm!");
+      console.log("Đã có lỗi xảy ra!", error);
+      Notification(
+        "error",
+        "Lỗi",
+        "Đã có lỗi xảy ra khi tạo danh mục sản phẩm!"
+      );
     }
   };
 
@@ -98,7 +102,7 @@ function CreateCategory() {
 
   return (
     <>
-      <h1 className='namePage'>Thêm Danh Mục Sản Phẩm</h1>
+      <h1 className="namePage">Thêm Danh Mục Sản Phẩm</h1>
 
       <Card bordered={false} className="form-container">
         <Form
@@ -106,14 +110,14 @@ function CreateCategory() {
           layout="vertical"
           name="create-category"
           onFinish={onFinish}
-          initialValues={{ status: 'active' }}
+          initialValues={{ status: "active" }}
         >
           <Divider orientation="left">Thông tin cơ bản</Divider>
 
           <Form.Item
             label="Tiêu đề:"
             name="title"
-            rules={[{ required: true, message: 'Vui lòng nhập tên danh mục!' }]}
+            rules={[{ required: true, message: "Vui lòng nhập tên danh mục!" }]}
           >
             <Input placeholder="Nhập tên danh mục sản phẩm" />
           </Form.Item>
@@ -121,7 +125,7 @@ function CreateCategory() {
           <Form.Item
             name="parent_id"
             label="Danh mục cha:"
-          // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
+            // rules={[{ required: true, message: 'Vui lòng chọn danh mục cha!' }]}
           >
             <Select allowClear placeholder="Chọn danh mục cha">
               <Option key="none" value="">
@@ -142,9 +146,9 @@ function CreateCategory() {
               onEditorChange={(newValue) => setEditorContent(newValue)}
               init={{
                 plugins:
-                  'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                  "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
                 toolbar:
-                  'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                  "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
               }}
             />
           </Form.Item>
@@ -167,7 +171,11 @@ function CreateCategory() {
                 footer={null}
                 onCancel={() => setPreviewOpen(false)}
               >
-                <img alt="preview" style={{ width: '100%' }} src={previewImage} />
+                <img
+                  alt="preview"
+                  style={{ width: "100%" }}
+                  src={previewImage}
+                />
               </Modal>
             )}
           </Form.Item>
@@ -177,7 +185,7 @@ function CreateCategory() {
           <Form.Item label="Vị trí:" name="position">
             <InputNumber
               min={1}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               placeholder="Tự động tăng nếu để trống"
             />
           </Form.Item>
@@ -189,11 +197,20 @@ function CreateCategory() {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" block>
+          <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+            <Button
+              style={{ color: "white", backgroundColor: "blue" }}
+              htmlType="submit"
+            >
               Thêm Danh Mục
             </Button>
-          </Form.Item>
+            <Link
+              to={"/admin/products-category"}
+              style={{ marginLeft: "10px" }}
+            >
+              <Button>Trở về</Button>
+            </Link>
+          </div>
         </Form>
       </Card>
 

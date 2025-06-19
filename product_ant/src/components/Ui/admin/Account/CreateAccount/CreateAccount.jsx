@@ -1,5 +1,16 @@
 import { useState, useEffect } from "react";
-import { Modal, Form, Input, Select, Radio, Spin, Upload, Card, Divider, Button } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  Radio,
+  Spin,
+  Upload,
+  Card,
+  Divider,
+  Button,
+} from "antd";
 import md5 from "md5";
 import { PlusOutlined } from "@ant-design/icons";
 import Notification from "../../../../../utils/Notification";
@@ -9,6 +20,7 @@ import {
   getAllRoles,
 } from "../../../../../api/admin/index";
 import "./style.css";
+import { Link } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -105,7 +117,7 @@ function CreateAccount() {
 
   return (
     <div>
-      <h1>Tạo tài khoản</h1>
+      <h1 className="namePage">Tạo tài khoản</h1>
       <Card bordered={false} className="form-container">
         <Form
           name="create-account"
@@ -190,10 +202,20 @@ function CreateAccount() {
           </Form.Item>
         </Form>
 
-        <div className="btn-submit" style={{ display: "flex", flexDirection: "row-reverse" }}>
-          <Button type="primary" htmlType="submit" form="create-account">
+        <div
+          className="btn-submit"
+          style={{ display: "flex", flexDirection: "row-reverse" }}
+        >
+          <Button
+            style={{ color: "white", backgroundColor: "blue" }}
+            htmlType="submit"
+            form="create-account"
+          >
             Tạo tài khoản
           </Button>
+          <Link to="/admin/accounts">
+            <Button>Trở về</Button>
+          </Link>
         </div>
       </Card>
       {loading && <Spin className="spin" />}
