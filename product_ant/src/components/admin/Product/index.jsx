@@ -157,7 +157,11 @@ function Product() {
           min="1"
           defaultValue={record.position}
           style={{ width: "50px", height: "30px", textAlign: "center" }}
-          onBlur={(e) => handleChangePosition(e, record)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setTimeout(() => handleChangePosition(e, record), 100);
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
         />
       ),
       sorter: (a, b) => a.position - b.position,
@@ -177,7 +181,10 @@ function Product() {
               backgroundColor: record.status === "active" ? "#13c2c2" : "black",
               borderColor: record.status === "active" ? "#13c2c2" : "black",
             }}
-            onClick={() => handleClickStatus(record)}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickStatus(record);
+            }}
           >
             {record.status === "active" ? (
               <CheckCircleOutlined />
