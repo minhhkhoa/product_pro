@@ -36,7 +36,7 @@ function DashBoard() {
   return (
     <Layout className="dashboard">
       <Content>
-        <h1 className="dashboard-title">Dashboard</h1>
+        <h1 className="dashboard-title">Tổng quan</h1>
 
         {/* Tổng quan cửa hàng */}
         <Row gutter={16}>

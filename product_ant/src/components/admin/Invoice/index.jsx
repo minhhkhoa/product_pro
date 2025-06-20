@@ -220,8 +220,9 @@ export default function Invoice() {
                     <Divider />
                   </>
                 ))}
-                <Form.Item>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <Button
+                    style={{ width: "30%" }}
                     type="dashed"
                     onClick={() =>
                       add({ quantity: 1, unit_price: 0, discount: 0 })
@@ -231,7 +232,7 @@ export default function Invoice() {
                   >
                     Thêm sản phẩm
                   </Button>
-                </Form.Item>
+                </div>
               </>
             )}
           </Form.List>
@@ -257,7 +258,10 @@ export default function Invoice() {
           </Row>
 
           <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-            <Button style={{ color: "white", backgroundColor: "blue" }} htmlType="submit">
+            <Button
+              style={{ color: "white", backgroundColor: "blue" }}
+              htmlType="submit"
+            >
               Lưu hóa đơn
             </Button>
 
